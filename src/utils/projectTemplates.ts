@@ -1,3 +1,4 @@
+
 import { 
   ShoppingCart, Store, Hotel, Users, FileText, CheckSquare, Building, TrendingUp, 
   BookOpen, BarChart3, Smartphone, CreditCard, Brain, Zap, Calendar, 
@@ -14,10 +15,10 @@ import {
   Lightbulb, Flame, Snowflake, Droplet, Wind, CloudRain,
   Truck, Receipt, GraduationCap, ClipboardCheck, Home, Scale,
   Clock, HardHat, Share2, PieChart, MousePointer, User,
-  HelpCircle, RotateCcw, Route, Activity, Smile, Lotus,
+  HelpCircle, RotateCcw, Route, Activity, Smile, Flower2,
   CheckCircle, Apple, Dumbbell, Vote, Scan, MapPin,
   ChefHat, UserPlus, Package, Wallet, Bitcoin, PiggyBank,
-  Megaphone, Palette, Gavel
+  Megaphone, Palette, Gavel, Workflow
 } from 'lucide-react';
 
 export interface ProjectTemplate {
@@ -739,7 +740,7 @@ export const projectTemplates: ProjectTemplate[] = [
     description: 'Aplicativo de meditação com trilhas personalizadas',
     category: 'health',
     features: ['Meditações guiadas', 'Trilhas personalizadas', 'Timer customizável', 'Progresso pessoal', 'Lembretes inteligentes'],
-    icon: Lotus,
+    icon: Flower2,
     color: 'bg-indigo-600'
   },
   {
