@@ -10,12 +10,12 @@ interface Toast {
 }
 
 let toastCount = 0;
-let globalToastSetter: ((toasts: Toast[]) => void) | null = null;
+let globalToastSetter: ((setter: (prev: Toast[]) => Toast[]) => void) | null = null;
 
 export const useToast = () => {
   const [toasts, setToasts] = useState<Toast[]>([]);
   
-  // Register the global setter
+  // Register the global setter with proper typing
   globalToastSetter = setToasts;
 
   const dismiss = (toastId: string) => {
