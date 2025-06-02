@@ -102,22 +102,6 @@ const generateProjectFiles = (config: ProjectConfig): Record<string, string> => 
     }
   };
 
-  // Adicionar dependências do React Native se for um template mobile
-  if (template.category === 'mobile') {
-    packageJson.dependencies = {
-      ...packageJson.dependencies,
-      "expo": "~50.0.0",
-      "react-native": "0.73.0",
-      "@expo/vector-icons": "^13.0.0",
-      "expo-status-bar": "~1.11.1",
-      "expo-linear-gradient": "~12.7.2",
-      "expo-router": "~3.4.0",
-      "expo-constants": "~15.4.0",
-      "expo-device": "~5.9.0",
-      "expo-notifications": "~0.27.0"
-    };
-  }
-
   const files: Record<string, string> = {
     'package.json': JSON.stringify(packageJson, null, 2),
     'src/main.tsx': generateMainComponent(),
@@ -148,24 +132,6 @@ const generateProjectFiles = (config: ProjectConfig): Record<string, string> => 
   const pages = generateTemplatePages(template, name);
   Object.entries(pages).forEach(([path, content]) => {
     files[`src/pages/${path}`] = content;
-  });
-
-  // Adicionar hooks do template
-  const hooks = generateTemplateHooks(template);
-  Object.entries(hooks).forEach(([path, content]) => {
-    files[`src/hooks/${path}`] = content;
-  });
-
-  // Adicionar utils do template
-  const utils = generateTemplateUtils(template);
-  Object.entries(utils).forEach(([path, content]) => {
-    files[`src/utils/${path}`] = content;
-  });
-
-  // Adicionar services do template
-  const services = generateTemplateServices(template);
-  Object.entries(services).forEach(([path, content]) => {
-    files[`src/services/${path}`] = content;
   });
 
   return files;
@@ -218,6 +184,10 @@ verify_jwt = false`;
 };
 
 const generateSupabaseSeed = (template: ProjectTemplate) => {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string || '';
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string || '';
+  const supabaseServiceKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY as string || '';
+  
   let seedContent = `-- Seed data for ${template.name}
 -- Enable RLS (Row Level Security)
 ALTER TABLE auth.users ENABLE ROW LEVEL SECURITY;
@@ -230,6 +200,9 @@ CREATE TABLE public.profiles (
   full_name TEXT,
   avatar_url TEXT,
   website TEXT,
+  plan_type TEXT DEFAULT 'freemium',
+  projects_generated INTEGER DEFAULT 0,
+  monthly_limit INTEGER DEFAULT 2,
   PRIMARY KEY (id)
 );
 
@@ -245,261 +218,26 @@ CREATE POLICY "Users can insert their own profile." ON public.profiles
 CREATE POLICY "Users can update own profile." ON public.profiles
   FOR UPDATE USING (auth.uid() = id);
 
--- Create a bucket for avatars
-INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true);
-
--- Set up storage policy
-CREATE POLICY "Avatar images are publicly accessible." ON storage.objects
-  FOR SELECT USING (bucket_id = 'avatars');
-
-CREATE POLICY "Anyone can upload an avatar." ON storage.objects
-  FOR INSERT WITH CHECK (bucket_id = 'avatars');
-
-CREATE POLICY "Anyone can update their own avatar." ON storage.objects
-  FOR UPDATE USING (auth.uid()::text = (storage.foldername(name))[1]);`;
-
-  // Adicionar tabelas específicas baseadas no template
-  if (template.category === 'health') {
-    seedContent += `
-
--- Health-specific tables
-CREATE TABLE public.appointments (
+-- Create generated_projects table
+CREATE TABLE public.generated_projects (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  patient_name TEXT NOT NULL,
-  patient_email TEXT,
-  patient_phone TEXT,
-  appointment_date TIMESTAMP WITH TIME ZONE NOT NULL,
-  duration INTEGER DEFAULT 60,
-  status TEXT DEFAULT 'scheduled',
-  notes TEXT,
+  template_id TEXT NOT NULL,
+  project_name TEXT NOT NULL,
+  project_description TEXT,
+  download_url TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE TABLE public.patients (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  name TEXT NOT NULL,
-  email TEXT,
-  phone TEXT,
-  birth_date DATE,
-  address TEXT,
-  medical_history TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+ALTER TABLE public.generated_projects ENABLE ROW LEVEL SECURITY;
 
-ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.patients ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Users can view own appointments" ON public.appointments
+CREATE POLICY "Users can view own projects" ON public.generated_projects
   FOR SELECT USING (auth.uid() = user_id);
 
-CREATE POLICY "Users can create own appointments" ON public.appointments
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "Users can view own patients" ON public.patients
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can create own patients" ON public.patients
+CREATE POLICY "Users can create projects" ON public.generated_projects
   FOR INSERT WITH CHECK (auth.uid() = user_id);`;
-  }
-
-  if (template.category === 'delivery') {
-    seedContent += `
-
--- Delivery-specific tables
-CREATE TABLE public.products (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  name TEXT NOT NULL,
-  description TEXT,
-  price DECIMAL(10,2) NOT NULL,
-  category TEXT,
-  image_url TEXT,
-  active BOOLEAN DEFAULT true,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
-CREATE TABLE public.orders (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  customer_name TEXT NOT NULL,
-  customer_phone TEXT,
-  customer_address TEXT NOT NULL,
-  total_amount DECIMAL(10,2) NOT NULL,
-  status TEXT DEFAULT 'pending',
-  delivery_fee DECIMAL(10,2) DEFAULT 0,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
-CREATE TABLE public.order_items (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  order_id UUID REFERENCES public.orders(id) ON DELETE CASCADE NOT NULL,
-  product_id UUID REFERENCES public.products(id) ON DELETE CASCADE NOT NULL,
-  quantity INTEGER NOT NULL,
-  unit_price DECIMAL(10,2) NOT NULL
-);
-
-ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.order_items ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Users can view own products" ON public.products
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can manage own products" ON public.products
-  FOR ALL USING (auth.uid() = user_id);`;
-  }
-
-  if (template.category === 'business') {
-    seedContent += `
-
--- Business-specific tables
-CREATE TABLE public.projects (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  name TEXT NOT NULL,
-  description TEXT,
-  status TEXT DEFAULT 'active',
-  client_name TEXT,
-  budget DECIMAL(15,2),
-  deadline DATE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
-CREATE TABLE public.tasks (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  project_id UUID REFERENCES public.projects(id) ON DELETE CASCADE NOT NULL,
-  title TEXT NOT NULL,
-  description TEXT,
-  status TEXT DEFAULT 'todo',
-  priority TEXT DEFAULT 'medium',
-  assigned_to UUID REFERENCES auth.users(id),
-  due_date DATE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
-ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.tasks ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Users can view own projects" ON public.projects
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can manage own projects" ON public.projects
-  FOR ALL USING (auth.uid() = user_id);`;
-  }
 
   return seedContent;
-};
-
-const generateSupabaseContext = () => {
-  return `import React, { createContext, useContext } from 'react';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-
-const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string) || '';
-const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string) || '';
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-const SupabaseContext = createContext<SupabaseClient | null>(null);
-
-export const useSupabase = () => {
-  const context = useContext(SupabaseContext);
-  if (!context) {
-    throw new Error('useSupabase must be used within a SupabaseProvider');
-  }
-  return context;
-};
-
-export const SupabaseProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <SupabaseContext.Provider value={supabase}>
-      {children}
-    </SupabaseContext.Provider>
-  );
-};`;
-};
-
-const generateAuthContext = () => {
-  return `import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session, AuthError } from '@supabase/supabase-js';
-import { useSupabase } from './SupabaseContext';
-
-interface AuthContextType {
-  user: User | null;
-  session: Session | null;
-  loading: boolean;
-  signUp: (email: string, password: string) => Promise<{ error: AuthError | null }>;
-  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
-  signOut: () => Promise<{ error: AuthError | null }>;
-}
-
-const AuthContext = createContext<AuthContextType | null>(null);
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
-  const supabase = useSupabase();
-
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, [supabase.auth]);
-
-  const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({ email, password });
-    return { error };
-  };
-
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error };
-  };
-
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    return { error };
-  };
-
-  const value = {
-    user,
-    session,
-    loading,
-    signUp,
-    signIn,
-    signOut,
-  };
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
-};`;
 };
 
 const generateMainComponent = () => {
@@ -520,8 +258,6 @@ const generateAppComponent = (template: ProjectTemplate) => {
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
-import { SupabaseProvider } from './contexts/SupabaseContext';
-import { AuthProvider } from './contexts/AuthContext';
 import HomePage from './pages/HomePage';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
@@ -539,21 +275,17 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <SupabaseProvider>
-        <AuthProvider>
-          <Router>
-            <div className="min-h-screen bg-gray-50">
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-              </Routes>
-              <Toaster />
-            </div>
-          </Router>
-        </AuthProvider>
-      </SupabaseProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-50">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Routes>
+          <Toaster />
+        </div>
+      </Router>
     </QueryClientProvider>
   );
 }
@@ -564,71 +296,17 @@ export default App;`;
 const generateTemplateComponents = (template: ProjectTemplate) => {
   const components: Record<string, string> = {};
 
-  // Componentes UI base
-  components['ui/button.tsx'] = generateButtonComponent();
-  components['ui/card.tsx'] = generateCardComponent();
-  components['ui/input.tsx'] = generateInputComponent();
-  components['ui/badge.tsx'] = generateBadgeComponent();
-  components['ui/toaster.tsx'] = generateToasterComponent();
-  components['ui/toast.tsx'] = generateToastComponent();
-  components['ui/use-toast.ts'] = generateUseToastHook();
-
-  // Context providers
-  components['contexts/SupabaseContext.tsx'] = generateSupabaseContext();
-  components['contexts/AuthContext.tsx'] = generateAuthContext();
-
-  // Layout components
-  components['layout/Header.tsx'] = generateHeaderComponent(template);
-  components['layout/Sidebar.tsx'] = generateSidebarComponent(template);
-  components['layout/Footer.tsx'] = generateFooterComponent();
-
-  return components;
-};
-
-const generateButtonComponent = () => {
-  return `import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+  components['ui/button.tsx'] = `import * as React from "react"
 import { cn } from "@/lib/utils"
 
-const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-      size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  }
-)
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean
-}
-
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
+  ({ className, ...props }, ref) => {
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+      <button
+        className={cn(
+          "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2",
+          className
+        )}
         ref={ref}
         {...props}
       />
@@ -637,437 +315,119 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = "Button"
 
-export { Button, buttonVariants }`;
-};
+export { Button }`;
 
-const generateCardComponent = () => {
-  return `import * as React from "react"
-import { cn } from "@/lib/utils"
-
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
-      className
-    )}
-    {...props}
-  />
-))
-Card.displayName = "Card"
-
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
-    {...props}
-  />
-))
-CardHeader.displayName = "CardHeader"
-
-const CardTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h3
-    ref={ref}
-    className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
-      className
-    )}
-    {...props}
-  />
-))
-CardTitle.displayName = "CardTitle"
-
-const CardDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
-    {...props}
-  />
-))
-CardDescription.displayName = "CardDescription"
-
-const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-))
-CardContent.displayName = "CardContent"
-
-const CardFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
-    {...props}
-  />
-))
-CardFooter.displayName = "CardFooter"
-
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }`;
-};
-
-const generateInputComponent = () => {
-  return `import * as React from "react"
-import { cn } from "@/lib/utils"
-
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
-
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
-    return (
-      <input
-        type={type}
-        className={cn(
-          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-Input.displayName = "Input"
-
-export { Input }`;
-};
-
-const generateBadgeComponent = () => {
-  return `import * as React from "react"
-import { cn } from "@/lib/utils"
-
-const badgeVariants = {
-  default: "bg-primary text-primary-foreground",
-  secondary: "bg-secondary text-secondary-foreground",
-  destructive: "bg-destructive text-destructive-foreground",
-  outline: "border border-input bg-background text-foreground",
-};
-
-export interface BadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: keyof typeof badgeVariants;
-}
-
-const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ className, variant = "default", ...props }, ref) => {
-    return (
-      <span
-        ref={ref}
-        className={cn(
-          "inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold",
-          badgeVariants[variant],
-          className
-        )}
-        {...props}
-      />
-    )
-  }
-)
-Badge.displayName = "Badge"
-
-export { Badge }`;
-};
-
-const generateToasterComponent = () => {
-  return `import * as React from "react"
-import { Toaster as RadixToaster } from "@radix-ui/react-toast"
-
-const Toaster = () => {
-  return <RadixToaster position="top-right" />
-}
-
-export { Toaster }`;
-};
-
-const generateToastComponent = () => {
-  return `import * as React from "react"
-import { ToastProvider, ToastViewport } from "@radix-ui/react-toast"
-
-const Toast = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <ToastProvider>
-      {children}
-      <ToastViewport />
-    </ToastProvider>
-  )
-}
-
-export { Toast }`;
-};
-
-const generateUseToastHook = () => {
-  return `import { useToast as useRadixToast } from "@radix-ui/react-toast"
-
-export const useToast = () => {
-  const toast = useRadixToast()
-  return toast
-}`;
-};
-
-const generateHeaderComponent = (template: ProjectTemplate) => {
-  return `import React from 'react';
-
-const Header = () => {
-  return (
-    <header className="bg-white shadow-sm border-b">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <h1 className="text-2xl font-bold text-gray-900">Header - ${template.name}</h1>
-      </div>
-    </header>
-  );
-};
-
-export default Header;`;
-};
-
-const generateSidebarComponent = (template: ProjectTemplate) => {
-  return `import React from 'react';
-
-const Sidebar = () => {
-  return (
-    <aside className="w-64 bg-gray-100 p-4">
-      <nav>
-        <ul>
-          <li>Menu Item 1</li>
-          <li>Menu Item 2</li>
-        </ul>
-      </nav>
-    </aside>
-  );
-};
-
-export default Sidebar;`;
-};
-
-const generateFooterComponent = () => {
-  return `import React from 'react';
-
-const Footer = () => {
-  return (
-    <footer className="bg-white border-t p-4 text-center text-sm text-gray-500">
-      © 2024 Gerador de SaaS IA. Todos os direitos reservados.
-    </footer>
-  );
-};
-
-export default Footer;`;
-};
-
-const generateTemplateHooks = (template: ProjectTemplate) => {
-  return {};
-};
-
-const generateTemplateUtils = (template: ProjectTemplate) => {
-  return {};
-};
-
-const generateTemplateServices = (template: ProjectTemplate) => {
-  return {};
+  return components;
 };
 
 const generateTemplatePages = (template: ProjectTemplate, name: string) => {
   const pages: Record<string, string> = {};
   
-  pages['HomePage.tsx'] = generateHomePage(template, name);
-  pages['Dashboard.tsx'] = generateDashboardPage(template);
-  pages['Login.tsx'] = generateLoginPage();
-  pages['Register.tsx'] = generateRegisterPage();
-  
-  return pages;
+  pages['HomePage.tsx'] = `import React from 'react';
+
+const HomePage = () => {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white shadow">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <h1 className="text-3xl font-bold text-gray-900">${name}</h1>
+          <p className="mt-2 text-gray-600">${template.description}</p>
+        </div>
+      </header>
+      
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-4">Funcionalidades</h2>
+          <ul className="space-y-2">
+            ${template.features.map(feature => `<li className="flex items-center space-x-2">
+              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+              <span>${feature}</span>
+            </li>`).join('\n            ')}
+          </ul>
+        </div>
+      </main>
+    </div>
+  );
 };
 
-const generateHomePage = (template: ProjectTemplate, projectName: string) => {
-  return `// HomePage implementation`;
+export default HomePage;`;
+
+  pages['Dashboard.tsx'] = `import React from 'react';
+
+const Dashboard = () => {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h1>
+        <div className="bg-white rounded-lg shadow p-6">
+          <p>Bem-vindo ao seu dashboard!</p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
-const generateDashboardPage = (template: ProjectTemplate) => {
-  return `// Dashboard implementation`;
-};
+export default Dashboard;`;
 
-const generateLoginPage = () => {
-  return `import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useAuth } from '@/contexts/AuthContext';
-import { toast } from '@/hooks/use-toast';
+  pages['Login.tsx'] = `import React from 'react';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const { error } = await signIn(email, password);
-
-    if (error) {
-      toast({
-        title: "Erro no login",
-        description: error.message,
-        variant: "destructive"
-      });
-    } else {
-      navigate('/dashboard');
-    }
-
-    setLoading(false);
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Entre na sua conta</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="password">Senha</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Entrando...' : 'Entrar'}
-            </Button>
-          </form>
-          <div className="mt-4 text-center">
-            <Link to="/register" className="text-sm text-blue-600 hover:underline">
-              Não tem conta? Cadastre-se
-            </Link>
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+        <form className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
           </div>
-        </CardContent>
-      </Card>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Senha</label>
+            <input type="password" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+          </div>
+          <button type="submit" className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+            Entrar
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
 
 export default Login;`;
-};
 
-const generateRegisterPage = () => {
-  return `import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useAuth } from '@/contexts/AuthContext';
-import { toast } from '@/hooks/use-toast';
+  pages['Register.tsx'] = `import React from 'react';
 
 const Register = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { signUp } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const { error } = await signUp(email, password);
-
-    if (error) {
-      toast({
-        title: "Erro no cadastro",
-        description: error.message,
-        variant: "destructive"
-      });
-    } else {
-      toast({
-        title: "Cadastro realizado!",
-        description: "Verifique seu email para confirmar a conta.",
-      });
-      navigate('/login');
-    }
-
-    setLoading(false);
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Cadastro</CardTitle>
-          <CardDescription>Crie sua nova conta</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="password">Senha</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Cadastrando...' : 'Cadastrar'}
-            </Button>
-          </form>
-          <div className="mt-4 text-center">
-            <Link to="/login" className="text-sm text-blue-600 hover:underline">
-              Já tem conta? Faça login
-            </Link>
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-6">Cadastrar</h2>
+        <form className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Nome</label>
+            <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
           </div>
-        </CardContent>
-      </Card>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Senha</label>
+            <input type="password" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+          </div>
+          <button type="submit" className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+            Cadastrar
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
 
 export default Register;`;
+  
+  return pages;
 };
 
 const generateIndexHtml = (name: string) => {
@@ -1091,21 +451,89 @@ const generateReadme = (template: ProjectTemplate, name: string, description: st
 
 ${description || template.description}
 
-## Backend incluído com Supabase
+## 🚀 Como Instalar e Executar
 
-Este projeto inclui configuração completa de backend com:
-- Autenticação de usuários
-- Banco de dados PostgreSQL
-- Storage para arquivos
-- APIs prontas para uso
-- Row Level Security (RLS) configurado
+### Pré-requisitos
+- Node.js 18+ 
+- npm ou yarn
 
-## Instalação
+### Instalação
 
-1. npm install
-2. Configure as variáveis de ambiente (copie .env.example para .env)
-3. Configure seu projeto Supabase
-4. npm run dev`;
+1. **Extraia o projeto baixado**
+   \`\`\`bash
+   unzip ${name.toLowerCase().replace(/\s+/g, '-')}.zip
+   cd ${name.toLowerCase().replace(/\s+/g, '-')}
+   \`\`\`
+
+2. **Instale as dependências**
+   \`\`\`bash
+   npm install
+   \`\`\`
+
+3. **Configure as variáveis de ambiente**
+   \`\`\`bash
+   cp .env.example .env
+   \`\`\`
+   
+   Edite o arquivo \`.env\` com suas configurações do Supabase:
+   - \`VITE_SUPABASE_URL\`: URL do seu projeto Supabase
+   - \`VITE_SUPABASE_ANON_KEY\`: Chave anônima do Supabase
+
+4. **Execute o projeto**
+   \`\`\`bash
+   npm run dev
+   \`\`\`
+
+5. **Acesse no navegador**
+   \`\`\`
+   http://localhost:5173
+   \`\`\`
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Frontend**: React 18 + TypeScript + Vite
+- **Styling**: Tailwind CSS + Shadcn/ui
+- **Backend**: Supabase (PostgreSQL + Auth + Storage)
+- **Formulários**: React Hook Form + Zod
+- **Estado**: TanStack Query
+- **Ícones**: Lucide React
+
+## 📦 Funcionalidades Incluídas
+
+${template.features.map(feature => `- ✅ ${feature}`).join('\n')}
+
+${features ? `\n## 🎯 Funcionalidades Personalizadas\n\n${features}` : ''}
+
+## 🗄️ Configuração do Banco de Dados
+
+O projeto inclui scripts SQL prontos no arquivo \`supabase/seed.sql\`. Execute-os no seu painel do Supabase para criar as tabelas necessárias.
+
+## 📝 Scripts Disponíveis
+
+- \`npm run dev\` - Inicia o servidor de desenvolvimento
+- \`npm run build\` - Gera a build de produção
+- \`npm run preview\` - Visualiza a build de produção
+- \`npm run lint\` - Executa o linter
+
+## 🔧 Personalização
+
+Este projeto foi gerado com uma estrutura modular. Você pode:
+
+1. **Modificar componentes** em \`src/components/\`
+2. **Adicionar páginas** em \`src/pages/\`
+3. **Configurar rotas** em \`src/App.tsx\`
+4. **Personalizar estilos** em \`src/index.css\`
+
+## 📞 Suporte
+
+Para dúvidas ou problemas:
+1. Verifique a documentação do Supabase: https://supabase.com/docs
+2. Consulte a documentação do React: https://react.dev
+3. Revise os logs do console para erros específicos
+
+---
+
+**Projeto gerado pelo Gerador SaaS IA** 🤖`;
 };
 
 const generateTailwindConfig = () => {
@@ -1212,22 +640,16 @@ const generateTsConfig = () => {
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-
-    /* Path mapping */
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
@@ -1278,28 +700,6 @@ const generateIndexCss = () => {
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
   }
 }
 
