@@ -11,6 +11,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Checkout from "./pages/Checkout";
+import Subscription from "./pages/Subscription";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/subscription" element={<Subscription />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/generator" element={<Index />} />
           <Route path="/admin" element={<AdminDashboard />} />

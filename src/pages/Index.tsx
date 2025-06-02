@@ -258,7 +258,7 @@ const Index = () => {
                       )}
                     </div>
                     {(user.plan_type === 'freemium' && projectsRemaining === 0) && (
-                      <Link to="/register?plan=pro">
+                      <Link to="/subscription">
                         <Button variant="outline" className="bg-white/20 border-white/30 text-white hover:bg-white/30">
                           <Crown className="w-4 h-4 mr-2" />
                           Fazer Upgrade
@@ -368,7 +368,7 @@ const Index = () => {
                     <div className="text-center text-white">
                       <Lock className="w-12 h-12 mx-auto mb-4" />
                       <p className="font-bold text-lg mb-2">Limite Atingido</p>
-                      <Link to="/register?plan=pro">
+                      <Link to="/subscription">
                         <Button variant="outline" className="bg-white/20 border-white/30 text-white hover:bg-white/30">
                           <Crown className="w-4 h-4 mr-2" />
                           Fazer Upgrade
