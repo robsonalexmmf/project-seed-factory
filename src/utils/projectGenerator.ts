@@ -1,4 +1,3 @@
-
 import JSZip from 'jszip';
 import { ProjectTemplate } from './projectTemplates';
 
@@ -100,6 +99,22 @@ const generateProjectFiles = (config: ProjectConfig): Record<string, string> => 
       "vite": "^5.4.3"
     }
   };
+
+  // Adicionar dependências do React Native se for um template mobile
+  if (template.category === 'mobile') {
+    packageJson.dependencies = {
+      ...packageJson.dependencies,
+      "expo": "~50.0.0",
+      "react-native": "0.73.0",
+      "@expo/vector-icons": "^13.0.0",
+      "expo-status-bar": "~1.11.1",
+      "expo-linear-gradient": "~12.7.2",
+      "expo-router": "~3.4.0",
+      "expo-constants": "~15.4.0",
+      "expo-device": "~5.9.0",
+      "expo-notifications": "~0.27.0"
+    };
+  }
 
   const files: Record<string, string> = {
     'package.json': JSON.stringify(packageJson, null, 2),
@@ -375,95 +390,12 @@ CREATE POLICY "Users can manage own projects" ON public.projects
   return seedContent;
 };
 
-const generateMainComponent = () => {
-  return `import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)`;
-};
-
-const generateAppComponent = (template: ProjectTemplate) => {
-  return `import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Toaster } from '@/components/ui/toaster';
-import { SupabaseProvider } from './contexts/SupabaseContext';
-import { AuthProvider } from './contexts/AuthContext';
-import HomePage from './pages/HomePage';
-import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
-import Register from './pages/Register';
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      refetchOnWindowFocus: false,
-    },
-  },
-});
-
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <SupabaseProvider>
-        <AuthProvider>
-          <Router>
-            <div className="min-h-screen bg-gray-50">
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-              </Routes>
-              <Toaster />
-            </div>
-          </Router>
-        </AuthProvider>
-      </SupabaseProvider>
-    </QueryClientProvider>
-  );
-}
-
-export default App;`;
-};
-
-const generateTemplateComponents = (template: ProjectTemplate) => {
-  const components: Record<string, string> = {};
-
-  // Componentes UI base
-  components['ui/button.tsx'] = generateButtonComponent();
-  components['ui/card.tsx'] = generateCardComponent();
-  components['ui/input.tsx'] = generateInputComponent();
-  components['ui/badge.tsx'] = generateBadgeComponent();
-  components['ui/toaster.tsx'] = generateToasterComponent();
-  components['ui/toast.tsx'] = generateToastComponent();
-  components['ui/use-toast.ts'] = generateUseToastHook();
-
-  // Context providers
-  components['contexts/SupabaseContext.tsx'] = generateSupabaseContext();
-  components['contexts/AuthContext.tsx'] = generateAuthContext();
-
-  // Layout components
-  components['layout/Header.tsx'] = generateHeaderComponent(template);
-  components['layout/Sidebar.tsx'] = generateSidebarComponent(template);
-  components['layout/Footer.tsx'] = generateFooterComponent();
-
-  return components;
-};
-
 const generateSupabaseContext = () => {
   return `import React, { createContext, useContext } from 'react';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string) || '';
+const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string) || '';
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -568,7 +500,89 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 };`;
 };
 
-// Funções auxiliares para configuração
+const generateMainComponent = () => {
+  return `import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App.tsx'
+import './index.css'
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)`;
+};
+
+const generateAppComponent = (template: ProjectTemplate) => {
+  return `import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from '@/components/ui/toaster';
+import { SupabaseProvider } from './contexts/SupabaseContext';
+import { AuthProvider } from './contexts/AuthContext';
+import HomePage from './pages/HomePage';
+import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
+import Register from './pages/Register';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <SupabaseProvider>
+        <AuthProvider>
+          <Router>
+            <div className="min-h-screen bg-gray-50">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Routes>
+              <Toaster />
+            </div>
+          </Router>
+        </AuthProvider>
+      </SupabaseProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;`;
+};
+
+const generateTemplateComponents = (template: ProjectTemplate) => {
+  const components: Record<string, string> = {};
+
+  // Componentes UI base
+  components['ui/button.tsx'] = generateButtonComponent();
+  components['ui/card.tsx'] = generateCardComponent();
+  components['ui/input.tsx'] = generateInputComponent();
+  components['ui/badge.tsx'] = generateBadgeComponent();
+  components['ui/toaster.tsx'] = generateToasterComponent();
+  components['ui/toast.tsx'] = generateToastComponent();
+  components['ui/use-toast.ts'] = generateUseToastHook();
+
+  // Context providers
+  components['contexts/SupabaseContext.tsx'] = generateSupabaseContext();
+  components['contexts/AuthContext.tsx'] = generateAuthContext();
+
+  // Layout components
+  components['layout/Header.tsx'] = generateHeaderComponent(template);
+  components['layout/Sidebar.tsx'] = generateSidebarComponent(template);
+  components['layout/Footer.tsx'] = generateFooterComponent();
+
+  return components;
+};
+
 const generateButtonComponent = () => {
   return `import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
