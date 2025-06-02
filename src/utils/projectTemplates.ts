@@ -1,4 +1,3 @@
-
 import { 
   LucideIcon, 
   Activity, 
@@ -61,7 +60,8 @@ import {
   Key,
   Shirt,
   Dog,
-  Gift
+  Gift,
+  Clock
 } from 'lucide-react';
 
 export interface ProjectTemplate {
@@ -601,7 +601,7 @@ export const projectTemplates: ProjectTemplate[] = [
     description: 'Sistema para controlar tempo de preparo na cozinha',
     category: 'delivery',
     features: ['Tempo de preparo', 'Fila de pedidos', 'Cozinha', 'Eficiência', 'Relatórios'],
-    icon: Timer,
+    icon: Clock,
     color: 'bg-red-600'
   },
   {
