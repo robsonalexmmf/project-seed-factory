@@ -8,6 +8,9 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LandingPage from "./components/LandingPage";
 import AdminDashboard from "./components/AdminDashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Checkout from "./pages/Checkout";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +22,9 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/generator" element={<Index />} />
           <Route path="/admin" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

@@ -5,8 +5,27 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Check, Zap, Users, Shield, Star, Code, Rocket } from 'lucide-react';
 import { userPlans } from '@/types/user';
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    navigate('/register?plan=freemium');
+  };
+
+  const handleLogin = () => {
+    navigate('/login');
+  };
+
+  const handlePlanSelect = (planId: string) => {
+    if (planId === 'freemium') {
+      navigate('/register?plan=freemium');
+    } else {
+      navigate(`/register?plan=${planId}`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
@@ -18,8 +37,8 @@ const LandingPage = () => {
               <h1 className="text-2xl font-bold text-gray-900">SaaS Generator AI</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="outline">Login</Button>
-              <Button>Começar Grátis</Button>
+              <Button variant="outline" onClick={handleLogin}>Login</Button>
+              <Button onClick={handleGetStarted}>Começar Grátis</Button>
             </div>
           </div>
         </div>
@@ -41,7 +60,7 @@ const LandingPage = () => {
             com autenticação, banco de dados e deploy automático.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700" onClick={handleGetStarted}>
               <Zap className="w-5 h-5 mr-2" />
               Começar Grátis
             </Button>
@@ -140,6 +159,7 @@ const LandingPage = () => {
                   <Button 
                     className={`w-full mt-6 ${plan.id === 'pro' ? 'bg-blue-600 hover:bg-blue-700' : ''}`}
                     variant={plan.id === 'pro' ? 'default' : 'outline'}
+                    onClick={() => handlePlanSelect(plan.id)}
                   >
                     {plan.price === 0 ? 'Começar Grátis' : 'Assinar Agora'}
                   </Button>
@@ -183,7 +203,7 @@ const LandingPage = () => {
           <p className="text-xl text-gray-600 mb-8">
             Junte-se a milhares de empreendedores que já criaram seus SaaS com nossa plataforma
           </p>
-          <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+          <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700" onClick={handleGetStarted}>
             <Star className="w-5 h-5 mr-2" />
             Começar Agora - Grátis
           </Button>
