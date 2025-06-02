@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -14,7 +13,6 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { toast } = useToast();
 
   // Pegar o plano da URL se vier do botão de assinatura
   const planType = new URLSearchParams(location.search).get('plan') || 'freemium';
