@@ -1,4 +1,3 @@
-
 import { 
   ShoppingCart, Store, Hotel, Users, FileText, CheckSquare, Building, TrendingUp, 
   BookOpen, BarChart3, Smartphone, CreditCard, Brain, Zap, Calendar, 
@@ -6,13 +5,19 @@ import {
   Heart, Stethoscope, Car, Wrench, Scissors, PaintBucket, Coffee,
   Calculator, ClipboardList, Target, Award, Gift, Star, Settings,
   Database, Cloud, Lock, Key, Search, Filter, Share, Download,
-  Upload, Edit, Save, Trash, Plus, Minus, Play, Pause, Stop,
+  Upload, Edit, Save, Trash, Plus, Minus, Play, Pause,
   Volume2, Wifi, Battery, Signal, Map, Navigation, Compass,
   Thermometer, Sun, Moon, Eye, EyeOff, Bell, BellOff, Flag,
   Tag, Bookmark, Archive, Folder, File, Image, Link, Copy,
-  Clipboard, Printer, Scanner, Monitor, Laptop, Tablet,
+  Clipboard, Printer, Monitor, Laptop, Tablet,
   Watch, Gamepad2, Headphones, Mic, Speaker, Radio, Tv,
-  Lightbulb, Flame, Snowflake, Droplet, Wind, CloudRain
+  Lightbulb, Flame, Snowflake, Droplet, Wind, CloudRain,
+  Truck, Receipt, GraduationCap, ClipboardCheck, Home, Scale,
+  Clock, HardHat, Share2, PieChart, MousePointer, User,
+  HelpCircle, RotateCcw, Route, Activity, Smile, Lotus,
+  CheckCircle, Apple, Dumbbell, Vote, Scan, MapPin,
+  ChefHat, UserPlus, Package, Wallet, Bitcoin, PiggyBank,
+  Megaphone, Palette, Gavel
 } from 'lucide-react';
 
 export interface ProjectTemplate {
@@ -46,7 +51,7 @@ export const projectTemplates: ProjectTemplate[] = [
   {
     id: 'delivery-system',
     name: 'Sistema de Delivery Completo',
-    description: 'Sistema completo de delivery com rastreamento em tempo real, cupons, avaliações e múltiplos gateways de pagamento',
+    description: 'Sistema completo de delivery com rastreamento em tempo real, cupons, avaliações e múltiplos pagamentos',
     category: 'delivery',
     features: ['Rastreamento GPS em tempo real', 'Sistema de cupons e promoções', 'Avaliações de entregadores', 'Múltiplos pagamentos', 'Dashboard para entregadores', 'Notificações push', 'Chat com entregador'],
     icon: ShoppingCart,
