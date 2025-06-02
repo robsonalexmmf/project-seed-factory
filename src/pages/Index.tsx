@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,13 +18,16 @@ import {
   Shield,
   Globe,
   Code,
-  Layers
+  Layers,
+  Crown,
+  Lock
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { projectTemplates, categories, getTemplatesByCategory, searchTemplates } from '@/utils/projectTemplates';
 import { generateAndDownloadProject } from '@/utils/projectGenerator';
 import TemplateCard from '@/components/TemplateCard';
 import ProjectGeneratorModal from '@/components/ProjectGeneratorModal';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
@@ -36,6 +38,52 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  // Verificar limite de projetos
+  const checkProjectLimit = () => {
+    if (!user) {
+      toast({
+        title: "Login necessário",
+        description: "Faça login para gerar projetos",
+        variant: "destructive"
+      });
+      return false;
+    }
+
+    // Admin tem acesso ilimitado
+    if (user.plan_type === 'admin') {
+      return true;
+    }
+
+    // Usuários freemium têm limite de 2 projetos por mês
+    if (user.plan_type === 'freemium' && user.projects_generated >= 2) {
+      return false;
+    }
+
+    // Usuários pro têm limite de 10 projetos por mês
+    if (user.plan_type === 'pro' && user.monthly_limit !== -1 && user.projects_generated >= user.monthly_limit) {
+      return false;
+    }
+
+    // Business tem projetos ilimitados
+    return true;
+  };
+
+  const showUpgradeModal = () => {
+    toast({
+      title: "Limite de projetos atingido! 🚀",
+      description: "Você atingiu o limite de 2 projetos gratuitos. Faça upgrade para continuar gerando!",
+      variant: "destructive"
+    });
+  };
 
   // Filtrar templates
   const filteredTemplates = selectedCategory === 'all' 
@@ -47,6 +95,11 @@ const Index = () => {
       : getTemplatesByCategory(selectedCategory);
 
   const handleTemplateSelect = (template: any) => {
+    if (!checkProjectLimit()) {
+      showUpgradeModal();
+      return;
+    }
+    
     setSelectedTemplate(template);
     setIsModalOpen(true);
   };
@@ -58,6 +111,11 @@ const Index = () => {
         description: "Por favor, selecione um template e digite o nome do projeto",
         variant: "destructive"
       });
+      return;
+    }
+
+    if (!checkProjectLimit()) {
+      showUpgradeModal();
       return;
     }
 
@@ -81,6 +139,27 @@ const Index = () => {
         description: projectDescription,
         features: customFeatures
       });
+
+      // Incrementar contador de projetos gerados
+      if (user) {
+        const updatedUser = {
+          ...user,
+          projects_generated: user.projects_generated + 1
+        };
+
+        // Atualizar no localStorage
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        
+        // Atualizar lista de usuários
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const userIndex = users.findIndex((u: any) => u.id === user.id);
+        if (userIndex !== -1) {
+          users[userIndex] = updatedUser;
+          localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        setUser(updatedUser);
+      }
 
       toast({
         title: "🎉 Projeto Gerado com Sucesso!",
@@ -111,6 +190,16 @@ const Index = () => {
     count: cat.id === 'all' ? totalTemplates : getTemplatesByCategory(cat.id).length
   }));
 
+  // Calcular projetos restantes
+  const getProjectsRemaining = () => {
+    if (!user) return 0;
+    if (user.plan_type === 'admin' || user.plan_type === 'business') return -1; // Ilimitado
+    if (user.plan_type === 'pro') return Math.max(0, user.monthly_limit - user.projects_generated);
+    return Math.max(0, 2 - user.projects_generated); // Freemium
+  };
+
+  const projectsRemaining = getProjectsRemaining();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
       {/* Animated Background */}
@@ -140,6 +229,46 @@ const Index = () => {
               <span className="font-bold text-yellow-300 mx-2">{totalTemplates} templates</span> 
               profissionais com Supabase integrado.
             </p>
+
+            {/* Status do usuário e limite de projetos */}
+            {user && (
+              <div className="flex justify-center mb-8">
+                <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+                  <div className="flex items-center space-x-4 text-white">
+                    <div className="flex items-center space-x-2">
+                      {user.plan_type === 'admin' ? (
+                        <Crown className="w-6 h-6 text-yellow-300" />
+                      ) : user.plan_type === 'business' ? (
+                        <Star className="w-6 h-6 text-purple-300" />
+                      ) : user.plan_type === 'pro' ? (
+                        <Zap className="w-6 h-6 text-blue-300" />
+                      ) : (
+                        <Timer className="w-6 h-6 text-green-300" />
+                      )}
+                      <span className="font-bold text-lg capitalize">{user.plan_type}</span>
+                    </div>
+                    <div className="h-6 w-px bg-white/30"></div>
+                    <div className="text-lg">
+                      {projectsRemaining === -1 ? (
+                        <span className="text-green-300 font-bold">Projetos Ilimitados</span>
+                      ) : (
+                        <span className={`font-bold ${projectsRemaining === 0 ? 'text-red-300' : 'text-green-300'}`}>
+                          {projectsRemaining} projetos restantes
+                        </span>
+                      )}
+                    </div>
+                    {(user.plan_type === 'freemium' && projectsRemaining === 0) && (
+                      <Link to="/register?plan=pro">
+                        <Button variant="outline" className="bg-white/20 border-white/30 text-white hover:bg-white/30">
+                          <Crown className="w-4 h-4 mr-2" />
+                          Fazer Upgrade
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
             
             <div className="flex flex-wrap justify-center gap-4 mb-10">
               <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white px-6 py-3 text-lg font-bold shadow-lg">
@@ -226,13 +355,29 @@ const Index = () => {
         {filteredTemplates.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {filteredTemplates.map((template) => (
-              <TemplateCard
-                key={template.id}
-                template={template}
-                isSelected={false}
-                onSelect={() => handleTemplateSelect(template)}
-                categoryName={categories.find(c => c.id === template.category)?.name || ''}
-              />
+              <div key={template.id} className="relative">
+                <TemplateCard
+                  template={template}
+                  isSelected={false}
+                  onSelect={() => handleTemplateSelect(template)}
+                  categoryName={categories.find(c => c.id === template.category)?.name || ''}
+                />
+                {/* Overlay para usuários sem limite */}
+                {user && user.plan_type === 'freemium' && projectsRemaining === 0 && (
+                  <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                    <div className="text-center text-white">
+                      <Lock className="w-12 h-12 mx-auto mb-4" />
+                      <p className="font-bold text-lg mb-2">Limite Atingido</p>
+                      <Link to="/register?plan=pro">
+                        <Button variant="outline" className="bg-white/20 border-white/30 text-white hover:bg-white/30">
+                          <Crown className="w-4 h-4 mr-2" />
+                          Fazer Upgrade
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         ) : (
