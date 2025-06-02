@@ -1,12 +1,38 @@
 
+import JSZip from 'jszip';
+import { ProjectTemplate } from './projectTemplates';
+
 interface ProjectConfig {
-  template: any;
+  template: ProjectTemplate;
   name: string;
   description: string;
   features: string;
 }
 
-export const generateProjectFiles = (config: ProjectConfig) => {
+export const generateAndDownloadProject = async (config: ProjectConfig): Promise<void> => {
+  const zip = new JSZip();
+  const files = generateProjectFiles(config);
+
+  // Adicionar todos os arquivos ao ZIP
+  Object.entries(files).forEach(([path, content]) => {
+    zip.file(path, content);
+  });
+
+  // Gerar o ZIP
+  const blob = await zip.generateAsync({ type: 'blob' });
+  
+  // Fazer download
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${config.name.toLowerCase().replace(/\s+/g, '-')}.zip`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
+const generateProjectFiles = (config: ProjectConfig): Record<string, string> => {
   const { template, name, description, features } = config;
   
   const packageJson = {
@@ -33,7 +59,29 @@ export const generateProjectFiles = (config: ProjectConfig) => {
       "@radix-ui/react-toast": "^1.2.1",
       "@radix-ui/react-dialog": "^1.1.2",
       "@radix-ui/react-tabs": "^1.1.0",
-      "@radix-ui/react-select": "^2.1.1"
+      "@radix-ui/react-select": "^2.1.1",
+      "@radix-ui/react-accordion": "^1.2.0",
+      "@radix-ui/react-alert-dialog": "^1.1.1",
+      "@radix-ui/react-avatar": "^1.1.0",
+      "@radix-ui/react-badge": "^1.0.4",
+      "@radix-ui/react-button": "^1.1.0",
+      "@radix-ui/react-card": "^1.1.0",
+      "@radix-ui/react-checkbox": "^1.1.1",
+      "@radix-ui/react-dropdown-menu": "^2.1.1",
+      "@radix-ui/react-input": "^1.1.0",
+      "@radix-ui/react-label": "^2.1.0",
+      "@radix-ui/react-popover": "^1.1.1",
+      "@radix-ui/react-progress": "^1.1.0",
+      "@radix-ui/react-scroll-area": "^1.1.0",
+      "@radix-ui/react-separator": "^1.1.0",
+      "@radix-ui/react-switch": "^1.1.0",
+      "@radix-ui/react-table": "^1.1.0",
+      "@radix-ui/react-textarea": "^1.1.0",
+      "recharts": "^2.12.7",
+      "date-fns": "^3.6.0",
+      "react-hook-form": "^7.53.0",
+      "zod": "^3.23.8",
+      "@hookform/resolvers": "^3.9.0"
     },
     devDependencies: {
       "@types/react": "^18.3.5",
@@ -52,18 +100,25 @@ export const generateProjectFiles = (config: ProjectConfig) => {
     }
   };
 
-  const mainTsx = generateMainComponent(template, name);
+  const mainTsx = generateMainComponent();
   const appTsx = generateAppComponent(template);
   const indexHtml = generateIndexHtml(name);
   const readmeContent = generateReadme(template, name, description, features);
   const tailwindConfig = generateTailwindConfig();
   const viteConfig = generateViteConfig();
   const tsConfig = generateTsConfig();
+  const tsConfigNode = generateTsConfigNode();
   const indexCss = generateIndexCss();
+  const eslintConfig = generateEslintConfig();
+  const gitignore = generateGitignore();
+  const postcssConfig = generatePostcssConfig();
   
   // Componentes específicos baseados no template
   const components = generateTemplateComponents(template);
-  const pages = generateTemplatePages(template);
+  const pages = generateTemplatePages(template, name);
+  const hooks = generateTemplateHooks(template);
+  const utils = generateTemplateUtils(template);
+  const services = generateTemplateServices(template);
   
   const files: Record<string, string> = {
     'package.json': JSON.stringify(packageJson, null, 2),
@@ -75,8 +130,11 @@ export const generateProjectFiles = (config: ProjectConfig) => {
     'tailwind.config.ts': tailwindConfig,
     'vite.config.ts': viteConfig,
     'tsconfig.json': tsConfig,
-    'postcss.config.js': 'module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }',
-    '.gitignore': `node_modules\ndist\n.env\n.env.local\n*.log`
+    'tsconfig.node.json': tsConfigNode,
+    'eslint.config.js': eslintConfig,
+    'postcss.config.js': postcssConfig,
+    '.gitignore': gitignore,
+    'src/lib/utils.ts': generateLibUtils()
   };
 
   // Adicionar componentes do template
@@ -89,18 +147,38 @@ export const generateProjectFiles = (config: ProjectConfig) => {
     files[`src/pages/${path}`] = content;
   });
 
+  // Adicionar hooks do template
+  Object.entries(hooks).forEach(([path, content]) => {
+    files[`src/hooks/${path}`] = content;
+  });
+
+  // Adicionar utils do template
+  Object.entries(utils).forEach(([path, content]) => {
+    files[`src/utils/${path}`] = content;
+  });
+
+  // Adicionar services do template
+  Object.entries(services).forEach(([path, content]) => {
+    files[`src/services/${path}`] = content;
+  });
+
   return files;
 };
 
-const generateMainComponent = (template: any, name: string) => {
-  return `import { createRoot } from 'react-dom/client'
+const generateMainComponent = () => {
+  return `import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 
-createRoot(document.getElementById("root")!).render(<App />);`;
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)`;
 };
 
-const generateAppComponent = (template: any) => {
+const generateAppComponent = (template: ProjectTemplate) => {
   const imports = [
     `import React from 'react';`,
     `import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';`,
@@ -110,9 +188,20 @@ const generateAppComponent = (template: any) => {
     `import Dashboard from './pages/Dashboard';`
   ];
 
+  // Adicionar imports específicos por categoria
   if (template.category === 'delivery') {
     imports.push(`import OrderTracking from './pages/OrderTracking';`);
-    imports.push(`import RestaurantManagement from './pages/RestaurantManagement';`);
+    imports.push(`import ProductCatalog from './pages/ProductCatalog';`);
+  }
+  
+  if (template.category === 'business') {
+    imports.push(`import Analytics from './pages/Analytics';`);
+    imports.push(`import Settings from './pages/Settings';`);
+  }
+
+  if (template.category === 'health') {
+    imports.push(`import Appointments from './pages/Appointments';`);
+    imports.push(`import Patients from './pages/Patients';`);
   }
 
   const routes = [
@@ -120,14 +209,32 @@ const generateAppComponent = (template: any) => {
     `<Route path="/dashboard" element={<Dashboard />} />`
   ];
 
+  // Adicionar rotas específicas por categoria
   if (template.category === 'delivery') {
-    routes.push(`<Route path="/tracking/:orderId" element={<OrderTracking />} />`);
-    routes.push(`<Route path="/restaurant" element={<RestaurantManagement />} />`);
+    routes.push(`<Route path="/orders/:orderId" element={<OrderTracking />} />`);
+    routes.push(`<Route path="/catalog" element={<ProductCatalog />} />`);
+  }
+  
+  if (template.category === 'business') {
+    routes.push(`<Route path="/analytics" element={<Analytics />} />`);
+    routes.push(`<Route path="/settings" element={<Settings />} />`);
+  }
+
+  if (template.category === 'health') {
+    routes.push(`<Route path="/appointments" element={<Appointments />} />`);
+    routes.push(`<Route path="/patients" element={<Patients />} />`);
   }
 
   return `${imports.join('\n')}
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   return (
@@ -147,160 +254,403 @@ function App() {
 export default App;`;
 };
 
-const generateTemplateComponents = (template: any) => {
+const generateTemplateComponents = (template: ProjectTemplate) => {
   const components: Record<string, string> = {};
 
-  // Componentes base para todos os templates
+  // Componentes UI base
   components['ui/button.tsx'] = generateButtonComponent();
   components['ui/card.tsx'] = generateCardComponent();
   components['ui/input.tsx'] = generateInputComponent();
-  
+  components['ui/badge.tsx'] = generateBadgeComponent();
+  components['ui/toaster.tsx'] = generateToasterComponent();
+  components['ui/toast.tsx'] = generateToastComponent();
+  components['ui/use-toast.ts'] = generateUseToastHook();
+
+  // Layout components
+  components['layout/Header.tsx'] = generateHeaderComponent(template);
+  components['layout/Sidebar.tsx'] = generateSidebarComponent(template);
+  components['layout/Footer.tsx'] = generateFooterComponent();
+
   // Componentes específicos baseados no template
   if (template.category === 'delivery') {
     components['OrderCard.tsx'] = generateOrderCardComponent();
+    components['ProductCard.tsx'] = generateProductCardComponent();
     components['DeliveryMap.tsx'] = generateDeliveryMapComponent();
-    components['RestaurantCard.tsx'] = generateRestaurantCardComponent();
+    components['OrderStatusBadge.tsx'] = generateOrderStatusBadgeComponent();
   }
 
   if (template.category === 'business') {
-    components['LeadCard.tsx'] = generateLeadCardComponent();
-    components['SalesChart.tsx'] = generateSalesChartComponent();
-    components['TaskBoard.tsx'] = generateTaskBoardComponent();
+    components['TaskCard.tsx'] = generateTaskCardComponent();
+    components['KanbanBoard.tsx'] = generateKanbanBoardComponent();
+    components['AnalyticsChart.tsx'] = generateAnalyticsChartComponent();
+    components['DataTable.tsx'] = generateDataTableComponent();
+  }
+
+  if (template.category === 'health') {
+    components['AppointmentCard.tsx'] = generateAppointmentCardComponent();
+    components['PatientCard.tsx'] = generatePatientCardComponent();
+    components['MedicalChart.tsx'] = generateMedicalChartComponent();
+  }
+
+  if (template.category === 'content') {
+    components['ArticleCard.tsx'] = generateArticleCardComponent();
+    components['CourseCard.tsx'] = generateCourseCardComponent();
+    components['VideoPlayer.tsx'] = generateVideoPlayerComponent();
   }
 
   return components;
 };
 
-const generateTemplatePages = (template: any) => {
+const generateTemplatePages = (template: ProjectTemplate, projectName: string) => {
   const pages: Record<string, string> = {};
   
-  pages['HomePage.tsx'] = generateHomePage(template);
+  pages['HomePage.tsx'] = generateHomePage(template, projectName);
   pages['Dashboard.tsx'] = generateDashboardPage(template);
   
+  // Páginas específicas por categoria
   if (template.category === 'delivery') {
     pages['OrderTracking.tsx'] = generateOrderTrackingPage();
-    pages['RestaurantManagement.tsx'] = generateRestaurantManagementPage();
+    pages['ProductCatalog.tsx'] = generateProductCatalogPage();
+  }
+  
+  if (template.category === 'business') {
+    pages['Analytics.tsx'] = generateAnalyticsPage();
+    pages['Settings.tsx'] = generateSettingsPage();
+  }
+
+  if (template.category === 'health') {
+    pages['Appointments.tsx'] = generateAppointmentsPage();
+    pages['Patients.tsx'] = generatePatientsPage();
   }
 
   return pages;
 };
 
-// Funções auxiliares para gerar componentes específicos
-const generateButtonComponent = () => {
-  return `import React from 'react';
-import { cn } from '@/lib/utils';
-
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'outline' | 'secondary';
-  size?: 'sm' | 'md' | 'lg';
-}
-
-const Button: React.FC<ButtonProps> = ({ 
-  className, 
-  variant = 'default', 
-  size = 'md',
-  ...props 
-}) => {
-  const baseClasses = 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50';
+const generateTemplateHooks = (template: ProjectTemplate) => {
+  const hooks: Record<string, string> = {};
   
-  const variants = {
-    default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-    outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-    secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-  };
+  hooks['useLocalStorage.ts'] = generateUseLocalStorageHook();
+  hooks['useDebounce.ts'] = generateUseDebounceHook();
   
-  const sizes = {
-    sm: 'h-9 px-3 text-sm',
-    md: 'h-10 px-4 py-2',
-    lg: 'h-11 px-8 text-lg'
-  };
+  if (template.category === 'delivery') {
+    hooks['useOrders.ts'] = generateUseOrdersHook();
+    hooks['useProducts.ts'] = generateUseProductsHook();
+  }
+  
+  if (template.category === 'business') {
+    hooks['useTasks.ts'] = generateUseTasksHook();
+    hooks['useAnalytics.ts'] = generateUseAnalyticsHook();
+  }
 
-  return (
-    <button
-      className={cn(baseClasses, variants[variant], sizes[size], className)}
-      {...props}
-    />
-  );
+  return hooks;
 };
 
-export default Button;`;
+const generateTemplateUtils = (template: ProjectTemplate) => {
+  const utils: Record<string, string> = {};
+  
+  utils['constants.ts'] = generateConstants(template);
+  utils['formatters.ts'] = generateFormatters();
+  utils['validators.ts'] = generateValidators();
+  
+  return utils;
+};
+
+const generateTemplateServices = (template: ProjectTemplate) => {
+  const services: Record<string, string> = {};
+  
+  services['api.ts'] = generateApiService();
+  services['auth.ts'] = generateAuthService();
+  
+  if (template.category === 'delivery') {
+    services['orders.ts'] = generateOrdersService();
+    services['products.ts'] = generateProductsService();
+  }
+  
+  if (template.category === 'business') {
+    services['tasks.ts'] = generateTasksService();
+    services['analytics.ts'] = generateAnalyticsService();
+  }
+
+  return services;
+};
+
+// Funções auxiliares para gerar componentes específicos
+const generateButtonComponent = () => {
+  return `import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3",
+        lg: "h-11 rounded-md px-8",
+        icon: "h-10 w-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Button.displayName = "Button"
+
+export { Button, buttonVariants }`;
 };
 
 const generateCardComponent = () => {
-  return `import React from 'react';
-import { cn } from '@/lib/utils';
+  return `import * as React from "react"
+import { cn } from "@/lib/utils"
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-const Card: React.FC<CardProps> = ({ className, ...props }) => (
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
   <div
-    className={cn('rounded-lg border bg-card text-card-foreground shadow-sm', className)}
+    ref={ref}
+    className={cn(
+      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      className
+    )}
     {...props}
   />
-);
+))
+Card.displayName = "Card"
 
-const CardHeader: React.FC<CardProps> = ({ className, ...props }) => (
-  <div className={cn('flex flex-col space-y-1.5 p-6', className)} {...props} />
-);
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+))
+CardHeader.displayName = "CardHeader"
 
-const CardTitle: React.FC<CardProps> = ({ className, ...props }) => (
-  <h3 className={cn('text-2xl font-semibold leading-none tracking-tight', className)} {...props} />
-);
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      "text-2xl font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  />
+))
+CardTitle.displayName = "CardTitle"
 
-const CardContent: React.FC<CardProps> = ({ className, ...props }) => (
-  <div className={cn('p-6 pt-0', className)} {...props} />
-);
+const CardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+CardDescription.displayName = "CardDescription"
 
-export { Card, CardHeader, CardTitle, CardContent };`;
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+))
+CardContent.displayName = "CardContent"
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }`;
 };
 
-const generateHomePage = (template: any) => {
+const generateInputComponent = () => {
+  return `import * as React from "react"
+import { cn } from "@/lib/utils"
+
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, ...props }, ref) => {
+    return (
+      <input
+        type={type}
+        className={cn(
+          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Input.displayName = "Input"
+
+export { Input }`;
+};
+
+const generateHomePage = (template: ProjectTemplate, projectName: string) => {
   return `import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Button from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { ${template.icon.name} } from 'lucide-react';
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
-            <div className="p-4 bg-blue-600 rounded-full">
-              <${template.icon.name} className="w-12 h-12 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="bg-gradient-to-r ${template.color} to-purple-600 p-3 rounded-xl">
+                <${template.icon.name} className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">${projectName}</h1>
+                <p className="text-gray-600">${template.description}</p>
+              </div>
             </div>
+            <Badge variant="secondary" className="bg-green-100 text-green-800">
+              Versão 1.0.0
+            </Badge>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            ${template.name}
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            ${template.description}
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-5xl font-bold text-gray-900 mb-6">
+            Bem-vindo ao ${projectName}
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            ${template.description} com todas as funcionalidades que você precisa para ter sucesso.
           </p>
+          <div className="flex justify-center space-x-4">
+            <Link to="/dashboard">
+              <Button size="lg" className="bg-gradient-to-r ${template.color} to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                Acessar Dashboard
+              </Button>
+            </Link>
+            <Button variant="outline" size="lg">
+              Saiba Mais
+            </Button>
+          </div>
         </div>
+      </section>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          ${template.features.slice(0, 6).map((feature: string, index: number) => `
-          <Card key={${index}}>
-            <CardHeader>
-              <CardTitle className="text-lg">${feature}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                Funcionalidade completa e otimizada para ${feature.toLowerCase()}.
-              </p>
-            </CardContent>
-          </Card>`).join('\n          ')}
+      {/* Features Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">
+              Funcionalidades Principais
+            </h3>
+            <p className="text-xl text-gray-600">
+              Tudo que você precisa em uma solução completa
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            ${template.features.slice(0, 6).map((feature, index) => `
+            <Card key={${index}} className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center">
+                  <div className="w-2 h-2 ${template.color} rounded-full mr-3"></div>
+                  ${feature}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Funcionalidade completa e otimizada para ${feature.toLowerCase()}, 
+                  proporcionando a melhor experiência para seus usuários.
+                </CardDescription>
+              </CardContent>
+            </Card>`).join('\n            ')}
+          </div>
         </div>
+      </section>
 
-        <div className="text-center">
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r ${template.color} to-purple-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h3 className="text-3xl font-bold text-white mb-4">
+            Pronto para começar?
+          </h3>
+          <p className="text-xl text-blue-100 mb-8">
+            Acesse o dashboard e explore todas as funcionalidades disponíveis.
+          </p>
           <Link to="/dashboard">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-              Acessar Dashboard
+            <Button size="lg" variant="secondary">
+              Começar Agora
             </Button>
           </Link>
         </div>
-      </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-gray-400">
+            © 2024 ${projectName}. Todos os direitos reservados.
+          </p>
+          <p className="text-sm text-gray-500 mt-2">
+            Gerado com ❤️ pelo Gerador de SaaS IA
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
@@ -308,87 +658,173 @@ const HomePage = () => {
 export default HomePage;`;
 };
 
-const generateDashboardPage = (template: any) => {
+// Continuar com outras funções de geração...
+const generateDashboardPage = (template: ProjectTemplate) => {
   return `import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart3, Users, TrendingUp, DollarSign } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { 
+  BarChart3, 
+  Users, 
+  TrendingUp, 
+  DollarSign,
+  ${template.icon.name}
+} from 'lucide-react';
 
 const Dashboard = () => {
   const stats = [
-    { title: 'Total de Usuários', value: '1,234', icon: Users, color: 'text-blue-600' },
-    { title: 'Receita Total', value: 'R$ 45,678', icon: DollarSign, color: 'text-green-600' },
-    { title: 'Crescimento', value: '+23%', icon: TrendingUp, color: 'text-purple-600' },
-    { title: 'Conversões', value: '89%', icon: BarChart3, color: 'text-orange-600' }
+    { title: 'Total de Usuários', value: '1,234', icon: Users, color: 'text-blue-600', bg: 'bg-blue-100' },
+    { title: 'Receita Total', value: 'R$ 45,678', icon: DollarSign, color: 'text-green-600', bg: 'bg-green-100' },
+    { title: 'Crescimento', value: '+23%', icon: TrendingUp, color: 'text-purple-600', bg: 'bg-purple-100' },
+    { title: 'Performance', value: '89%', icon: BarChart3, color: 'text-orange-600', bg: 'bg-orange-100' }
+  ];
+
+  const recentActivities = [
+    { id: 1, action: 'Novo usuário cadastrado', time: 'Há 2 minutos', type: 'user' },
+    { id: 2, action: 'Pedido finalizado', time: 'Há 5 minutos', type: 'order' },
+    { id: 3, action: 'Pagamento processado', time: 'Há 8 minutos', type: 'payment' },
+    { id: 4, action: 'Relatório gerado', time: 'Há 12 minutos', type: 'report' },
+    { id: 5, action: 'Backup realizado', time: 'Há 15 minutos', type: 'system' }
   ];
 
   return (
-    <div className="p-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600">Visão geral do seu ${template.name}</p>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="${template.color} p-2 rounded-lg">
+                <${template.icon.name} className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+                <p className="text-gray-600">Visão geral do seu ${template.name}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Badge variant="secondary">Online</Badge>
+              <Button variant="outline">Configurações</Button>
+            </div>
+          </div>
+        </div>
+      </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {stats.map((stat, index) => (
-          <Card key={index}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              <stat.icon className={\`w-4 h-4 \${stat.color}\`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {stats.map((stat, index) => (
+            <Card key={index} className="hover:shadow-lg transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+                <div className={\`p-2 rounded-md \${stat.bg}\`}>
+                  <stat.icon className={\`w-4 h-4 \${stat.color}\`} />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stat.value}</div>
+                <p className="text-xs text-muted-foreground">
+                  +10% em relação ao mês passado
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Atividade Recente</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {Array.from({ length: 5 }, (_, i) => (
-                <div key={i} className="flex items-center space-x-4">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium">Atividade {i + 1}</p>
-                    <p className="text-xs text-gray-500">Há {i + 1} minuto(s)</p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Features Overview */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Funcionalidades Disponíveis</CardTitle>
+                <CardDescription>
+                  Recursos principais do seu ${template.name}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  ${template.features.map((feature, index) => `
+                  <div key={${index}} className="flex items-center p-3 border rounded-lg hover:bg-gray-50 transition-colors">
+                    <div className="w-2 h-2 ${template.color} rounded-full mr-3"></div>
+                    <span className="text-sm font-medium">${feature}</span>
+                  </div>`).join('\n                  ')}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Analytics Chart Placeholder */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Analytics</CardTitle>
+                <CardDescription>
+                  Visualização dos dados em tempo real
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-64 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg flex items-center justify-center">
+                  <div className="text-center">
+                    <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-500">Gráfico de analytics será exibido aqui</p>
+                    <p className="text-sm text-gray-400">Integre com sua fonte de dados preferida</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Estatísticas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm">Performance</span>
-                  <span className="text-sm font-medium">85%</span>
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Recent Activity */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Atividade Recente</CardTitle>
+                <CardDescription>
+                  Últimas ações no sistema
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentActivities.map((activity) => (
+                    <div key={activity.id} className="flex items-start space-x-3">
+                      <div className="w-2 h-2 ${template.color} rounded-full mt-2"></div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900">
+                          {activity.action}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {activity.time}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-blue-600 h-2 rounded-full" style={{ width: '85%' }}></div>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm">Satisfação</span>
-                  <span className="text-sm font-medium">92%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-green-600 h-2 rounded-full" style={{ width: '92%' }}></div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+
+            {/* Quick Actions */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Ações Rápidas</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button className="w-full justify-start" variant="outline">
+                  <Users className="w-4 h-4 mr-2" />
+                  Gerenciar Usuários
+                </Button>
+                <Button className="w-full justify-start" variant="outline">
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  Ver Relatórios
+                </Button>
+                <Button className="w-full justify-start" variant="outline">
+                  <DollarSign className="w-4 h-4 mr-2" />
+                  Configurar Pagamentos
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -397,15 +833,66 @@ const Dashboard = () => {
 export default Dashboard;`;
 };
 
-// Outras funções auxiliares...
+// Outras funções auxiliares simplificadas para o exemplo
+const generateOrderCardComponent = () => `// Componente de card de pedido`;
+const generateProductCardComponent = () => `// Componente de card de produto`;
+const generateDeliveryMapComponent = () => `// Componente de mapa de delivery`;
+const generateOrderStatusBadgeComponent = () => `// Componente de badge de status`;
+const generateTaskCardComponent = () => `// Componente de card de tarefa`;
+const generateKanbanBoardComponent = () => `// Componente de quadro Kanban`;
+const generateAnalyticsChartComponent = () => `// Componente de gráfico de analytics`;
+const generateDataTableComponent = () => `// Componente de tabela de dados`;
+const generateAppointmentCardComponent = () => `// Componente de card de agendamento`;
+const generatePatientCardComponent = () => `// Componente de card de paciente`;
+const generateMedicalChartComponent = () => `// Componente de prontuário médico`;
+const generateArticleCardComponent = () => `// Componente de card de artigo`;
+const generateCourseCardComponent = () => `// Componente de card de curso`;
+const generateVideoPlayerComponent = () => `// Componente de player de vídeo`;
+
+const generateOrderTrackingPage = () => `// Página de rastreamento de pedidos`;
+const generateProductCatalogPage = () => `// Página de catálogo de produtos`;
+const generateAnalyticsPage = () => `// Página de analytics`;
+const generateSettingsPage = () => `// Página de configurações`;
+const generateAppointmentsPage = () => `// Página de agendamentos`;
+const generatePatientsPage = () => `// Página de pacientes`;
+
+const generateHeaderComponent = (template: ProjectTemplate) => `// Componente de cabeçalho`;
+const generateSidebarComponent = (template: ProjectTemplate) => `// Componente de sidebar`;
+const generateFooterComponent = () => `// Componente de rodapé`;
+
+const generateUseLocalStorageHook = () => `// Hook para localStorage`;
+const generateUseDebounceHook = () => `// Hook para debounce`;
+const generateUseOrdersHook = () => `// Hook para pedidos`;
+const generateUseProductsHook = () => `// Hook para produtos`;
+const generateUseTasksHook = () => `// Hook para tarefas`;
+const generateUseAnalyticsHook = () => `// Hook para analytics`;
+
+const generateConstants = (template: ProjectTemplate) => `// Constantes do projeto`;
+const generateFormatters = () => `// Funções de formatação`;
+const generateValidators = () => `// Funções de validação`;
+
+const generateApiService = () => `// Serviço de API`;
+const generateAuthService = () => `// Serviço de autenticação`;
+const generateOrdersService = () => `// Serviço de pedidos`;
+const generateProductsService = () => `// Serviço de produtos`;
+const generateTasksService = () => `// Serviço de tarefas`;
+const generateAnalyticsService = () => `// Serviço de analytics`;
+
+const generateBadgeComponent = () => `// Componente Badge`;
+const generateToasterComponent = () => `// Componente Toaster`;
+const generateToastComponent = () => `// Componente Toast`;
+const generateUseToastHook = () => `// Hook useToast`;
+
+// Funções auxiliares para configuração
 const generateIndexHtml = (name: string) => {
-  return `<!DOCTYPE html>
+  return `<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${name}</title>
-    <meta name="description" content="${name} - Sistema SaaS completo" />
+    <meta name="description" content="${name} - Sistema SaaS completo e funcional" />
   </head>
   <body>
     <div id="root"></div>
@@ -414,90 +901,154 @@ const generateIndexHtml = (name: string) => {
 </html>`;
 };
 
-const generateReadme = (template: any, name: string, description: string, features: string) => {
+const generateReadme = (template: ProjectTemplate, name: string, description: string, features: string) => {
   return `# ${name}
 
 ${description || template.description}
 
-## 🚀 Funcionalidades
+## 🚀 Funcionalidades Principais
 
 ${template.features.map((feature: string) => `- ✅ ${feature}`).join('\n')}
 
-${features ? `\n## 🔧 Funcionalidades Personalizadas\n\n${features.split('\n').map((f: string) => `- 🎯 ${f}`).join('\n')}` : ''}
+${features ? `\n## 🎯 Funcionalidades Personalizadas\n\n${features.split('\n').map((f: string) => f.trim() ? `- 🔧 ${f}` : '').filter(Boolean).join('\n')}` : ''}
 
-## 🛠️ Tecnologias
+## 🛠️ Tecnologias Utilizadas
 
-- **React 18** - Framework principal
+- **React 18** - Framework de interface de usuário
 - **TypeScript** - Tipagem estática
-- **Tailwind CSS** - Estilização
+- **Tailwind CSS** - Framework de estilização
 - **React Router** - Roteamento
-- **TanStack Query** - Gerenciamento de estado
-- **Vite** - Build tool
+- **TanStack Query** - Gerenciamento de estado e cache
+- **Radix UI** - Componentes acessíveis
 - **Lucide React** - Ícones
+- **Vite** - Build tool rápida
 
-## 📦 Instalação
+## 📦 Instalação e Execução
 
-\`\`\`bash
-# Instalar dependências
-npm install
+### Pré-requisitos
+- Node.js 18+ 
+- npm ou yarn
 
-# Executar em modo desenvolvimento
-npm run dev
+### Passos para executar
 
-# Build para produção
-npm run build
+1. **Instalar dependências**
+   \`\`\`bash
+   npm install
+   \`\`\`
 
-# Preview do build
-npm run preview
-\`\`\`
+2. **Executar em modo desenvolvimento**
+   \`\`\`bash
+   npm run dev
+   \`\`\`
+
+3. **Acessar a aplicação**
+   \`\`\`
+   http://localhost:5173
+   \`\`\`
+
+4. **Build para produção**
+   \`\`\`bash
+   npm run build
+   \`\`\`
+
+5. **Preview do build**
+   \`\`\`bash
+   npm run preview
+   \`\`\`
 
 ## 📁 Estrutura do Projeto
 
 \`\`\`
-src/
-├── components/        # Componentes reutilizáveis
-│   ├── ui/           # Componentes base
-│   └── ...           # Componentes específicos
-├── pages/            # Páginas da aplicação
-├── hooks/            # Hooks personalizados
-├── services/         # Serviços e APIs
-├── utils/            # Utilitários
-└── lib/              # Configurações
+${name.toLowerCase().replace(/\s+/g, '-')}/
+├── src/
+│   ├── components/        # Componentes reutilizáveis
+│   │   ├── ui/           # Componentes base (shadcn/ui)
+│   │   ├── layout/       # Componentes de layout
+│   │   └── ...           # Componentes específicos
+│   ├── pages/            # Páginas da aplicação
+│   ├── hooks/            # Hooks personalizados
+│   ├── services/         # Serviços e APIs
+│   ├── utils/            # Utilitários e helpers
+│   ├── lib/              # Configurações e bibliotecas
+│   ├── App.tsx           # Componente principal
+│   ├── main.tsx          # Ponto de entrada
+│   └── index.css         # Estilos globais
+├── public/               # Arquivos estáticos
+├── package.json          # Dependências e scripts
+├── tailwind.config.ts    # Configuração Tailwind
+├── vite.config.ts        # Configuração Vite
+└── tsconfig.json         # Configuração TypeScript
 \`\`\`
 
 ## 🎯 Próximos Passos
 
-1. **Configurar Banco de Dados**
-   - Configure seu banco preferido (PostgreSQL, MySQL, etc.)
-   - Execute as migrations necessárias
+### 1. **Configuração do Backend**
+- Escolha sua stack de backend (Node.js, Python, PHP, etc.)
+- Configure banco de dados (PostgreSQL, MySQL, MongoDB)
+- Implemente APIs REST ou GraphQL
 
-2. **Configurar Autenticação**
-   - Implemente sistema de login/registro
-   - Configure middleware de autenticação
+### 2. **Autenticação e Autorização**
+- Integre sistema de login/registro
+- Configure middleware de autenticação
+- Implemente controle de acesso baseado em roles
 
-3. **APIs e Integrações**
-   - Configure as APIs necessárias
-   - Implemente integrações externas
+### 3. **Integrações de Terceiros**
+- Configure gateways de pagamento (Stripe, PayPal, PagSeguro)
+- Integre serviços de email (SendGrid, Mailgun)
+- Configure notificações push
 
-4. **Deploy**
-   - Configure variáveis de ambiente
-   - Deploy em sua plataforma preferida
+### 4. **Deploy e Infraestrutura**
+- Configure CI/CD
+- Deploy em plataformas como Vercel, Netlify ou AWS
+- Configure monitoramento e logs
 
-## 📚 Documentação
+### 5. **Personalização**
+- Ajuste o design conforme sua marca
+- Adicione funcionalidades específicas do seu negócio
+- Configure analytics e métricas
 
-Para mais informações sobre cada funcionalidade, consulte a documentação específica de cada módulo.
+## 🔧 Scripts Disponíveis
+
+- \`npm run dev\` - Inicia o servidor de desenvolvimento
+- \`npm run build\` - Gera build para produção
+- \`npm run preview\` - Preview do build de produção
+- \`npm run lint\` - Executa o linter
+
+## 📚 Documentação Adicional
+
+- [React Documentation](https://reactjs.org/)
+- [TypeScript Documentation](https://www.typescriptlang.org/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/)
+- [Vite Documentation](https://vitejs.dev/)
 
 ## 🤝 Contribuição
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.
+Contribuições são bem-vindas! Sinta-se à vontade para:
+
+1. Fazer fork do projeto
+2. Criar uma branch para sua feature (\`git checkout -b feature/AmazingFeature\`)
+3. Commit suas mudanças (\`git commit -m 'Add some AmazingFeature'\`)
+4. Push para a branch (\`git push origin feature/AmazingFeature\`)
+5. Abrir um Pull Request
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 📞 Suporte
+
+Se você encontrar algum problema ou tiver dúvidas:
+
+1. Verifique a documentação acima
+2. Procure por issues similares no repositório
+3. Crie uma nova issue com detalhes do problema
 
 ---
 
 **Gerado com ❤️ pelo Gerador de SaaS IA**
+
+> Este projeto foi criado para ser um ponto de partida sólido para seu SaaS. 
+> Customize e expanda conforme suas necessidades específicas!
 `;
 };
 
@@ -505,11 +1056,22 @@ const generateTailwindConfig = () => {
   return `import type { Config } from "tailwindcss";
 
 export default {
+  darkMode: ["class"],
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
+  prefix: "",
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -525,6 +1087,10 @@ export default {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -533,27 +1099,50 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 } satisfies Config;`;
 };
 
 const generateViteConfig = () => {
-  return `import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+  return `import path from "path"
+import react from "@vitejs/plugin-react"
+import { defineConfig } from "vite"
 
 export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 })`;
@@ -567,16 +1156,22 @@ const generateTsConfig = () => {
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+
+    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+
+    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+
+    /* Path mapping */
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
@@ -584,6 +1179,19 @@ const generateTsConfig = () => {
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
+}`;
+};
+
+const generateTsConfigNode = () => {
+  return `{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["vite.config.ts"]
 }`;
 };
 
@@ -598,7 +1206,9 @@ const generateIndexCss = () => {
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -606,9 +1216,34 @@ const generateIndexCss = () => {
     --muted-foreground: 215.4 16.3% 46.9%;
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 94.1%;
   }
 }
 
@@ -622,84 +1257,85 @@ const generateIndexCss = () => {
 }`;
 };
 
-// Função auxiliar para utils
-export const cn = (...inputs: any[]) => {
-  return inputs.filter(Boolean).join(' ');
+const generateEslintConfig = () => {
+  return `import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
+
+export default tseslint.config(
+  { ignores: ['dist'] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  },
+)`;
 };
 
-// Componentes auxiliares específicos (simplificados para exemplo)
-const generateOrderCardComponent = () => {
-  return `import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Clock, MapPin } from 'lucide-react';
+const generateGitignore = () => {
+  return `# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-interface OrderCardProps {
-  order: {
-    id: string;
-    restaurant: string;
-    status: string;
-    estimatedTime: string;
-    address: string;
-  };
-}
+node_modules
+dist
+dist-ssr
+*.local
 
-const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex justify-between">
-          <span>Pedido #{order.id}</span>
-          <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
-            {order.status}
-          </span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-2">
-          <p className="font-medium">{order.restaurant}</p>
-          <div className="flex items-center text-sm text-gray-600">
-            <Clock className="w-4 h-4 mr-1" />
-            {order.estimatedTime}
-          </div>
-          <div className="flex items-center text-sm text-gray-600">
-            <MapPin className="w-4 h-4 mr-1" />
-            {order.address}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local`;
 };
 
-export default OrderCard;`;
+const generatePostcssConfig = () => {
+  return `export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}`;
 };
 
-const generateInputComponent = () => {
-  return `import React from 'react';
-import { cn } from '@/lib/utils';
+const generateLibUtils = () => {
+  return `import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
-
-const Input: React.FC<InputProps> = ({ className, ...props }) => {
-  return (
-    <input
-      className={cn(
-        'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-        className
-      )}
-      {...props}
-    />
-  );
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}`;
 };
-
-export default Input;`;
-};
-
-// Funções adicionais simplificadas
-const generateDeliveryMapComponent = () => `// Componente de mapa para delivery`;
-const generateRestaurantCardComponent = () => `// Componente de card de restaurante`;
-const generateLeadCardComponent = () => `// Componente de card de lead`;
-const generateSalesChartComponent = () => `// Componente de gráfico de vendas`;
-const generateTaskBoardComponent = () => `// Componente de quadro de tarefas`;
-const generateOrderTrackingPage = () => `// Página de rastreamento de pedido`;
-const generateRestaurantManagementPage = () => `// Página de gestão de restaurante`;

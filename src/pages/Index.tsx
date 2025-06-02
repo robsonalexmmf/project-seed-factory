@@ -6,30 +6,24 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   Download, 
   Rocket, 
   Bot, 
-  ShoppingCart, 
-  Hotel, 
-  Users, 
-  FileText, 
-  CheckSquare,
-  Store,
-  CreditCard,
-  Building,
-  TrendingUp,
-  BookOpen,
-  BarChart3,
-  Smartphone,
   Search,
   Zap,
-  Brain
+  Star,
+  CheckCircle,
+  Sparkles,
+  Timer,
+  Shield
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { projectTemplates, categories, getTemplatesByCategory, searchTemplates } from '@/utils/projectTemplates';
+import { generateAndDownloadProject } from '@/utils/projectGenerator';
+import TemplateCard from '@/components/TemplateCard';
+import ProjectGenerator from '@/components/ProjectGenerator';
 
 const Index = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
@@ -40,184 +34,19 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  const categories = [
-    { id: 'all', name: 'Todos', icon: Bot },
-    { id: 'delivery', name: 'Delivery & E-commerce', icon: ShoppingCart },
-    { id: 'business', name: 'Negócios & Produtividade', icon: Building },
-    { id: 'marketing', name: 'Vendas & Marketing', icon: TrendingUp },
-    { id: 'content', name: 'Conteúdo & Educação', icon: BookOpen },
-    { id: 'data', name: 'Dados & Projetos', icon: BarChart3 },
-    { id: 'health', name: 'Saúde & Bem-estar', icon: Users },
-    { id: 'mobile', name: 'Apps Mobile', icon: Smartphone }
-  ];
-
-  const templates = [
-    // Delivery & E-commerce
-    {
-      id: 'delivery-system',
-      name: 'Sistema de Delivery',
-      description: 'Sistema completo de delivery com rastreamento em tempo real, cupons, avaliações e múltiplos gateways de pagamento',
-      category: 'delivery',
-      features: ['Rastreamento em tempo real', 'Sistema de cupons', 'Avaliações', 'Múltiplos pagamentos', 'Dashboard para entregadores'],
-      icon: ShoppingCart,
-      color: 'bg-blue-500'
-    },
-    {
-      id: 'ecommerce-complete',
-      name: 'E-commerce Completo',
-      description: 'Loja virtual completa com IA para recomendações, marketplace, afiliados e integração com ERP',
-      category: 'delivery',
-      features: ['Carrinho persistente', 'IA para recomendações', 'Marketplace', 'Sistema de afiliados', 'Integração ERP'],
-      icon: Store,
-      color: 'bg-green-500'
-    },
-    {
-      id: 'hotel-system',
-      name: 'Sistema de Hotel',
-      description: 'Gestão hoteleira completa com check-in digital, integração com Booking.com e controle de ocupação',
-      category: 'delivery',
-      features: ['Check-in digital QR Code', 'Integração Booking.com', 'Controle de limpeza', 'Dashboard ocupação'],
-      icon: Hotel,
-      color: 'bg-purple-500'
-    },
-
-    // Negócios & Produtividade
-    {
-      id: 'crm-empresarial',
-      name: 'CRM Empresarial',
-      description: 'CRM completo com funil de vendas, automação, lead scoring e previsão de vendas com IA',
-      category: 'business',
-      features: ['Funil customizável', 'Automação de tarefas', 'Lead scoring', 'Previsão com IA', 'Propostas e contratos'],
-      icon: Users,
-      color: 'bg-orange-500'
-    },
-    {
-      id: 'task-system',
-      name: 'Sistema de Tarefas',
-      description: 'Gerenciador de tarefas e projetos com Kanban, time tracking e relatórios de produtividade',
-      category: 'business',
-      features: ['Kanban drag-drop', 'Time tracking', 'Notificações', 'Relatórios produtividade', 'Integração Calendar'],
-      icon: CheckSquare,
-      color: 'bg-red-500'
-    },
-    {
-      id: 'erp-basico',
-      name: 'ERP Básico para Pequenas Empresas',
-      description: 'Sistema ERP completo com financeiro, estoque, vendas e relatórios gerenciais',
-      category: 'business',
-      features: ['Módulo financeiro', 'Controle de estoque', 'Gestão de vendas', 'Relatórios gerenciais', 'Emissão de NF'],
-      icon: Building,
-      color: 'bg-indigo-500'
-    },
-    {
-      id: 'agendamento-consultas',
-      name: 'Sistema de Agendamento de Consultas',
-      description: 'Plataforma para agendamento de consultas com confirmação automática e lembretes',
-      category: 'business',
-      features: ['Agenda online', 'Confirmação automática', 'Lembretes por email/SMS', 'Pagamento online', 'Histórico de consultas'],
-      icon: Users,
-      color: 'bg-teal-500'
-    },
-
-    // Vendas & Marketing
-    {
-      id: 'landing-page-generator',
-      name: 'Gerador de Landing Pages',
-      description: 'Ferramenta para criar landing pages com editor drag-and-drop e testes A/B',
-      category: 'marketing',
-      features: ['Editor drag-drop', 'Testes A/B', 'Analytics integrado', 'Formulários personalizados', 'SEO otimizado'],
-      icon: TrendingUp,
-      color: 'bg-pink-500'
-    },
-    {
-      id: 'email-marketing',
-      name: 'Plataforma de E-mail Marketing',
-      description: 'Sistema completo de email marketing com automação, segmentação e analytics',
-      category: 'marketing',
-      features: ['Automação de emails', 'Segmentação avançada', 'Templates responsivos', 'A/B testing', 'Analytics detalhado'],
-      icon: TrendingUp,
-      color: 'bg-yellow-500'
-    },
-    {
-      id: 'copywriting-ai',
-      name: 'Ferramenta de Copywriting com IA',
-      description: 'Gerador de textos publicitários com IA, templates e otimização para conversão',
-      category: 'marketing',
-      features: ['Geração com IA', 'Templates diversos', 'Otimização conversão', 'Análise de sentimento', 'Múltiplos idiomas'],
-      icon: Brain,
-      color: 'bg-cyan-500'
-    },
-
-    // Conteúdo & Educação
-    {
-      id: 'blog-cms',
-      name: 'Blog com CMS',
-      description: 'Sistema de blog com editor avançado, SEO automático e monetização integrada',
-      category: 'content',
-      features: ['Editor drag-drop', 'SEO automático com IA', 'Agendamento', 'Analytics por post', 'Newsletter integrada'],
-      icon: FileText,
-      color: 'bg-emerald-500'
-    },
-    {
-      id: 'lms-cursos',
-      name: 'Plataforma de Cursos Online (LMS)',
-      description: 'Sistema completo para cursos online com vídeos, quizzes, certificados e gamificação',
-      category: 'content',
-      features: ['Player de vídeo', 'Sistema de quizzes', 'Certificados automáticos', 'Gamificação', 'Relatórios de progresso'],
-      icon: BookOpen,
-      color: 'bg-violet-500'
-    },
-    {
-      id: 'portfolio-generator',
-      name: 'Gerador de Portfólios',
-      description: 'Criador de sites pessoais e portfólios com templates profissionais',
-      category: 'content',
-      features: ['Templates profissionais', 'Galeria de projetos', 'Blog integrado', 'SEO otimizado', 'Domínio personalizado'],
-      icon: FileText,
-      color: 'bg-slate-500'
-    },
-
-    // Apps Mobile (React Native)
-    {
-      id: 'delivery-app',
-      name: 'App de Delivery',
-      description: 'Aplicativo móvel de delivery com rastreamento GPS, push notifications e pagamento integrado',
-      category: 'mobile',
-      features: ['Rastreamento GPS', 'Push notifications', 'Pagamento in-app', 'Chat com entregador', 'Avaliações'],
-      icon: Smartphone,
-      color: 'bg-blue-600'
-    },
-    {
-      id: 'task-mobile-app',
-      name: 'App de Gestão de Tarefas',
-      description: 'App móvel para gestão de tarefas com sincronização offline e colaboração em equipe',
-      category: 'mobile',
-      features: ['Modo offline', 'Sincronização automática', 'Colaboração em equipe', 'Notificações inteligentes', 'Widget nativo'],
-      icon: CheckSquare,
-      color: 'bg-green-600'
-    },
-    {
-      id: 'financial-app',
-      name: 'App de Controle Financeiro',
-      description: 'Aplicativo para controle financeiro pessoal com categorização automática e metas',
-      category: 'mobile',
-      features: ['Categorização automática', 'Metas financeiras', 'Gráficos e relatórios', 'Sincronização bancária', 'Lembretes'],
-      icon: CreditCard,
-      color: 'bg-emerald-600'
-    }
-  ];
-
-  const filteredTemplates = templates.filter(template => {
-    const matchesCategory = selectedCategory === 'all' || template.category === selectedCategory;
-    const matchesSearch = template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         template.description.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  // Filtrar templates
+  const filteredTemplates = selectedCategory === 'all' 
+    ? searchTerm 
+      ? searchTemplates(searchTerm)
+      : projectTemplates
+    : searchTerm
+      ? searchTemplates(searchTerm).filter(t => t.category === selectedCategory)
+      : getTemplatesByCategory(selectedCategory);
 
   const generateProject = async () => {
     if (!selectedTemplate || !projectName) {
       toast({
-        title: "Erro",
+        title: "Erro de Validação",
         description: "Por favor, selecione um template e digite o nome do projeto",
         variant: "destructive"
       });
@@ -227,8 +56,7 @@ const Index = () => {
     setIsGenerating(true);
     
     try {
-      // Simula processo de geração
-      console.log('Gerando projeto:', {
+      console.log('Iniciando geração do projeto:', {
         template: selectedTemplate,
         name: projectName,
         description: projectDescription,
@@ -236,15 +64,19 @@ const Index = () => {
       });
 
       // Simula tempo de geração
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
-      // Cria arquivo ZIP simulado (em produção, aqui seria a lógica real de geração)
-      const projectFiles = generateProjectFiles(selectedTemplate, projectName, projectDescription, customFeatures);
-      downloadProject(projectFiles, projectName);
+      // Gera e baixa o projeto
+      await generateAndDownloadProject({
+        template: selectedTemplate,
+        name: projectName,
+        description: projectDescription,
+        features: customFeatures
+      });
 
       toast({
-        title: "Projeto Gerado!",
-        description: `${projectName} foi gerado com sucesso e está sendo baixado.`
+        title: "🎉 Projeto Gerado com Sucesso!",
+        description: `${projectName} foi gerado e está sendo baixado. Execute 'npm install' e depois 'npm run dev' para rodar o projeto.`
       });
 
       // Reset form
@@ -253,6 +85,7 @@ const Index = () => {
       setProjectDescription('');
       setCustomFeatures('');
     } catch (error) {
+      console.error('Erro na geração:', error);
       toast({
         title: "Erro na Geração",
         description: "Ocorreu um erro ao gerar o projeto. Tente novamente.",
@@ -263,383 +96,216 @@ const Index = () => {
     }
   };
 
-  const generateProjectFiles = (template: any, name: string, description: string, features: string) => {
-    const packageJson = {
-      name: name.toLowerCase().replace(/\s+/g, '-'),
-      version: "1.0.0",
-      description: description || template.description,
-      dependencies: {
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "react-router-dom": "^6.26.2",
-        "@tanstack/react-query": "^5.56.2",
-        "tailwindcss": "^3.4.0",
-        "lucide-react": "^0.462.0",
-        "clsx": "^2.1.1",
-        "tailwind-merge": "^2.5.2"
-      },
-      scripts: {
-        "dev": "vite",
-        "build": "vite build",
-        "preview": "vite preview"
-      }
-    };
-
-    const mainComponent = generateMainComponent(template, name, features);
-    const indexHtml = generateIndexHtml(name);
-    const readmeContent = generateReadme(template, name, description, features);
-
-    return {
-      'package.json': JSON.stringify(packageJson, null, 2),
-      'src/App.tsx': mainComponent,
-      'index.html': indexHtml,
-      'README.md': readmeContent,
-      'tailwind.config.js': generateTailwindConfig(),
-      'vite.config.ts': generateViteConfig()
-    };
-  };
-
-  const generateMainComponent = (template: any, name: string, features: string) => {
-    return `import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import HomePage from './pages/HomePage';
-import Dashboard from './pages/Dashboard';
-import './index.css';
-
-const queryClient = new QueryClient();
-
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <div className="min-h-screen bg-gray-50">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Routes>
-        </div>
-      </Router>
-    </QueryClientProvider>
-  );
-}
-
-export default App;`;
-  };
-
-  const generateIndexHtml = (name: string) => {
-    return `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${name}</title>
-</head>
-<body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-</body>
-</html>`;
-  };
-
-  const generateReadme = (template: any, name: string, description: string, features: string) => {
-    return `# ${name}
-
-${description || template.description}
-
-## Funcionalidades
-
-${template.features.map((feature: string) => `- ${feature}`).join('\n')}
-
-${features ? `\n## Funcionalidades Personalizadas\n\n${features}` : ''}
-
-## Instalação
-
-\`\`\`bash
-npm install
-npm run dev
-\`\`\`
-
-## Tecnologias
-
-- React 18
-- TypeScript
-- Tailwind CSS
-- React Router
-- TanStack Query
-- Vite
-
-## Estrutura do Projeto
-
-\`\`\`
-src/
-  components/     # Componentes reutilizáveis
-  pages/         # Páginas da aplicação
-  hooks/         # Hooks personalizados
-  services/      # Serviços e APIs
-  utils/         # Utilitários
-\`\`\`
-
-Gerado com ❤️ pelo Gerador de SaaS IA
-`;
-  };
-
-  const generateTailwindConfig = () => {
-    return `module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}`;
-  };
-
-  const generateViteConfig = () => {
-    return `import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-})`;
-  };
-
-  const downloadProject = (files: any, projectName: string) => {
-    // Simula download do ZIP
-    const blob = new Blob([JSON.stringify(files, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${projectName.toLowerCase().replace(/\s+/g, '-')}.zip`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
+  const totalTemplates = projectTemplates.length;
+  const categoryCounts = categories.map(cat => ({
+    ...cat,
+    count: cat.id === 'all' ? totalTemplates : getTemplatesByCategory(cat.id).length
+  }));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl">
-                <Bot className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">Gerador de SaaS com IA</h1>
-                <p className="text-gray-600">Crie projetos SaaS completos em segundos</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center">
+            <div className="flex justify-center mb-6">
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-2xl shadow-lg">
+                <Bot className="w-12 h-12 text-white" />
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Badge variant="secondary" className="bg-green-100 text-green-800">
-                {templates.length} Templates
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Gerador de SaaS com IA
+            </h1>
+            <p className="text-xl text-gray-600 mb-6 max-w-3xl mx-auto">
+              Crie projetos SaaS completos e funcionais em segundos. Mais de <span className="font-bold text-blue-600">{totalTemplates} templates</span> profissionais prontos para uso.
+            </p>
+            
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
+              <Badge variant="secondary" className="bg-green-100 text-green-800 px-4 py-2">
+                <CheckCircle className="w-4 h-4 mr-2" />
+                {totalTemplates}+ Templates
               </Badge>
-              <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+              <Badge variant="secondary" className="bg-blue-100 text-blue-800 px-4 py-2">
+                <Zap className="w-4 h-4 mr-2" />
                 100% Funcional
+              </Badge>
+              <Badge variant="secondary" className="bg-purple-100 text-purple-800 px-4 py-2">
+                <Timer className="w-4 h-4 mr-2" />
+                Pronto em Segundos
+              </Badge>
+              <Badge variant="secondary" className="bg-orange-100 text-orange-800 px-4 py-2">
+                <Shield className="w-4 h-4 mr-2" />
+                Código Limpo
               </Badge>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Search and Filters */}
-        <div className="mb-8 space-y-4">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Buscar templates..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
+        <div className="mb-12 space-y-6">
+          {/* Search Bar */}
+          <div className="max-w-2xl mx-auto">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Input
+                placeholder="Buscar templates... (ex: delivery, crm, blog)"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl shadow-lg"
+              />
             </div>
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-full sm:w-64">
-                <SelectValue placeholder="Selecionar categoria" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    <div className="flex items-center space-x-2">
-                      <category.icon className="w-4 h-4" />
-                      <span>{category.name}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
           </div>
 
-          {/* Category Tabs */}
-          <div className="flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <Button
-                key={category.id}
-                variant={selectedCategory === category.id ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory(category.id)}
-                className="flex items-center space-x-2"
-              >
-                <category.icon className="w-4 h-4" />
-                <span>{category.name}</span>
-              </Button>
-            ))}
+          {/* Category Filter */}
+          <div className="text-center">
+            <Label className="text-lg font-semibold text-gray-700 mb-4 block">
+              Categorias de Templates
+            </Label>
+            <div className="flex flex-wrap justify-center gap-3">
+              {categoryCounts.map((category) => (
+                <Button
+                  key={category.id}
+                  variant={selectedCategory === category.id ? "default" : "outline"}
+                  size="lg"
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`flex items-center space-x-2 px-6 py-3 rounded-full transition-all ${
+                    selectedCategory === category.id 
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg transform scale-105' 
+                      : 'hover:bg-gray-50 hover:scale-105'
+                  }`}
+                >
+                  <category.icon className="w-5 h-5" />
+                  <span className="font-medium">{category.name}</span>
+                  <Badge variant="secondary" className="ml-2">
+                    {category.count}
+                  </Badge>
+                </Button>
+              ))}
+            </div>
           </div>
+        </div>
+
+        {/* Results Summary */}
+        <div className="mb-8 text-center">
+          <p className="text-lg text-gray-600">
+            {searchTerm ? (
+              <>Encontrados <span className="font-bold text-blue-600">{filteredTemplates.length}</span> templates para "{searchTerm}"</>
+            ) : (
+              <>Exibindo <span className="font-bold text-blue-600">{filteredTemplates.length}</span> templates da categoria <span className="font-bold">{categories.find(c => c.id === selectedCategory)?.name}</span></>
+            )}
+          </p>
         </div>
 
         {/* Templates Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {filteredTemplates.map((template) => (
-            <Card 
-              key={template.id} 
-              className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 ${
-                selectedTemplate?.id === template.id ? 'ring-2 ring-blue-500 shadow-lg' : ''
-              }`}
-              onClick={() => setSelectedTemplate(template)}
+        {filteredTemplates.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {filteredTemplates.map((template) => (
+              <TemplateCard
+                key={template.id}
+                template={template}
+                isSelected={selectedTemplate?.id === template.id}
+                onSelect={() => setSelectedTemplate(template)}
+                categoryName={categories.find(c => c.id === template.category)?.name || ''}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <div className="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+              <Search className="w-12 h-12 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Nenhum template encontrado
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Tente buscar por outros termos ou selecione uma categoria diferente
+            </p>
+            <Button 
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedCategory('all');
+              }}
+              variant="outline"
             >
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <div className={`p-2 rounded-lg ${template.color} bg-opacity-10`}>
-                    <template.icon className={`w-6 h-6 ${template.color.replace('bg-', 'text-')}`} />
-                  </div>
-                  <Badge variant="secondary" className="text-xs">
-                    {categories.find(c => c.id === template.category)?.name}
-                  </Badge>
-                </div>
-                <CardTitle className="text-lg">{template.name}</CardTitle>
-                <CardDescription className="text-sm">
-                  {template.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-gray-700">Funcionalidades:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {template.features.slice(0, 3).map((feature, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        {feature}
-                      </Badge>
-                    ))}
-                    {template.features.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{template.features.length - 3} mais
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Generation Panel */}
-        {selectedTemplate && (
-          <Card className="border-t-4 border-t-blue-500">
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Rocket className="w-5 h-5 text-blue-500" />
-                <span>Configurar e Gerar Projeto</span>
-              </CardTitle>
-              <CardDescription>
-                Configure os detalhes do seu projeto {selectedTemplate.name}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="projectName">Nome do Projeto *</Label>
-                    <Input
-                      id="projectName"
-                      placeholder="Ex: Meu Sistema de Delivery"
-                      value={projectName}
-                      onChange={(e) => setProjectName(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="projectDescription">Descrição do Projeto</Label>
-                    <Textarea
-                      id="projectDescription"
-                      placeholder="Descreva brevemente o que seu projeto fará..."
-                      value={projectDescription}
-                      onChange={(e) => setProjectDescription(e.target.value)}
-                      rows={3}
-                    />
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="customFeatures">Funcionalidades Personalizadas</Label>
-                    <Textarea
-                      id="customFeatures"
-                      placeholder="Adicione funcionalidades extras que deseja incluir..."
-                      value={customFeatures}
-                      onChange={(e) => setCustomFeatures(e.target.value)}
-                      rows={5}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Template Features Preview */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium text-gray-900 mb-2">Funcionalidades Incluídas:</h4>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                  {selectedTemplate.features.map((feature: string, index: number) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <Zap className="w-4 h-4 text-green-500" />
-                      <span className="text-sm text-gray-700">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex justify-end space-x-4">
-                <Button
-                  variant="outline"
-                  onClick={() => setSelectedTemplate(null)}
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  onClick={generateProject}
-                  disabled={!projectName || isGenerating}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                >
-                  {isGenerating ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Gerando...
-                    </>
-                  ) : (
-                    <>
-                      <Download className="w-4 h-4 mr-2" />
-                      Gerar e Baixar
-                    </>
-                  )}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+              Ver Todos os Templates
+            </Button>
+          </div>
         )}
 
+        {/* Project Generator */}
+        <ProjectGenerator
+          selectedTemplate={selectedTemplate}
+          projectName={projectName}
+          projectDescription={projectDescription}
+          customFeatures={customFeatures}
+          isGenerating={isGenerating}
+          onProjectNameChange={setProjectName}
+          onProjectDescriptionChange={setProjectDescription}
+          onCustomFeaturesChange={setCustomFeatures}
+          onGenerate={generateProject}
+          onCancel={() => setSelectedTemplate(null)}
+        />
+
+        {/* Feature Highlights */}
+        <div className="mt-20 py-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl text-white">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold mb-4">
+              Por que escolher nosso gerador?
+            </h3>
+            <p className="text-xl text-blue-100">
+              A maneira mais rápida de criar SaaS profissionais
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 px-8">
+            <div className="text-center">
+              <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8" />
+              </div>
+              <h4 className="text-xl font-semibold mb-2">Código Profissional</h4>
+              <p className="text-blue-100">
+                Código limpo, organizado e seguindo as melhores práticas do mercado
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Timer className="w-8 h-8" />
+              </div>
+              <h4 className="text-xl font-semibold mb-2">Pronto para Produção</h4>
+              <p className="text-blue-100">
+                Projetos completos com todas as dependências e configurações necessárias
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8" />
+              </div>
+              <h4 className="text-xl font-semibold mb-2">Sempre Atualizado</h4>
+              <p className="text-blue-100">
+                Tecnologias modernas: React 18, TypeScript, Tailwind CSS e muito mais
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Footer */}
-        <div className="mt-12 text-center py-8 border-t">
-          <p className="text-gray-600">
-            Gerador de SaaS com IA - Crie projetos completos e funcionais em segundos
+        <div className="mt-16 text-center py-12 border-t border-gray-200">
+          <div className="flex justify-center items-center space-x-2 mb-4">
+            <Star className="w-5 h-5 text-yellow-500 fill-current" />
+            <Star className="w-5 h-5 text-yellow-500 fill-current" />
+            <Star className="w-5 h-5 text-yellow-500 fill-current" />
+            <Star className="w-5 h-5 text-yellow-500 fill-current" />
+            <Star className="w-5 h-5 text-yellow-500 fill-current" />
+          </div>
+          <p className="text-gray-600 text-lg mb-2">
+            Gerador de SaaS com IA - Transforme suas ideias em realidade
           </p>
-          <p className="text-sm text-gray-500 mt-2">
-            Todos os projetos gerados incluem código funcional, dependências e documentação completa
+          <p className="text-sm text-gray-500">
+            Todos os projetos incluem código funcional, documentação completa e estão prontos para execução
           </p>
         </div>
       </div>
