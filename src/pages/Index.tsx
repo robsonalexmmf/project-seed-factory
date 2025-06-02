@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   Download, 
@@ -17,13 +16,17 @@ import {
   CheckCircle,
   Sparkles,
   Timer,
-  Shield
+  Shield,
+  ArrowRight,
+  Globe,
+  Code,
+  Layers
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { projectTemplates, categories, getTemplatesByCategory, searchTemplates } from '@/utils/projectTemplates';
 import { generateAndDownloadProject } from '@/utils/projectGenerator';
 import TemplateCard from '@/components/TemplateCard';
-import ProjectGenerator from '@/components/ProjectGenerator';
+import ProjectGeneratorModal from '@/components/ProjectGeneratorModal';
 
 const Index = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
@@ -33,6 +36,7 @@ const Index = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Filtrar templates
   const filteredTemplates = selectedCategory === 'all' 
@@ -42,6 +46,11 @@ const Index = () => {
     : searchTerm
       ? searchTemplates(searchTerm).filter(t => t.category === selectedCategory)
       : getTemplatesByCategory(selectedCategory);
+
+  const handleTemplateSelect = (template: any) => {
+    setSelectedTemplate(template);
+    setIsModalOpen(true);
+  };
 
   const generateProject = async () => {
     if (!selectedTemplate || !projectName) {
@@ -79,11 +88,12 @@ const Index = () => {
         description: `${projectName} foi gerado e está sendo baixado. Execute 'npm install' e depois 'npm run dev' para rodar o projeto.`
       });
 
-      // Reset form
+      // Reset form and close modal
       setSelectedTemplate(null);
       setProjectName('');
       setProjectDescription('');
       setCustomFeatures('');
+      setIsModalOpen(false);
     } catch (error) {
       console.error('Erro na geração:', error);
       toast({
@@ -103,82 +113,103 @@ const Index = () => {
   }));
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-1000"></div>
+      </div>
+
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 shadow-2xl">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
-            <div className="flex justify-center mb-6">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-2xl shadow-lg">
-                <Bot className="w-12 h-12 text-white" />
+            <div className="flex justify-center mb-8">
+              <div className="bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-lg p-6 rounded-3xl shadow-2xl border border-white/20">
+                <Bot className="w-16 h-16 text-white drop-shadow-lg" />
               </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Gerador de SaaS com IA
+            <h1 className="text-5xl md:text-7xl font-black text-white mb-6 drop-shadow-2xl">
+              Gerador de SaaS
+              <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                com IA
+              </span>
             </h1>
-            <p className="text-xl text-gray-600 mb-6 max-w-3xl mx-auto">
-              Crie projetos SaaS completos e funcionais em segundos. Mais de <span className="font-bold text-blue-600">{totalTemplates} templates</span> profissionais prontos para uso.
+            <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-4xl mx-auto font-light">
+              Crie projetos SaaS completos e funcionais em segundos. Mais de 
+              <span className="font-bold text-yellow-300 mx-2">{totalTemplates} templates</span> 
+              profissionais prontos para uso.
             </p>
             
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <Badge variant="secondary" className="bg-green-100 text-green-800 px-4 py-2">
-                <CheckCircle className="w-4 h-4 mr-2" />
+            <div className="flex flex-wrap justify-center gap-4 mb-10">
+              <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white px-6 py-3 text-lg font-bold shadow-lg">
+                <CheckCircle className="w-5 h-5 mr-2" />
                 {totalTemplates}+ Templates
               </Badge>
-              <Badge variant="secondary" className="bg-blue-100 text-blue-800 px-4 py-2">
-                <Zap className="w-4 h-4 mr-2" />
+              <Badge className="bg-gradient-to-r from-blue-400 to-cyan-500 text-white px-6 py-3 text-lg font-bold shadow-lg">
+                <Zap className="w-5 h-5 mr-2" />
                 100% Funcional
               </Badge>
-              <Badge variant="secondary" className="bg-purple-100 text-purple-800 px-4 py-2">
-                <Timer className="w-4 h-4 mr-2" />
+              <Badge className="bg-gradient-to-r from-purple-400 to-pink-500 text-white px-6 py-3 text-lg font-bold shadow-lg">
+                <Timer className="w-5 h-5 mr-2" />
                 Pronto em Segundos
               </Badge>
-              <Badge variant="secondary" className="bg-orange-100 text-orange-800 px-4 py-2">
-                <Shield className="w-4 h-4 mr-2" />
+              <Badge className="bg-gradient-to-r from-orange-400 to-red-500 text-white px-6 py-3 text-lg font-bold shadow-lg">
+                <Shield className="w-5 h-5 mr-2" />
                 Código Limpo
               </Badge>
             </div>
+
+            <Button 
+              size="lg" 
+              className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold px-8 py-4 text-lg rounded-2xl shadow-2xl transform transition-all hover:scale-105"
+            >
+              <ArrowRight className="w-6 h-6 mr-2" />
+              Começar Agora
+            </Button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Search and Filters */}
-        <div className="mb-12 space-y-6">
+        <div className="mb-16 space-y-8">
           {/* Search Bar */}
-          <div className="max-w-2xl mx-auto">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <div className="max-w-3xl mx-auto">
+            <div className="relative group">
+              <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400 group-focus-within:text-purple-500 transition-colors" />
               <Input
                 placeholder="Buscar templates... (ex: delivery, crm, blog)"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl shadow-lg"
+                className="pl-16 h-16 text-xl border-3 border-gray-200 focus:border-purple-500 rounded-2xl shadow-xl bg-white/80 backdrop-blur-sm transition-all duration-300 focus:shadow-2xl"
               />
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-focus-within:opacity-100 transition-opacity -z-10"></div>
             </div>
           </div>
 
           {/* Category Filter */}
           <div className="text-center">
-            <Label className="text-lg font-semibold text-gray-700 mb-4 block">
+            <Label className="text-2xl font-bold text-gray-800 mb-6 block">
               Categorias de Templates
             </Label>
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap justify-center gap-4">
               {categoryCounts.map((category) => (
                 <Button
                   key={category.id}
                   variant={selectedCategory === category.id ? "default" : "outline"}
                   size="lg"
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center space-x-2 px-6 py-3 rounded-full transition-all ${
+                  className={`flex items-center space-x-3 px-8 py-4 rounded-2xl transition-all duration-300 font-bold text-lg shadow-lg ${
                     selectedCategory === category.id 
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg transform scale-105' 
-                      : 'hover:bg-gray-50 hover:scale-105'
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-2xl transform scale-110 text-white' 
+                      : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:scale-105 border-2 border-gray-200 hover:border-purple-300 bg-white/80 backdrop-blur-sm'
                   }`}
                 >
-                  <category.icon className="w-5 h-5" />
-                  <span className="font-medium">{category.name}</span>
-                  <Badge variant="secondary" className="ml-2">
+                  <category.icon className="w-6 h-6" />
+                  <span>{category.name}</span>
+                  <Badge variant="secondary" className={`ml-2 ${selectedCategory === category.id ? 'bg-white/20 text-white' : ''}`}>
                     {category.count}
                   </Badge>
                 </Button>
@@ -188,38 +219,40 @@ const Index = () => {
         </div>
 
         {/* Results Summary */}
-        <div className="mb-8 text-center">
-          <p className="text-lg text-gray-600">
-            {searchTerm ? (
-              <>Encontrados <span className="font-bold text-blue-600">{filteredTemplates.length}</span> templates para "{searchTerm}"</>
-            ) : (
-              <>Exibindo <span className="font-bold text-blue-600">{filteredTemplates.length}</span> templates da categoria <span className="font-bold">{categories.find(c => c.id === selectedCategory)?.name}</span></>
-            )}
-          </p>
+        <div className="mb-12 text-center">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-3xl p-8 shadow-xl border border-blue-200">
+            <p className="text-2xl text-gray-700 font-semibold">
+              {searchTerm ? (
+                <>Encontrados <span className="font-black text-blue-600 text-3xl">{filteredTemplates.length}</span> templates para <span className="text-purple-600 font-bold">"{searchTerm}"</span></>
+              ) : (
+                <>Exibindo <span className="font-black text-blue-600 text-3xl">{filteredTemplates.length}</span> templates da categoria <span className="font-bold text-purple-600">{categories.find(c => c.id === selectedCategory)?.name}</span></>
+              )}
+            </p>
+          </div>
         </div>
 
         {/* Templates Grid */}
         {filteredTemplates.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {filteredTemplates.map((template) => (
               <TemplateCard
                 key={template.id}
                 template={template}
-                isSelected={selectedTemplate?.id === template.id}
-                onSelect={() => setSelectedTemplate(template)}
+                isSelected={false}
+                onSelect={() => handleTemplateSelect(template)}
                 categoryName={categories.find(c => c.id === template.category)?.name || ''}
               />
             ))}
           </div>
         ) : (
-          <div className="text-center py-16">
-            <div className="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
-              <Search className="w-12 h-12 text-gray-400" />
+          <div className="text-center py-20">
+            <div className="bg-gradient-to-r from-gray-100 to-gray-200 rounded-full w-32 h-32 flex items-center justify-center mx-auto mb-8 shadow-xl">
+              <Search className="w-16 h-16 text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">
               Nenhum template encontrado
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-xl text-gray-600 mb-8 max-w-md mx-auto">
               Tente buscar por outros termos ou selecione uma categoria diferente
             </p>
             <Button 
@@ -227,88 +260,90 @@ const Index = () => {
                 setSearchTerm('');
                 setSelectedCategory('all');
               }}
-              variant="outline"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-4 text-lg font-bold rounded-2xl shadow-xl"
             >
               Ver Todos os Templates
             </Button>
           </div>
         )}
 
-        {/* Project Generator */}
-        <ProjectGenerator
-          selectedTemplate={selectedTemplate}
-          projectName={projectName}
-          projectDescription={projectDescription}
-          customFeatures={customFeatures}
-          isGenerating={isGenerating}
-          onProjectNameChange={setProjectName}
-          onProjectDescriptionChange={setProjectDescription}
-          onCustomFeaturesChange={setCustomFeatures}
-          onGenerate={generateProject}
-          onCancel={() => setSelectedTemplate(null)}
-        />
-
         {/* Feature Highlights */}
-        <div className="mt-20 py-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl text-white">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">
-              Por que escolher nosso gerador?
-            </h3>
-            <p className="text-xl text-blue-100">
-              A maneira mais rápida de criar SaaS profissionais
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8 px-8">
-            <div className="text-center">
-              <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="w-8 h-8" />
-              </div>
-              <h4 className="text-xl font-semibold mb-2">Código Profissional</h4>
-              <p className="text-blue-100">
-                Código limpo, organizado e seguindo as melhores práticas do mercado
+        <div className="mt-24 py-20 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-3xl text-white shadow-2xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent"></div>
+          <div className="relative">
+            <div className="text-center mb-16">
+              <h3 className="text-4xl md:text-5xl font-black mb-6">
+                Por que escolher nosso gerador?
+              </h3>
+              <p className="text-2xl text-purple-100 font-light">
+                A maneira mais rápida de criar SaaS profissionais
               </p>
             </div>
             
-            <div className="text-center">
-              <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Timer className="w-8 h-8" />
+            <div className="grid md:grid-cols-3 gap-12 px-8">
+              <div className="text-center group">
+                <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-2xl group-hover:scale-110 transition-transform">
+                  <Sparkles className="w-10 h-10 text-white" />
+                </div>
+                <h4 className="text-2xl font-bold mb-4">Código Profissional</h4>
+                <p className="text-purple-100 text-lg">
+                  Código limpo, organizado e seguindo as melhores práticas do mercado
+                </p>
               </div>
-              <h4 className="text-xl font-semibold mb-2">Pronto para Produção</h4>
-              <p className="text-blue-100">
-                Projetos completos com todas as dependências e configurações necessárias
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8" />
+              
+              <div className="text-center group">
+                <div className="bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-2xl group-hover:scale-110 transition-transform">
+                  <Timer className="w-10 h-10 text-white" />
+                </div>
+                <h4 className="text-2xl font-bold mb-4">Pronto para Produção</h4>
+                <p className="text-purple-100 text-lg">
+                  Projetos completos com todas as dependências e configurações necessárias
+                </p>
               </div>
-              <h4 className="text-xl font-semibold mb-2">Sempre Atualizado</h4>
-              <p className="text-blue-100">
-                Tecnologias modernas: React 18, TypeScript, Tailwind CSS e muito mais
-              </p>
+              
+              <div className="text-center group">
+                <div className="bg-gradient-to-r from-blue-400 to-cyan-500 rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-2xl group-hover:scale-110 transition-transform">
+                  <Shield className="w-10 h-10 text-white" />
+                </div>
+                <h4 className="text-2xl font-bold mb-4">Sempre Atualizado</h4>
+                <p className="text-purple-100 text-lg">
+                  Tecnologias modernas: React 18, TypeScript, Tailwind CSS e muito mais
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="mt-16 text-center py-12 border-t border-gray-200">
-          <div className="flex justify-center items-center space-x-2 mb-4">
-            <Star className="w-5 h-5 text-yellow-500 fill-current" />
-            <Star className="w-5 h-5 text-yellow-500 fill-current" />
-            <Star className="w-5 h-5 text-yellow-500 fill-current" />
-            <Star className="w-5 h-5 text-yellow-500 fill-current" />
-            <Star className="w-5 h-5 text-yellow-500 fill-current" />
+        <div className="mt-20 text-center py-16 border-t-2 border-gradient-to-r from-blue-200 to-purple-200">
+          <div className="flex justify-center items-center space-x-2 mb-6">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="w-6 h-6 text-yellow-500 fill-current" />
+            ))}
           </div>
-          <p className="text-gray-600 text-lg mb-2">
+          <p className="text-gray-700 text-2xl mb-4 font-bold">
             Gerador de SaaS com IA - Transforme suas ideias em realidade
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Todos os projetos incluem código funcional, documentação completa e estão prontos para execução
           </p>
         </div>
       </div>
+
+      {/* Project Generator Modal */}
+      <ProjectGeneratorModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        selectedTemplate={selectedTemplate}
+        projectName={projectName}
+        projectDescription={projectDescription}
+        customFeatures={customFeatures}
+        isGenerating={isGenerating}
+        onProjectNameChange={setProjectName}
+        onProjectDescriptionChange={setProjectDescription}
+        onCustomFeaturesChange={setCustomFeatures}
+        onGenerate={generateProject}
+      />
     </div>
   );
 };
