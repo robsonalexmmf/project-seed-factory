@@ -69,7 +69,7 @@ const Index = () => {
     }
 
     // Usuários pro têm limite de 10 projetos por mês
-    if (user.plan_type === 'pro' && user.monthly_limit !== -1 && user.projects_generated >= user.monthly_limit) {
+    if (user.plan_type === 'pro' && user.projects_generated >= 10) {
       return false;
     }
 
@@ -78,9 +78,13 @@ const Index = () => {
   };
 
   const showUpgradeModal = () => {
+    const limitMessage = user?.plan_type === 'freemium' 
+      ? "Você atingiu o limite de 2 projetos gratuitos. Faça upgrade para continuar gerando!"
+      : "Você atingiu o limite de 10 projetos do plano Pro. Faça upgrade para Business para projetos ilimitados!";
+    
     toast({
       title: "Limite de projetos atingido! 🚀",
-      description: "Você atingiu o limite de 2 projetos gratuitos. Faça upgrade para continuar gerando!",
+      description: limitMessage,
       variant: "destructive"
     });
   };
@@ -194,7 +198,7 @@ const Index = () => {
   const getProjectsRemaining = () => {
     if (!user) return 0;
     if (user.plan_type === 'admin' || user.plan_type === 'business') return -1; // Ilimitado
-    if (user.plan_type === 'pro') return Math.max(0, user.monthly_limit - user.projects_generated);
+    if (user.plan_type === 'pro') return Math.max(0, 10 - user.projects_generated);
     return Math.max(0, 2 - user.projects_generated); // Freemium
   };
 
@@ -363,7 +367,7 @@ const Index = () => {
                   categoryName={categories.find(c => c.id === template.category)?.name || ''}
                 />
                 {/* Overlay para usuários sem limite */}
-                {user && user.plan_type === 'freemium' && projectsRemaining === 0 && (
+                {user && ((user.plan_type === 'freemium' && projectsRemaining === 0) || (user.plan_type === 'pro' && projectsRemaining === 0)) && (
                   <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center backdrop-blur-sm">
                     <div className="text-center text-white">
                       <Lock className="w-12 h-12 mx-auto mb-4" />
