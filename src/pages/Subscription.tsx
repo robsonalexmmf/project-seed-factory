@@ -46,7 +46,16 @@ const Subscription = () => {
   ];
 
   const handlePlanSelect = (planId: string) => {
-    navigate(`/register?plan=${planId}`);
+    // Verificar se o usuário está logado
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    
+    if (!user.id) {
+      // Se não estiver logado, vai para cadastro
+      navigate(`/register?plan=${planId}`);
+    } else {
+      // Se já estiver logado, vai direto para o checkout
+      navigate(`/checkout?plan=${planId}`);
+    }
   };
 
   return (
