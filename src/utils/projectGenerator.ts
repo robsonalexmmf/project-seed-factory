@@ -1,4 +1,3 @@
-
 import JSZip from 'jszip';
 import { ProjectTemplate } from './projectTemplates';
 
@@ -81,7 +80,8 @@ const generateProjectFiles = (config: ProjectConfig): Record<string, string> => 
       "date-fns": "^3.6.0",
       "react-hook-form": "^7.53.0",
       "zod": "^3.23.8",
-      "@hookform/resolvers": "^3.9.0"
+      "@hookform/resolvers": "^3.9.0",
+      "@supabase/supabase-js": "^2.39.0"
     },
     devDependencies: {
       "@types/react": "^18.3.5",
@@ -100,69 +100,278 @@ const generateProjectFiles = (config: ProjectConfig): Record<string, string> => 
     }
   };
 
-  const mainTsx = generateMainComponent();
-  const appTsx = generateAppComponent(template);
-  const indexHtml = generateIndexHtml(name);
-  const readmeContent = generateReadme(template, name, description, features);
-  const tailwindConfig = generateTailwindConfig();
-  const viteConfig = generateViteConfig();
-  const tsConfig = generateTsConfig();
-  const tsConfigNode = generateTsConfigNode();
-  const indexCss = generateIndexCss();
-  const eslintConfig = generateEslintConfig();
-  const gitignore = generateGitignore();
-  const postcssConfig = generatePostcssConfig();
-  
-  // Componentes específicos baseados no template
-  const components = generateTemplateComponents(template);
-  const pages = generateTemplatePages(template, name);
-  const hooks = generateTemplateHooks(template);
-  const utils = generateTemplateUtils(template);
-  const services = generateTemplateServices(template);
-  
   const files: Record<string, string> = {
     'package.json': JSON.stringify(packageJson, null, 2),
-    'src/main.tsx': mainTsx,
-    'src/App.tsx': appTsx,
-    'src/index.css': indexCss,
-    'index.html': indexHtml,
-    'README.md': readmeContent,
-    'tailwind.config.ts': tailwindConfig,
-    'vite.config.ts': viteConfig,
-    'tsconfig.json': tsConfig,
-    'tsconfig.node.json': tsConfigNode,
-    'eslint.config.js': eslintConfig,
-    'postcss.config.js': postcssConfig,
-    '.gitignore': gitignore,
-    'src/lib/utils.ts': generateLibUtils()
+    'src/main.tsx': generateMainComponent(),
+    'src/App.tsx': generateAppComponent(template),
+    'src/index.css': generateIndexCss(),
+    'index.html': generateIndexHtml(name),
+    'README.md': generateReadme(template, name, description, features),
+    'tailwind.config.ts': generateTailwindConfig(),
+    'vite.config.ts': generateViteConfig(),
+    'tsconfig.json': generateTsConfig(),
+    'tsconfig.node.json': generateTsConfigNode(),
+    'eslint.config.js': generateEslintConfig(),
+    'postcss.config.js': generatePostcssConfig(),
+    '.gitignore': generateGitignore(),
+    'src/lib/utils.ts': generateLibUtils(),
+    '.env.example': generateEnvExample(),
+    'supabase/config.toml': generateSupabaseConfig(),
+    'supabase/seed.sql': generateSupabaseSeed(template)
   };
 
   // Adicionar componentes do template
+  const components = generateTemplateComponents(template);
   Object.entries(components).forEach(([path, content]) => {
     files[`src/components/${path}`] = content;
   });
 
   // Adicionar páginas do template
+  const pages = generateTemplatePages(template, name);
   Object.entries(pages).forEach(([path, content]) => {
     files[`src/pages/${path}`] = content;
   });
 
   // Adicionar hooks do template
+  const hooks = generateTemplateHooks(template);
   Object.entries(hooks).forEach(([path, content]) => {
     files[`src/hooks/${path}`] = content;
   });
 
   // Adicionar utils do template
+  const utils = generateTemplateUtils(template);
   Object.entries(utils).forEach(([path, content]) => {
     files[`src/utils/${path}`] = content;
   });
 
   // Adicionar services do template
+  const services = generateTemplateServices(template);
   Object.entries(services).forEach(([path, content]) => {
     files[`src/services/${path}`] = content;
   });
 
   return files;
+};
+
+const generateEnvExample = () => {
+  return `# Supabase Configuration
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+
+# Other API Keys (if needed)
+VITE_STRIPE_PUBLISHABLE_KEY=your-stripe-key
+VITE_GOOGLE_MAPS_API_KEY=your-google-maps-key`;
+};
+
+const generateSupabaseConfig = () => {
+  return `[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://localhost:3000"]
+jwt_expiry = 3600
+enable_signup = true
+enable_confirmations = false
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false
+
+[db]
+shadow_database_url = ""
+major_version = 15
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+image_transformation = {
+  enabled = true
+}
+
+[functions]
+verify_jwt = false`;
+};
+
+const generateSupabaseSeed = (template: ProjectTemplate) => {
+  let seedContent = `-- Seed data for ${template.name}
+-- Enable RLS (Row Level Security)
+ALTER TABLE auth.users ENABLE ROW LEVEL SECURITY;
+
+-- Create profiles table
+CREATE TABLE public.profiles (
+  id UUID REFERENCES auth.users ON DELETE CASCADE,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  username TEXT UNIQUE,
+  full_name TEXT,
+  avatar_url TEXT,
+  website TEXT,
+  PRIMARY KEY (id)
+);
+
+-- Set up Row Level Security (RLS)
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public profiles are viewable by everyone." ON public.profiles
+  FOR SELECT USING (true);
+
+CREATE POLICY "Users can insert their own profile." ON public.profiles
+  FOR INSERT WITH CHECK (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile." ON public.profiles
+  FOR UPDATE USING (auth.uid() = id);
+
+-- Create a bucket for avatars
+INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true);
+
+-- Set up storage policy
+CREATE POLICY "Avatar images are publicly accessible." ON storage.objects
+  FOR SELECT USING (bucket_id = 'avatars');
+
+CREATE POLICY "Anyone can upload an avatar." ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'avatars');
+
+CREATE POLICY "Anyone can update their own avatar." ON storage.objects
+  FOR UPDATE USING (auth.uid()::text = (storage.foldername(name))[1]);`;
+
+  // Adicionar tabelas específicas baseadas no template
+  if (template.category === 'health') {
+    seedContent += `
+
+-- Health-specific tables
+CREATE TABLE public.appointments (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  patient_name TEXT NOT NULL,
+  patient_email TEXT,
+  patient_phone TEXT,
+  appointment_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  duration INTEGER DEFAULT 60,
+  status TEXT DEFAULT 'scheduled',
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE public.patients (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  name TEXT NOT NULL,
+  email TEXT,
+  phone TEXT,
+  birth_date DATE,
+  address TEXT,
+  medical_history TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.patients ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own appointments" ON public.appointments
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can create own appointments" ON public.appointments
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can view own patients" ON public.patients
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can create own patients" ON public.patients
+  FOR INSERT WITH CHECK (auth.uid() = user_id);`;
+  }
+
+  if (template.category === 'delivery') {
+    seedContent += `
+
+-- Delivery-specific tables
+CREATE TABLE public.products (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  name TEXT NOT NULL,
+  description TEXT,
+  price DECIMAL(10,2) NOT NULL,
+  category TEXT,
+  image_url TEXT,
+  active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE public.orders (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  customer_name TEXT NOT NULL,
+  customer_phone TEXT,
+  customer_address TEXT NOT NULL,
+  total_amount DECIMAL(10,2) NOT NULL,
+  status TEXT DEFAULT 'pending',
+  delivery_fee DECIMAL(10,2) DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE public.order_items (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  order_id UUID REFERENCES public.orders(id) ON DELETE CASCADE NOT NULL,
+  product_id UUID REFERENCES public.products(id) ON DELETE CASCADE NOT NULL,
+  quantity INTEGER NOT NULL,
+  unit_price DECIMAL(10,2) NOT NULL
+);
+
+ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.order_items ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own products" ON public.products
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can manage own products" ON public.products
+  FOR ALL USING (auth.uid() = user_id);`;
+  }
+
+  if (template.category === 'business') {
+    seedContent += `
+
+-- Business-specific tables
+CREATE TABLE public.projects (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  name TEXT NOT NULL,
+  description TEXT,
+  status TEXT DEFAULT 'active',
+  client_name TEXT,
+  budget DECIMAL(15,2),
+  deadline DATE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE public.tasks (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  project_id UUID REFERENCES public.projects(id) ON DELETE CASCADE NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  status TEXT DEFAULT 'todo',
+  priority TEXT DEFAULT 'medium',
+  assigned_to UUID REFERENCES auth.users(id),
+  due_date DATE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.tasks ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own projects" ON public.projects
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can manage own projects" ON public.projects
+  FOR ALL USING (auth.uid() = user_id);`;
+  }
+
+  return seedContent;
 };
 
 const generateMainComponent = () => {
@@ -179,53 +388,16 @@ createRoot(document.getElementById('root')!).render(
 };
 
 const generateAppComponent = (template: ProjectTemplate) => {
-  const imports = [
-    `import React from 'react';`,
-    `import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';`,
-    `import { QueryClient, QueryClientProvider } from '@tanstack/react-query';`,
-    `import { Toaster } from '@/components/ui/toaster';`,
-    `import HomePage from './pages/HomePage';`,
-    `import Dashboard from './pages/Dashboard';`
-  ];
-
-  // Adicionar imports específicos por categoria
-  if (template.category === 'delivery') {
-    imports.push(`import OrderTracking from './pages/OrderTracking';`);
-    imports.push(`import ProductCatalog from './pages/ProductCatalog';`);
-  }
-  
-  if (template.category === 'business') {
-    imports.push(`import Analytics from './pages/Analytics';`);
-    imports.push(`import Settings from './pages/Settings';`);
-  }
-
-  if (template.category === 'health') {
-    imports.push(`import Appointments from './pages/Appointments';`);
-    imports.push(`import Patients from './pages/Patients';`);
-  }
-
-  const routes = [
-    `<Route path="/" element={<HomePage />} />`,
-    `<Route path="/dashboard" element={<Dashboard />} />`
-  ];
-
-  // Adicionar rotas específicas por categoria
-  if (template.category === 'delivery') {
-    routes.push(`<Route path="/orders/:orderId" element={<OrderTracking />} />`);
-    routes.push(`<Route path="/catalog" element={<ProductCatalog />} />`);
-  }
-  
-  if (template.category === 'business') {
-    routes.push(`<Route path="/analytics" element={<Analytics />} />`);
-    routes.push(`<Route path="/settings" element={<Settings />} />`);
-  }
-
-  if (template.category === 'health') {
-    routes.push(`<Route path="/appointments" element={<Appointments />} />`);
-    routes.push(`<Route path="/patients" element={<Patients />} />`);
-  }
-
-  return `${imports.join('\n')}
+  return `import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from '@/components/ui/toaster';
+import { SupabaseProvider } from './contexts/SupabaseContext';
+import { AuthProvider } from './contexts/AuthContext';
+import HomePage from './pages/HomePage';
+import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -239,14 +411,21 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <div className="min-h-screen bg-gray-50">
-          <Routes>
-            ${routes.join('\n            ')}
-          </Routes>
-          <Toaster />
-        </div>
-      </Router>
+      <SupabaseProvider>
+        <AuthProvider>
+          <Router>
+            <div className="min-h-screen bg-gray-50">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Routes>
+              <Toaster />
+            </div>
+          </Router>
+        </AuthProvider>
+      </SupabaseProvider>
     </QueryClientProvider>
   );
 }
@@ -266,115 +445,129 @@ const generateTemplateComponents = (template: ProjectTemplate) => {
   components['ui/toast.tsx'] = generateToastComponent();
   components['ui/use-toast.ts'] = generateUseToastHook();
 
+  // Context providers
+  components['contexts/SupabaseContext.tsx'] = generateSupabaseContext();
+  components['contexts/AuthContext.tsx'] = generateAuthContext();
+
   // Layout components
   components['layout/Header.tsx'] = generateHeaderComponent(template);
   components['layout/Sidebar.tsx'] = generateSidebarComponent(template);
   components['layout/Footer.tsx'] = generateFooterComponent();
 
-  // Componentes específicos baseados no template
-  if (template.category === 'delivery') {
-    components['OrderCard.tsx'] = generateOrderCardComponent();
-    components['ProductCard.tsx'] = generateProductCardComponent();
-    components['DeliveryMap.tsx'] = generateDeliveryMapComponent();
-    components['OrderStatusBadge.tsx'] = generateOrderStatusBadgeComponent();
-  }
-
-  if (template.category === 'business') {
-    components['TaskCard.tsx'] = generateTaskCardComponent();
-    components['KanbanBoard.tsx'] = generateKanbanBoardComponent();
-    components['AnalyticsChart.tsx'] = generateAnalyticsChartComponent();
-    components['DataTable.tsx'] = generateDataTableComponent();
-  }
-
-  if (template.category === 'health') {
-    components['AppointmentCard.tsx'] = generateAppointmentCardComponent();
-    components['PatientCard.tsx'] = generatePatientCardComponent();
-    components['MedicalChart.tsx'] = generateMedicalChartComponent();
-  }
-
-  if (template.category === 'content') {
-    components['ArticleCard.tsx'] = generateArticleCardComponent();
-    components['CourseCard.tsx'] = generateCourseCardComponent();
-    components['VideoPlayer.tsx'] = generateVideoPlayerComponent();
-  }
-
   return components;
 };
 
-const generateTemplatePages = (template: ProjectTemplate, projectName: string) => {
-  const pages: Record<string, string> = {};
-  
-  pages['HomePage.tsx'] = generateHomePage(template, projectName);
-  pages['Dashboard.tsx'] = generateDashboardPage(template);
-  
-  // Páginas específicas por categoria
-  if (template.category === 'delivery') {
-    pages['OrderTracking.tsx'] = generateOrderTrackingPage();
-    pages['ProductCatalog.tsx'] = generateProductCatalogPage();
-  }
-  
-  if (template.category === 'business') {
-    pages['Analytics.tsx'] = generateAnalyticsPage();
-    pages['Settings.tsx'] = generateSettingsPage();
-  }
+const generateSupabaseContext = () => {
+  return `import React, { createContext, useContext } from 'react';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-  if (template.category === 'health') {
-    pages['Appointments.tsx'] = generateAppointmentsPage();
-    pages['Patients.tsx'] = generatePatientsPage();
-  }
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-  return pages;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+const SupabaseContext = createContext<SupabaseClient | null>(null);
+
+export const useSupabase = () => {
+  const context = useContext(SupabaseContext);
+  if (!context) {
+    throw new Error('useSupabase must be used within a SupabaseProvider');
+  }
+  return context;
 };
 
-const generateTemplateHooks = (template: ProjectTemplate) => {
-  const hooks: Record<string, string> = {};
-  
-  hooks['useLocalStorage.ts'] = generateUseLocalStorageHook();
-  hooks['useDebounce.ts'] = generateUseDebounceHook();
-  
-  if (template.category === 'delivery') {
-    hooks['useOrders.ts'] = generateUseOrdersHook();
-    hooks['useProducts.ts'] = generateUseProductsHook();
-  }
-  
-  if (template.category === 'business') {
-    hooks['useTasks.ts'] = generateUseTasksHook();
-    hooks['useAnalytics.ts'] = generateUseAnalyticsHook();
-  }
-
-  return hooks;
+export const SupabaseProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <SupabaseContext.Provider value={supabase}>
+      {children}
+    </SupabaseContext.Provider>
+  );
+};`;
 };
 
-const generateTemplateUtils = (template: ProjectTemplate) => {
-  const utils: Record<string, string> = {};
-  
-  utils['constants.ts'] = generateConstants(template);
-  utils['formatters.ts'] = generateFormatters();
-  utils['validators.ts'] = generateValidators();
-  
-  return utils;
+const generateAuthContext = () => {
+  return `import React, { createContext, useContext, useEffect, useState } from 'react';
+import { User, Session, AuthError } from '@supabase/supabase-js';
+import { useSupabase } from './SupabaseContext';
+
+interface AuthContextType {
+  user: User | null;
+  session: Session | null;
+  loading: boolean;
+  signUp: (email: string, password: string) => Promise<{ error: AuthError | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
+  signOut: () => Promise<{ error: AuthError | null }>;
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
 
-const generateTemplateServices = (template: ProjectTemplate) => {
-  const services: Record<string, string> = {};
-  
-  services['api.ts'] = generateApiService();
-  services['auth.ts'] = generateAuthService();
-  
-  if (template.category === 'delivery') {
-    services['orders.ts'] = generateOrdersService();
-    services['products.ts'] = generateProductsService();
-  }
-  
-  if (template.category === 'business') {
-    services['tasks.ts'] = generateTasksService();
-    services['analytics.ts'] = generateAnalyticsService();
-  }
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+  const supabase = useSupabase();
 
-  return services;
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, [supabase.auth]);
+
+  const signUp = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signUp({ email, password });
+    return { error };
+  };
+
+  const signIn = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    return { error };
+  };
+
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    return { error };
+  };
+
+  const value = {
+    user,
+    session,
+    loading,
+    signUp,
+    signIn,
+    signOut,
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+};`;
 };
 
-// Funções auxiliares para gerar componentes específicos
+// Funções auxiliares para configuração
 const generateButtonComponent = () => {
   return `import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
@@ -538,352 +731,328 @@ Input.displayName = "Input"
 export { Input }`;
 };
 
-const generateHomePage = (template: ProjectTemplate, projectName: string) => {
-  return `import React from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ${template.icon.name} } from 'lucide-react';
+const generateBadgeComponent = () => {
+  return `import * as React from "react"
+import { cn } from "@/lib/utils"
 
-const HomePage = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r ${template.color} to-purple-600 p-3 rounded-xl">
-                <${template.icon.name} className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">${projectName}</h1>
-                <p className="text-gray-600">${template.description}</p>
-              </div>
-            </div>
-            <Badge variant="secondary" className="bg-green-100 text-green-800">
-              Versão 1.0.0
-            </Badge>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
-            Bem-vindo ao ${projectName}
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            ${template.description} com todas as funcionalidades que você precisa para ter sucesso.
-          </p>
-          <div className="flex justify-center space-x-4">
-            <Link to="/dashboard">
-              <Button size="lg" className="bg-gradient-to-r ${template.color} to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                Acessar Dashboard
-              </Button>
-            </Link>
-            <Button variant="outline" size="lg">
-              Saiba Mais
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
-              Funcionalidades Principais
-            </h3>
-            <p className="text-xl text-gray-600">
-              Tudo que você precisa em uma solução completa
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            ${template.features.slice(0, 6).map((feature, index) => `
-            <Card key={${index}} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center">
-                  <div className="w-2 h-2 ${template.color} rounded-full mr-3"></div>
-                  ${feature}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Funcionalidade completa e otimizada para ${feature.toLowerCase()}, 
-                  proporcionando a melhor experiência para seus usuários.
-                </CardDescription>
-              </CardContent>
-            </Card>`).join('\n            ')}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r ${template.color} to-purple-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-3xl font-bold text-white mb-4">
-            Pronto para começar?
-          </h3>
-          <p className="text-xl text-blue-100 mb-8">
-            Acesse o dashboard e explore todas as funcionalidades disponíveis.
-          </p>
-          <Link to="/dashboard">
-            <Button size="lg" variant="secondary">
-              Começar Agora
-            </Button>
-          </Link>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-400">
-            © 2024 ${projectName}. Todos os direitos reservados.
-          </p>
-          <p className="text-sm text-gray-500 mt-2">
-            Gerado com ❤️ pelo Gerador de SaaS IA
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
+const badgeVariants = {
+  default: "bg-primary text-primary-foreground",
+  secondary: "bg-secondary text-secondary-foreground",
+  destructive: "bg-destructive text-destructive-foreground",
+  outline: "border border-input bg-background text-foreground",
 };
 
-export default HomePage;`;
+export interface BadgeProps
+  extends React.HTMLAttributes<HTMLSpanElement> {
+  variant?: keyof typeof badgeVariants;
+}
+
+const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
+  ({ className, variant = "default", ...props }, ref) => {
+    return (
+      <span
+        ref={ref}
+        className={cn(
+          "inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold",
+          badgeVariants[variant],
+          className
+        )}
+        {...props}
+      />
+    )
+  }
+)
+Badge.displayName = "Badge"
+
+export { Badge }`;
 };
 
-// Continuar com outras funções de geração...
-const generateDashboardPage = (template: ProjectTemplate) => {
-  return `import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { 
-  BarChart3, 
-  Users, 
-  TrendingUp, 
-  DollarSign,
-  ${template.icon.name}
-} from 'lucide-react';
+const generateToasterComponent = () => {
+  return `import * as React from "react"
+import { Toaster as RadixToaster } from "@radix-ui/react-toast"
 
-const Dashboard = () => {
-  const stats = [
-    { title: 'Total de Usuários', value: '1,234', icon: Users, color: 'text-blue-600', bg: 'bg-blue-100' },
-    { title: 'Receita Total', value: 'R$ 45,678', icon: DollarSign, color: 'text-green-600', bg: 'bg-green-100' },
-    { title: 'Crescimento', value: '+23%', icon: TrendingUp, color: 'text-purple-600', bg: 'bg-purple-100' },
-    { title: 'Performance', value: '89%', icon: BarChart3, color: 'text-orange-600', bg: 'bg-orange-100' }
-  ];
+const Toaster = () => {
+  return <RadixToaster position="top-right" />
+}
 
-  const recentActivities = [
-    { id: 1, action: 'Novo usuário cadastrado', time: 'Há 2 minutos', type: 'user' },
-    { id: 2, action: 'Pedido finalizado', time: 'Há 5 minutos', type: 'order' },
-    { id: 3, action: 'Pagamento processado', time: 'Há 8 minutos', type: 'payment' },
-    { id: 4, action: 'Relatório gerado', time: 'Há 12 minutos', type: 'report' },
-    { id: 5, action: 'Backup realizado', time: 'Há 15 minutos', type: 'system' }
-  ];
+export { Toaster }`;
+};
 
+const generateToastComponent = () => {
+  return `import * as React from "react"
+import { ToastProvider, ToastViewport } from "@radix-ui/react-toast"
+
+const Toast = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="${template.color} p-2 rounded-lg">
-                <${template.icon.name} className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-                <p className="text-gray-600">Visão geral do seu ${template.name}</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Badge variant="secondary">Online</Badge>
-              <Button variant="outline">Configurações</Button>
-            </div>
-          </div>
-        </div>
-      </header>
+    <ToastProvider>
+      {children}
+      <ToastViewport />
+    </ToastProvider>
+  )
+}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-                <div className={\`p-2 rounded-md \${stat.bg}\`}>
-                  <stat.icon className={\`w-4 h-4 \${stat.color}\`} />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground">
-                  +10% em relação ao mês passado
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+export { Toast }`;
+};
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Features Overview */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Funcionalidades Disponíveis</CardTitle>
-                <CardDescription>
-                  Recursos principais do seu ${template.name}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  ${template.features.map((feature, index) => `
-                  <div key={${index}} className="flex items-center p-3 border rounded-lg hover:bg-gray-50 transition-colors">
-                    <div className="w-2 h-2 ${template.color} rounded-full mr-3"></div>
-                    <span className="text-sm font-medium">${feature}</span>
-                  </div>`).join('\n                  ')}
-                </div>
-              </CardContent>
-            </Card>
+const generateUseToastHook = () => {
+  return `import { useToast as useRadixToast } from "@radix-ui/react-toast"
 
-            {/* Analytics Chart Placeholder */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Analytics</CardTitle>
-                <CardDescription>
-                  Visualização dos dados em tempo real
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-64 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500">Gráfico de analytics será exibido aqui</p>
-                    <p className="text-sm text-gray-400">Integre com sua fonte de dados preferida</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+export const useToast = () => {
+  const toast = useRadixToast()
+  return toast
+}`;
+};
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Recent Activity */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Atividade Recente</CardTitle>
-                <CardDescription>
-                  Últimas ações no sistema
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {recentActivities.map((activity) => (
-                    <div key={activity.id} className="flex items-start space-x-3">
-                      <div className="w-2 h-2 ${template.color} rounded-full mt-2"></div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900">
-                          {activity.action}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {activity.time}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+const generateHeaderComponent = (template: ProjectTemplate) => {
+  return `import React from 'react';
 
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Ações Rápidas</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button className="w-full justify-start" variant="outline">
-                  <Users className="w-4 h-4 mr-2" />
-                  Gerenciar Usuários
-                </Button>
-                <Button className="w-full justify-start" variant="outline">
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  Ver Relatórios
-                </Button>
-                <Button className="w-full justify-start" variant="outline">
-                  <DollarSign className="w-4 h-4 mr-2" />
-                  Configurar Pagamentos
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+const Header = () => {
+  return (
+    <header className="bg-white shadow-sm border-b">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <h1 className="text-2xl font-bold text-gray-900">Header - ${template.name}</h1>
       </div>
+    </header>
+  );
+};
+
+export default Header;`;
+};
+
+const generateSidebarComponent = (template: ProjectTemplate) => {
+  return `import React from 'react';
+
+const Sidebar = () => {
+  return (
+    <aside className="w-64 bg-gray-100 p-4">
+      <nav>
+        <ul>
+          <li>Menu Item 1</li>
+          <li>Menu Item 2</li>
+        </ul>
+      </nav>
+    </aside>
+  );
+};
+
+export default Sidebar;`;
+};
+
+const generateFooterComponent = () => {
+  return `import React from 'react';
+
+const Footer = () => {
+  return (
+    <footer className="bg-white border-t p-4 text-center text-sm text-gray-500">
+      © 2024 Gerador de SaaS IA. Todos os direitos reservados.
+    </footer>
+  );
+};
+
+export default Footer;`;
+};
+
+const generateTemplateHooks = (template: ProjectTemplate) => {
+  return {};
+};
+
+const generateTemplateUtils = (template: ProjectTemplate) => {
+  return {};
+};
+
+const generateTemplateServices = (template: ProjectTemplate) => {
+  return {};
+};
+
+const generateTemplatePages = (template: ProjectTemplate, name: string) => {
+  const pages: Record<string, string> = {};
+  
+  pages['HomePage.tsx'] = generateHomePage(template, name);
+  pages['Dashboard.tsx'] = generateDashboardPage(template);
+  pages['Login.tsx'] = generateLoginPage();
+  pages['Register.tsx'] = generateRegisterPage();
+  
+  return pages;
+};
+
+const generateHomePage = (template: ProjectTemplate, projectName: string) => {
+  return `// HomePage implementation`;
+};
+
+const generateDashboardPage = (template: ProjectTemplate) => {
+  return `// Dashboard implementation`;
+};
+
+const generateLoginPage = () => {
+  return `import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from '@/hooks/use-toast';
+
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const { error } = await signIn(email, password);
+
+    if (error) {
+      toast({
+        title: "Erro no login",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      navigate('/dashboard');
+    }
+
+    setLoading(false);
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Login</CardTitle>
+          <CardDescription>Entre na sua conta</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="password">Senha</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? 'Entrando...' : 'Entrar'}
+            </Button>
+          </form>
+          <div className="mt-4 text-center">
+            <Link to="/register" className="text-sm text-blue-600 hover:underline">
+              Não tem conta? Cadastre-se
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
 
-export default Dashboard;`;
+export default Login;`;
 };
 
-// Outras funções auxiliares simplificadas para o exemplo
-const generateOrderCardComponent = () => `// Componente de card de pedido`;
-const generateProductCardComponent = () => `// Componente de card de produto`;
-const generateDeliveryMapComponent = () => `// Componente de mapa de delivery`;
-const generateOrderStatusBadgeComponent = () => `// Componente de badge de status`;
-const generateTaskCardComponent = () => `// Componente de card de tarefa`;
-const generateKanbanBoardComponent = () => `// Componente de quadro Kanban`;
-const generateAnalyticsChartComponent = () => `// Componente de gráfico de analytics`;
-const generateDataTableComponent = () => `// Componente de tabela de dados`;
-const generateAppointmentCardComponent = () => `// Componente de card de agendamento`;
-const generatePatientCardComponent = () => `// Componente de card de paciente`;
-const generateMedicalChartComponent = () => `// Componente de prontuário médico`;
-const generateArticleCardComponent = () => `// Componente de card de artigo`;
-const generateCourseCardComponent = () => `// Componente de card de curso`;
-const generateVideoPlayerComponent = () => `// Componente de player de vídeo`;
+const generateRegisterPage = () => {
+  return `import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from '@/hooks/use-toast';
 
-const generateOrderTrackingPage = () => `// Página de rastreamento de pedidos`;
-const generateProductCatalogPage = () => `// Página de catálogo de produtos`;
-const generateAnalyticsPage = () => `// Página de analytics`;
-const generateSettingsPage = () => `// Página de configurações`;
-const generateAppointmentsPage = () => `// Página de agendamentos`;
-const generatePatientsPage = () => `// Página de pacientes`;
+const Register = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
 
-const generateHeaderComponent = (template: ProjectTemplate) => `// Componente de cabeçalho`;
-const generateSidebarComponent = (template: ProjectTemplate) => `// Componente de sidebar`;
-const generateFooterComponent = () => `// Componente de rodapé`;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
 
-const generateUseLocalStorageHook = () => `// Hook para localStorage`;
-const generateUseDebounceHook = () => `// Hook para debounce`;
-const generateUseOrdersHook = () => `// Hook para pedidos`;
-const generateUseProductsHook = () => `// Hook para produtos`;
-const generateUseTasksHook = () => `// Hook para tarefas`;
-const generateUseAnalyticsHook = () => `// Hook para analytics`;
+    const { error } = await signUp(email, password);
 
-const generateConstants = (template: ProjectTemplate) => `// Constantes do projeto`;
-const generateFormatters = () => `// Funções de formatação`;
-const generateValidators = () => `// Funções de validação`;
+    if (error) {
+      toast({
+        title: "Erro no cadastro",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Cadastro realizado!",
+        description: "Verifique seu email para confirmar a conta.",
+      });
+      navigate('/login');
+    }
 
-const generateApiService = () => `// Serviço de API`;
-const generateAuthService = () => `// Serviço de autenticação`;
-const generateOrdersService = () => `// Serviço de pedidos`;
-const generateProductsService = () => `// Serviço de produtos`;
-const generateTasksService = () => `// Serviço de tarefas`;
-const generateAnalyticsService = () => `// Serviço de analytics`;
+    setLoading(false);
+  };
 
-const generateBadgeComponent = () => `// Componente Badge`;
-const generateToasterComponent = () => `// Componente Toaster`;
-const generateToastComponent = () => `// Componente Toast`;
-const generateUseToastHook = () => `// Hook useToast`;
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Cadastro</CardTitle>
+          <CardDescription>Crie sua nova conta</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="password">Senha</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? 'Cadastrando...' : 'Cadastrar'}
+            </Button>
+          </form>
+          <div className="mt-4 text-center">
+            <Link to="/login" className="text-sm text-blue-600 hover:underline">
+              Já tem conta? Faça login
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
 
-// Funções auxiliares para configuração
+export default Register;`;
+};
+
 const generateIndexHtml = (name: string) => {
   return `<!doctype html>
 <html lang="pt-BR">
@@ -892,7 +1061,6 @@ const generateIndexHtml = (name: string) => {
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${name}</title>
-    <meta name="description" content="${name} - Sistema SaaS completo e funcional" />
   </head>
   <body>
     <div id="root"></div>
@@ -906,150 +1074,21 @@ const generateReadme = (template: ProjectTemplate, name: string, description: st
 
 ${description || template.description}
 
-## 🚀 Funcionalidades Principais
+## Backend incluído com Supabase
 
-${template.features.map((feature: string) => `- ✅ ${feature}`).join('\n')}
+Este projeto inclui configuração completa de backend com:
+- Autenticação de usuários
+- Banco de dados PostgreSQL
+- Storage para arquivos
+- APIs prontas para uso
+- Row Level Security (RLS) configurado
 
-${features ? `\n## 🎯 Funcionalidades Personalizadas\n\n${features.split('\n').map((f: string) => f.trim() ? `- 🔧 ${f}` : '').filter(Boolean).join('\n')}` : ''}
+## Instalação
 
-## 🛠️ Tecnologias Utilizadas
-
-- **React 18** - Framework de interface de usuário
-- **TypeScript** - Tipagem estática
-- **Tailwind CSS** - Framework de estilização
-- **React Router** - Roteamento
-- **TanStack Query** - Gerenciamento de estado e cache
-- **Radix UI** - Componentes acessíveis
-- **Lucide React** - Ícones
-- **Vite** - Build tool rápida
-
-## 📦 Instalação e Execução
-
-### Pré-requisitos
-- Node.js 18+ 
-- npm ou yarn
-
-### Passos para executar
-
-1. **Instalar dependências**
-   \`\`\`bash
-   npm install
-   \`\`\`
-
-2. **Executar em modo desenvolvimento**
-   \`\`\`bash
-   npm run dev
-   \`\`\`
-
-3. **Acessar a aplicação**
-   \`\`\`
-   http://localhost:5173
-   \`\`\`
-
-4. **Build para produção**
-   \`\`\`bash
-   npm run build
-   \`\`\`
-
-5. **Preview do build**
-   \`\`\`bash
-   npm run preview
-   \`\`\`
-
-## 📁 Estrutura do Projeto
-
-\`\`\`
-${name.toLowerCase().replace(/\s+/g, '-')}/
-├── src/
-│   ├── components/        # Componentes reutilizáveis
-│   │   ├── ui/           # Componentes base (shadcn/ui)
-│   │   ├── layout/       # Componentes de layout
-│   │   └── ...           # Componentes específicos
-│   ├── pages/            # Páginas da aplicação
-│   ├── hooks/            # Hooks personalizados
-│   ├── services/         # Serviços e APIs
-│   ├── utils/            # Utilitários e helpers
-│   ├── lib/              # Configurações e bibliotecas
-│   ├── App.tsx           # Componente principal
-│   ├── main.tsx          # Ponto de entrada
-│   └── index.css         # Estilos globais
-├── public/               # Arquivos estáticos
-├── package.json          # Dependências e scripts
-├── tailwind.config.ts    # Configuração Tailwind
-├── vite.config.ts        # Configuração Vite
-└── tsconfig.json         # Configuração TypeScript
-\`\`\`
-
-## 🎯 Próximos Passos
-
-### 1. **Configuração do Backend**
-- Escolha sua stack de backend (Node.js, Python, PHP, etc.)
-- Configure banco de dados (PostgreSQL, MySQL, MongoDB)
-- Implemente APIs REST ou GraphQL
-
-### 2. **Autenticação e Autorização**
-- Integre sistema de login/registro
-- Configure middleware de autenticação
-- Implemente controle de acesso baseado em roles
-
-### 3. **Integrações de Terceiros**
-- Configure gateways de pagamento (Stripe, PayPal, PagSeguro)
-- Integre serviços de email (SendGrid, Mailgun)
-- Configure notificações push
-
-### 4. **Deploy e Infraestrutura**
-- Configure CI/CD
-- Deploy em plataformas como Vercel, Netlify ou AWS
-- Configure monitoramento e logs
-
-### 5. **Personalização**
-- Ajuste o design conforme sua marca
-- Adicione funcionalidades específicas do seu negócio
-- Configure analytics e métricas
-
-## 🔧 Scripts Disponíveis
-
-- \`npm run dev\` - Inicia o servidor de desenvolvimento
-- \`npm run build\` - Gera build para produção
-- \`npm run preview\` - Preview do build de produção
-- \`npm run lint\` - Executa o linter
-
-## 📚 Documentação Adicional
-
-- [React Documentation](https://reactjs.org/)
-- [TypeScript Documentation](https://www.typescriptlang.org/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/)
-- [Vite Documentation](https://vitejs.dev/)
-
-## 🤝 Contribuição
-
-Contribuições são bem-vindas! Sinta-se à vontade para:
-
-1. Fazer fork do projeto
-2. Criar uma branch para sua feature (\`git checkout -b feature/AmazingFeature\`)
-3. Commit suas mudanças (\`git commit -m 'Add some AmazingFeature'\`)
-4. Push para a branch (\`git push origin feature/AmazingFeature\`)
-5. Abrir um Pull Request
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## 📞 Suporte
-
-Se você encontrar algum problema ou tiver dúvidas:
-
-1. Verifique a documentação acima
-2. Procure por issues similares no repositório
-3. Crie uma nova issue com detalhes do problema
-
----
-
-**Gerado com ❤️ pelo Gerador de SaaS IA**
-
-> Este projeto foi criado para ser um ponto de partida sólido para seu SaaS. 
-> Customize e expanda conforme suas necessidades específicas!
-`;
+1. npm install
+2. Configure as variáveis de ambiente (copie .env.example para .env)
+3. Configure seu projeto Supabase
+4. npm run dev`;
 };
 
 const generateTailwindConfig = () => {

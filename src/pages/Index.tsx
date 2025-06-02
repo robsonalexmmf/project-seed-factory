@@ -17,7 +17,6 @@ import {
   Sparkles,
   Timer,
   Shield,
-  ArrowRight,
   Globe,
   Code,
   Layers
@@ -85,7 +84,7 @@ const Index = () => {
 
       toast({
         title: "🎉 Projeto Gerado com Sucesso!",
-        description: `${projectName} foi gerado e está sendo baixado. Execute 'npm install' e depois 'npm run dev' para rodar o projeto.`
+        description: `${projectName} foi gerado com frontend + backend Supabase completo! Execute 'npm install' e configure as variáveis de ambiente.`
       });
 
       // Reset form and close modal
@@ -137,19 +136,19 @@ const Index = () => {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-4xl mx-auto font-light">
-              Crie projetos SaaS completos e funcionais em segundos. Mais de 
+              Crie projetos SaaS completos com <span className="font-bold text-yellow-300">Frontend + Backend</span> em segundos. Mais de 
               <span className="font-bold text-yellow-300 mx-2">{totalTemplates} templates</span> 
-              profissionais prontos para uso.
+              profissionais com Supabase integrado.
             </p>
             
             <div className="flex flex-wrap justify-center gap-4 mb-10">
               <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white px-6 py-3 text-lg font-bold shadow-lg">
                 <CheckCircle className="w-5 h-5 mr-2" />
-                {totalTemplates}+ Templates
+                Frontend + Backend
               </Badge>
               <Badge className="bg-gradient-to-r from-blue-400 to-cyan-500 text-white px-6 py-3 text-lg font-bold shadow-lg">
                 <Zap className="w-5 h-5 mr-2" />
-                100% Funcional
+                Supabase Incluído
               </Badge>
               <Badge className="bg-gradient-to-r from-purple-400 to-pink-500 text-white px-6 py-3 text-lg font-bold shadow-lg">
                 <Timer className="w-5 h-5 mr-2" />
@@ -160,14 +159,6 @@ const Index = () => {
                 Código Limpo
               </Badge>
             </div>
-
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold px-8 py-4 text-lg rounded-2xl shadow-2xl transform transition-all hover:scale-105"
-            >
-              <ArrowRight className="w-6 h-6 mr-2" />
-              Começar Agora
-            </Button>
           </div>
         </div>
       </div>
@@ -276,7 +267,7 @@ const Index = () => {
                 Por que escolher nosso gerador?
               </h3>
               <p className="text-2xl text-purple-100 font-light">
-                A maneira mais rápida de criar SaaS profissionais
+                A maneira mais rápida de criar SaaS profissionais completos
               </p>
             </div>
             
@@ -285,9 +276,9 @@ const Index = () => {
                 <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-2xl group-hover:scale-110 transition-transform">
                   <Sparkles className="w-10 h-10 text-white" />
                 </div>
-                <h4 className="text-2xl font-bold mb-4">Código Profissional</h4>
+                <h4 className="text-2xl font-bold mb-4">Frontend + Backend</h4>
                 <p className="text-purple-100 text-lg">
-                  Código limpo, organizado e seguindo as melhores práticas do mercado
+                  Projetos completos com interface React e backend Supabase integrado
                 </p>
               </div>
               
@@ -295,9 +286,9 @@ const Index = () => {
                 <div className="bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-2xl group-hover:scale-110 transition-transform">
                   <Timer className="w-10 h-10 text-white" />
                 </div>
-                <h4 className="text-2xl font-bold mb-4">Pronto para Produção</h4>
+                <h4 className="text-2xl font-bold mb-4">Banco de Dados Incluído</h4>
                 <p className="text-purple-100 text-lg">
-                  Projetos completos com todas as dependências e configurações necessárias
+                  PostgreSQL, autenticação, storage e APIs prontas para uso
                 </p>
               </div>
               
@@ -305,9 +296,9 @@ const Index = () => {
                 <div className="bg-gradient-to-r from-blue-400 to-cyan-500 rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-2xl group-hover:scale-110 transition-transform">
                   <Shield className="w-10 h-10 text-white" />
                 </div>
-                <h4 className="text-2xl font-bold mb-4">Sempre Atualizado</h4>
+                <h4 className="text-2xl font-bold mb-4">Segurança Avançada</h4>
                 <p className="text-purple-100 text-lg">
-                  Tecnologias modernas: React 18, TypeScript, Tailwind CSS e muito mais
+                  Row Level Security (RLS) e autenticação JWT configurados
                 </p>
               </div>
             </div>
@@ -322,10 +313,10 @@ const Index = () => {
             ))}
           </div>
           <p className="text-gray-700 text-2xl mb-4 font-bold">
-            Gerador de SaaS com IA - Transforme suas ideias em realidade
+            Gerador de SaaS com IA - Frontend + Backend Completo
           </p>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Todos os projetos incluem código funcional, documentação completa e estão prontos para execução
+            Todos os projetos incluem código funcional, banco de dados, autenticação e estão prontos para produção
           </p>
         </div>
       </div>
