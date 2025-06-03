@@ -1,3 +1,4 @@
+
 import {
   Code, Database, Globe, Smartphone, Users, ShoppingCart, Calendar, 
   CreditCard, BarChart, MessageSquare, Mail, Lock, Settings, Search,
@@ -26,7 +27,8 @@ import {
   Paintbrush, PaintBucket, Eraser, Highlighter,
   Bot, Cpu, Server, CloudRain, Sparkles, GitBranch, Terminal,
   Shield as SecurityIcon, Network, HardDrive, Gauge, TestTube,
-  FileCode, BookMarked, Headphones, Navigation, ShoppingBag
+  FileCode, BookMarked, Headphones, Navigation, ShoppingBag,
+  Plus, QrCode
 } from 'lucide-react';
 
 export interface ProjectTemplate {
@@ -59,6 +61,21 @@ export const templateCategories = [
   { id: 'marketing', name: 'Marketing', icon: TrendingUp },
   { id: 'technology', name: 'Tecnologia', icon: Code },
   { id: 'whatsapp', name: 'WhatsApp Bots', icon: Bot },
+  { id: 'pdv-sales', name: 'PDV & Vendas', icon: CreditCard },
+  { id: 'stock', name: 'Estoque', icon: Package },
+  { id: 'financial', name: 'Financeiro', icon: BarChart },
+  { id: 'restaurant', name: 'Restaurantes', icon: Utensils },
+  { id: 'crm', name: 'CRM', icon: Users },
+  { id: 'employees', name: 'Funcionários', icon: UserCheck },
+  { id: 'fiscal', name: 'Fiscal', icon: FileText },
+  { id: 'service', name: 'Serviços', icon: Wrench },
+  { id: 'beauty', name: 'Beleza & Saúde', icon: Sparkles },
+  { id: 'real-estate', name: 'Imóveis', icon: Home },
+  { id: 'gym', name: 'Academias', icon: Dumbbell },
+  { id: 'marketplace', name: 'Marketplaces', icon: Store },
+  { id: 'ai', name: 'Inteligência Artificial', icon: Brain },
+  { id: 'specific', name: 'Setores Específicos', icon: Target },
+  { id: 'innovative', name: 'Ideias Inovadoras', icon: Zap },
   { id: 'other', name: 'Outros', icon: Star }
 ];
 
@@ -91,7 +108,6 @@ export const templates: ProjectTemplate[] = [
     estimatedTime: '5-7 dias',
     popular: true
   },
-  // Redes Sociais
   {
     id: 'social-network',
     name: 'Rede Social Básica',
@@ -118,7 +134,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '4-6 dias'
   },
-  // Produtividade
   {
     id: 'task-manager',
     name: 'Gerenciador de Tarefas',
@@ -145,7 +160,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'intermediate',
     estimatedTime: '3-4 dias'
   },
-  // Educação
   {
     id: 'online-course',
     name: 'Plataforma de Cursos Online',
@@ -173,7 +187,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '6-8 dias'
   },
-  // Saúde
   {
     id: 'health-tracker',
     name: 'Monitor de Saúde',
@@ -200,7 +213,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '7-10 dias'
   },
-  // Finanças
   {
     id: 'budget-app',
     name: 'App de Orçamento Pessoal',
@@ -227,7 +239,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '5-6 dias'
   },
-  // Entretenimento
   {
     id: 'music-player',
     name: 'Player de Música',
@@ -254,7 +265,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '7-9 dias'
   },
-  // Viagens
   {
     id: 'travel-planner',
     name: 'Planejador de Viagens',
@@ -281,7 +291,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '6-7 dias'
   },
-  // Negócios
   {
     id: 'crm-basic',
     name: 'CRM Básico',
@@ -308,8 +317,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '6-8 dias'
   },
-
-  // Novos templates E-commerce Avançados
   {
     id: 'marketplace-multivendor',
     name: 'Marketplace Multi-vendor',
@@ -350,8 +357,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'intermediate',
     estimatedTime: '4-5 dias'
   },
-
-  // Social & Comunicação Avançados
   {
     id: 'community-platform',
     name: 'Plataforma de Comunidade',
@@ -391,8 +396,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'intermediate',
     estimatedTime: '5-6 dias'
   },
-
-  // Negócios & Gestão Avançados
   {
     id: 'crm-advanced',
     name: 'CRM Avançado',
@@ -433,8 +436,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '6-8 dias'
   },
-
-  // Saúde & Bem-estar Expandido
   {
     id: 'telemedicine-advanced',
     name: 'Plataforma de Telemedicina',
@@ -474,8 +475,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '6-8 dias'
   },
-
-  // Educação Avançada
   {
     id: 'advanced-lms',
     name: 'LMS Avançado',
@@ -516,8 +515,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '6-8 dias'
   },
-
-  // Alimentação
   {
     id: 'ghost-kitchen',
     name: 'Plataforma Ghost Kitchen',
@@ -557,8 +554,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'intermediate',
     estimatedTime: '4-5 dias'
   },
-
-  // Transporte
   {
     id: 'fleet-management',
     name: 'Gestão de Frota',
@@ -598,8 +593,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '6-8 dias'
   },
-
-  // Imóveis
   {
     id: 'property-management',
     name: 'Gestão de Propriedades',
@@ -639,8 +632,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '7-9 dias'
   },
-
-  // Produtividade Avançada
   {
     id: 'ai-personal-assistant',
     name: 'Assistente Pessoal com IA',
@@ -681,8 +672,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '5-7 dias'
   },
-
-  // Entretenimento Avançado
   {
     id: 'streaming-platform',
     name: 'Plataforma de Streaming',
@@ -722,8 +711,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '8-10 dias'
   },
-
-  // WhatsApp Bots
   {
     id: 'whatsapp-ecommerce-bot',
     name: 'Bot E-commerce WhatsApp',
@@ -985,8 +972,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'intermediate',
     estimatedTime: '4-5 dias'
   },
-
-  // Marketing Digital
   {
     id: 'email-marketing-platform',
     name: 'Email Marketing',
@@ -1026,8 +1011,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'advanced',
     estimatedTime: '5-6 dias'
   },
-
-  // Finanças Expandidas
   {
     id: 'personal-finance-tracker',
     name: 'Finanças Pessoais',
@@ -1067,8 +1050,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'intermediate',
     estimatedTime: '4-5 dias'
   },
-
-  // Tecnologia
   {
     id: 'api-gateway',
     name: 'Gateway de APIs',
@@ -1121,8 +1102,6 @@ export const templates: ProjectTemplate[] = [
     difficulty: 'intermediate',
     estimatedTime: '4-6 dias'
   },
-
-  // Delivery Expandido
   {
     id: 'food-delivery-platform',
     name: 'Delivery de Comida',
@@ -1162,6 +1141,876 @@ export const templates: ProjectTemplate[] = [
     techStack: ['React', 'Supabase', 'OCR', 'Tailwind'],
     difficulty: 'advanced',
     estimatedTime: '5-7 dias'
+  },
+
+  // PDV & Vendas
+  {
+    id: 'cloud-pdv',
+    name: 'Sistema de PDV em Nuvem',
+    description: 'Sistema completo de ponto de venda na nuvem com recursos avançados',
+    category: 'pdv-sales',
+    subcategory: 'PDV',
+    icon: CreditCard,
+    color: 'from-blue-500 to-purple-600',
+    features: ['Vendas por QR Code', 'Nota fiscal integrada', 'Integração com maquininhas', 'Checkout móvel'],
+    techStack: ['React', 'Supabase', 'Payment APIs', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '6-8 dias',
+    popular: true
+  },
+  {
+    id: 'commission-panel',
+    name: 'Painel de Comissão por Vendedor',
+    description: 'Sistema de controle de comissões e metas por vendedor',
+    category: 'pdv-sales',
+    subcategory: 'Comissões',
+    icon: TrendingUp,
+    color: 'from-green-500 to-emerald-600',
+    features: ['Cálculo automático', 'Metas por vendedor', 'Relatórios', 'Ranking'],
+    techStack: ['React', 'Supabase', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-4 dias'
+  },
+  {
+    id: 'abandoned-cart-recovery',
+    name: 'Recuperação de Carrinho Abandonado',
+    description: 'Sistema de recuperação via WhatsApp para vendas não finalizadas',
+    category: 'pdv-sales',
+    subcategory: 'Recuperação',
+    icon: MessageCircle,
+    color: 'from-orange-500 to-red-600',
+    features: ['Automação WhatsApp', 'Lembretes personalizados', 'Analytics', 'Conversão'],
+    techStack: ['Node.js', 'WhatsApp API', 'Supabase'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-5 dias'
+  },
+  {
+    id: 'self-service-app',
+    name: 'App de Autoatendimento',
+    description: 'Aplicativo para clientes fazerem pedidos sem atendimento',
+    category: 'pdv-sales',
+    subcategory: 'Autoatendimento',
+    icon: Smartphone,
+    color: 'from-purple-500 to-pink-600',
+    features: ['Cardápio digital', 'Pedidos diretos', 'Pagamento integrado', 'QR Code'],
+    techStack: ['React Native', 'Supabase', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-6 dias'
+  },
+
+  // Gestão de Estoque
+  {
+    id: 'barcode-inventory',
+    name: 'Inventário com Código de Barras',
+    description: 'Sistema de inventário com leitura por código de barras',
+    category: 'stock',
+    subcategory: 'Inventário',
+    icon: QrCode,
+    color: 'from-blue-500 to-cyan-600',
+    features: ['Leitura por câmera', 'Contagem automática', 'Relatórios de divergência', 'Etiquetas'],
+    techStack: ['React Native', 'Supabase', 'Barcode Scanner', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-5 dias'
+  },
+  {
+    id: 'stock-alerts',
+    name: 'Alertas de Estoque Mínimo',
+    description: 'Sistema de alertas e reposição automática de produtos',
+    category: 'stock',
+    subcategory: 'Alertas',
+    icon: Bell,
+    color: 'from-red-500 to-orange-600',
+    features: ['Alertas automáticos', 'Previsão de demanda', 'Sugestão de compra', 'Notificações'],
+    techStack: ['React', 'Supabase', 'Push Notifications', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-4 dias'
+  },
+  {
+    id: 'abc-curve',
+    name: 'Curva ABC de Produtos',
+    description: 'Análise de produtos por importância e rentabilidade',
+    category: 'stock',
+    subcategory: 'Análise',
+    icon: BarChart,
+    color: 'from-green-500 to-blue-600',
+    features: ['Classificação ABC', 'Gráficos de performance', 'Relatórios', 'Insights'],
+    techStack: ['React', 'Supabase', 'Charts.js', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-5 dias'
+  },
+  {
+    id: 'multi-warehouse',
+    name: 'Multiarmazém com Transferência',
+    description: 'Gestão de múltiplos armazéns com transferência entre lojas',
+    category: 'stock',
+    subcategory: 'Multiarmazém',
+    icon: Warehouse,
+    color: 'from-purple-500 to-indigo-600',
+    features: ['Múltiplos locais', 'Transferências', 'Rastreamento', 'Relatórios'],
+    techStack: ['React', 'Supabase', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '5-7 dias'
+  },
+
+  // Financeiro e Cobrança
+  {
+    id: 'automated-cashflow',
+    name: 'Fluxo de Caixa Automatizado',
+    description: 'Sistema automatizado de controle de fluxo de caixa',
+    category: 'financial',
+    subcategory: 'Fluxo de Caixa',
+    icon: TrendingUp,
+    color: 'from-green-500 to-emerald-600',
+    features: ['Projeções automáticas', 'Categorização', 'Alertas', 'Relatórios'],
+    techStack: ['React', 'Supabase', 'Charts.js', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-6 dias'
+  },
+  {
+    id: 'bank-reconciliation',
+    name: 'Conciliação Bancária Automática',
+    description: 'Conciliação automática de extratos bancários',
+    category: 'financial',
+    subcategory: 'Conciliação',
+    icon: CreditCard,
+    color: 'from-blue-500 to-purple-600',
+    features: ['Import de extratos', 'Matching automático', 'Divergências', 'Relatórios'],
+    techStack: ['React', 'Supabase', 'Bank APIs', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '6-8 dias'
+  },
+  {
+    id: 'recurring-billing',
+    name: 'Sistema de Boletos Recorrentes',
+    description: 'Geração automática de boletos com cobrança recorrente',
+    category: 'financial',
+    subcategory: 'Cobrança',
+    icon: Receipt,
+    color: 'from-yellow-500 to-orange-600',
+    features: ['Geração automática', 'Vencimentos', 'Juros e multa', 'Baixa automática'],
+    techStack: ['React', 'Supabase', 'Payment APIs', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '5-7 dias'
+  },
+  {
+    id: 'pix-qr-billing',
+    name: 'Cobrança via PIX com QR Code',
+    description: 'Sistema de cobrança com QR Code dinâmico PIX',
+    category: 'financial',
+    subcategory: 'PIX',
+    icon: QrCode,
+    color: 'from-green-600 to-teal-600',
+    features: ['QR Code dinâmico', 'Cobrança instantânea', 'Webhook', 'Conciliação'],
+    techStack: ['React', 'Supabase', 'PIX APIs', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-5 dias'
+  },
+
+  // Bares, Restaurantes e Delivery
+  {
+    id: 'qr-table-orders',
+    name: 'Sistema de Pedidos por QR Code',
+    description: 'Pedidos diretos da mesa via QR Code sem garçom',
+    category: 'restaurant',
+    subcategory: 'Pedidos',
+    icon: QrCode,
+    color: 'from-orange-500 to-red-600',
+    features: ['Cardápio digital', 'Pedidos da mesa', 'Pagamento integrado', 'Status em tempo real'],
+    techStack: ['React', 'Supabase', 'Payment APIs', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-6 dias',
+    popular: true
+  },
+  {
+    id: 'digital-menu',
+    name: 'Cardápio Digital com Fotos',
+    description: 'Cardápio digital interativo com fotos e descrições',
+    category: 'restaurant',
+    subcategory: 'Cardápio',
+    icon: Image,
+    color: 'from-blue-500 to-cyan-600',
+    features: ['Upload de fotos', 'Descrições detalhadas', 'Preços dinâmicos', 'Categorias'],
+    techStack: ['React', 'Supabase Storage', 'Tailwind'],
+    difficulty: 'beginner',
+    estimatedTime: '2-3 dias'
+  },
+  {
+    id: 'electronic-bill',
+    name: 'Comanda Eletrônica',
+    description: 'Sistema digital de comandas para bares e restaurantes',
+    category: 'restaurant',
+    subcategory: 'Comanda',
+    icon: FileText,
+    color: 'from-purple-500 to-pink-600',
+    features: ['Comandas digitais', 'Controle de consumo', 'Divisão de conta', 'Histórico'],
+    techStack: ['React', 'Supabase', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-4 dias'
+  },
+  {
+    id: 'delivery-router',
+    name: 'Roteirizador para Entregadores',
+    description: 'Otimização de rotas para entregadores de delivery',
+    category: 'restaurant',
+    subcategory: 'Delivery',
+    icon: MapPin,
+    color: 'from-green-500 to-emerald-600',
+    features: ['Otimização de rotas', 'GPS integrado', 'Múltiplas entregas', 'Tempo estimado'],
+    techStack: ['React Native', 'Maps API', 'Supabase', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '5-7 dias'
+  },
+
+  // CRM e Relacionamento
+  {
+    id: 'birthday-campaigns',
+    name: 'Cadastro com Aniversários',
+    description: 'CRM com campanhas automáticas de aniversário',
+    category: 'crm',
+    subcategory: 'Campanhas',
+    icon: Calendar,
+    color: 'from-pink-500 to-red-600',
+    features: ['Campanhas automáticas', 'WhatsApp/SMS/Email', 'Cupons personalizados', 'Histórico'],
+    techStack: ['React', 'Supabase', 'Communication APIs', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-5 dias'
+  },
+  {
+    id: 'customer-scoring',
+    name: 'Score de Fidelidade por Consumo',
+    description: 'Sistema de pontuação baseado no consumo do cliente',
+    category: 'crm',
+    subcategory: 'Fidelidade',
+    icon: Star,
+    color: 'from-yellow-500 to-orange-600',
+    features: ['Sistema de pontos', 'Níveis de fidelidade', 'Recompensas', 'Gamificação'],
+    techStack: ['React', 'Supabase', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-5 dias'
+  },
+  {
+    id: 'referral-program',
+    name: 'Programa de Indicações',
+    description: 'Sistema de indicações com recompensas automáticas',
+    category: 'crm',
+    subcategory: 'Indicações',
+    icon: Users,
+    color: 'from-green-500 to-blue-600',
+    features: ['Códigos de indicação', 'Tracking de conversões', 'Recompensas automáticas', 'Relatórios'],
+    techStack: ['React', 'Supabase', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-6 dias'
+  },
+  {
+    id: 'social-integration',
+    name: 'Integração com Redes Sociais',
+    description: 'Integração com Instagram, WhatsApp e Facebook',
+    category: 'crm',
+    subcategory: 'Social',
+    icon: Share,
+    color: 'from-purple-500 to-pink-600',
+    features: ['Multi-canal', 'Histórico unificado', 'Automação', 'Analytics'],
+    techStack: ['React', 'Social APIs', 'Supabase', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '6-8 dias'
+  },
+
+  // Gestão de Funcionários
+  {
+    id: 'online-schedule',
+    name: 'Escala de Trabalho Online',
+    description: 'Sistema online para criação e gestão de escalas',
+    category: 'employees',
+    subcategory: 'Escala',
+    icon: Calendar,
+    color: 'from-blue-500 to-cyan-600',
+    features: ['Escalas automáticas', 'Troca de turnos', 'Notificações', 'Aprovações'],
+    techStack: ['React', 'Supabase', 'Push Notifications', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-6 dias'
+  },
+  {
+    id: 'geo-timetracking',
+    name: 'Controle de Ponto por Geolocalização',
+    description: 'Sistema de ponto eletrônico com validação por GPS',
+    category: 'employees',
+    subcategory: 'Ponto',
+    icon: MapPin,
+    color: 'from-green-500 to-emerald-600',
+    features: ['GPS tracking', 'Validação por local', 'Relatórios', 'Fotos obrigatórias'],
+    techStack: ['React Native', 'Supabase', 'GPS APIs', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-5 dias'
+  },
+  {
+    id: 'performance-evaluation',
+    name: 'Avaliação de Desempenho',
+    description: 'Sistema de avaliação 360° para funcionários',
+    category: 'employees',
+    subcategory: 'Avaliação',
+    icon: Star,
+    color: 'from-yellow-500 to-orange-600',
+    features: ['Avaliação 360°', 'Metas individuais', 'Feedback contínuo', 'Relatórios'],
+    techStack: ['React', 'Supabase', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '5-6 dias'
+  },
+  {
+    id: 'digital-onboarding',
+    name: 'Treinamentos e Documentos Digitais',
+    description: 'Portal de treinamento e documentos para funcionários',
+    category: 'employees',
+    subcategory: 'Treinamento',
+    icon: BookOpen,
+    color: 'from-purple-500 to-indigo-600',
+    features: ['Cursos online', 'Documentos digitais', 'Progresso tracking', 'Certificados'],
+    techStack: ['React', 'Supabase', 'Video Streaming', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-6 dias'
+  },
+
+  // Notas Fiscais e Regulatório
+  {
+    id: 'automated-nfe',
+    name: 'Emissão de NFe/NFCe Automática',
+    description: 'Sistema automatizado de emissão de notas fiscais',
+    category: 'fiscal',
+    subcategory: 'Notas Fiscais',
+    icon: FileText,
+    color: 'from-blue-500 to-purple-600',
+    features: ['Emissão automática', 'Validação XML', 'DANFE', 'Contingência'],
+    techStack: ['React', 'Fiscal APIs', 'Supabase', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '7-9 dias'
+  },
+  {
+    id: 'accounting-reports',
+    name: 'Relatórios para Contabilidade',
+    description: 'Geração automática de relatórios contábeis',
+    category: 'fiscal',
+    subcategory: 'Contabilidade',
+    icon: BarChart,
+    color: 'from-green-500 to-emerald-600',
+    features: ['DRE automática', 'Balancete', 'Livro caixa', 'Exportação'],
+    techStack: ['React', 'Supabase', 'PDF Generation', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '5-6 dias'
+  },
+  {
+    id: 'license-monitoring',
+    name: 'Monitoramento de Alvarás',
+    description: 'Controle de vencimento de licenças e alvarás',
+    category: 'fiscal',
+    subcategory: 'Licenças',
+    icon: Shield,
+    color: 'from-red-500 to-orange-600',
+    features: ['Calendário de vencimentos', 'Alertas automáticos', 'Documentos digitais', 'Renovações'],
+    techStack: ['React', 'Supabase', 'Notifications', 'Tailwind'],
+    difficulty: 'beginner',
+    estimatedTime: '2-3 dias'
+  },
+  {
+    id: 'tax-calculator',
+    name: 'Cálculo Automático de Tributos',
+    description: 'Calculadora automática de impostos por estado',
+    category: 'fiscal',
+    subcategory: 'Tributos',
+    icon: Calculator,
+    color: 'from-yellow-500 to-orange-600',
+    features: ['Cálculo por estado', 'Regras atualizadas', 'Simulações', 'Relatórios'],
+    techStack: ['React', 'Tax APIs', 'Supabase', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '6-8 dias'
+  },
+
+  // Assistência Técnica
+  {
+    id: 'service-orders',
+    name: 'Geração de Ordens de Serviço',
+    description: 'Sistema completo de ordens de serviço online',
+    category: 'service',
+    subcategory: 'OS',
+    icon: Wrench,
+    color: 'from-blue-500 to-cyan-600',
+    features: ['OS digitais', 'Checklist customizado', 'Fotos e anexos', 'Assinatura digital'],
+    techStack: ['React', 'Supabase', 'Digital Signature', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-6 dias'
+  },
+  {
+    id: 'technical-visits',
+    name: 'Agendamento de Visitas Técnicas',
+    description: 'Sistema de agendamento para técnicos de campo',
+    category: 'service',
+    subcategory: 'Agendamento',
+    icon: Calendar,
+    color: 'from-green-500 to-emerald-600',
+    features: ['Agenda técnicos', 'GPS routing', 'Notificações', 'Histórico'],
+    techStack: ['React Native', 'Supabase', 'Maps API', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-5 dias'
+  },
+  {
+    id: 'equipment-history',
+    name: 'Histórico por Equipamento',
+    description: 'Registro completo de manutenções por equipamento',
+    category: 'service',
+    subcategory: 'Histórico',
+    icon: Database,
+    color: 'from-purple-500 to-indigo-600',
+    features: ['QR Code por equipamento', 'Histórico completo', 'Manutenções preventivas', 'Relatórios'],
+    techStack: ['React', 'Supabase', 'QR Generator', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-5 dias'
+  },
+  {
+    id: 'warranty-system',
+    name: 'Sistema de Garantia por OS',
+    description: 'Controle automático de garantias por ordem de serviço',
+    category: 'service',
+    subcategory: 'Garantia',
+    icon: Shield,
+    color: 'from-yellow-500 to-orange-600',
+    features: ['Garantias automáticas', 'Vencimentos', 'Histórico', 'Certificados'],
+    techStack: ['React', 'Supabase', 'PDF Generation', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-4 dias'
+  },
+
+  // Beleza & Saúde
+  {
+    id: 'online-booking',
+    name: 'Agenda Online com Confirmação',
+    description: 'Sistema de agendamento com confirmação automática',
+    category: 'beauty',
+    subcategory: 'Agendamento',
+    icon: Calendar,
+    color: 'from-pink-500 to-purple-600',
+    features: ['Agendamento online', 'Confirmação WhatsApp', 'Lista de espera', 'Reagendamento'],
+    techStack: ['React', 'Supabase', 'WhatsApp API', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-5 dias',
+    popular: true
+  },
+  {
+    id: 'session-packages',
+    name: 'Pacotes de Sessões',
+    description: 'Controle de pacotes de sessões com uso automático',
+    category: 'beauty',
+    subcategory: 'Pacotes',
+    icon: Package,
+    color: 'from-blue-500 to-cyan-600',
+    features: ['Pacotes personalizados', 'Controle de uso', 'Validade', 'Relatórios'],
+    techStack: ['React', 'Supabase', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-4 dias'
+  },
+  {
+    id: 'digital-record',
+    name: 'Prontuário Digital do Cliente',
+    description: 'Prontuário eletrônico para clínicas e salões',
+    category: 'beauty',
+    subcategory: 'Prontuário',
+    icon: FileText,
+    color: 'from-green-500 to-emerald-600',
+    features: ['Histórico completo', 'Fotos antes/depois', 'Observações', 'Evolução'],
+    techStack: ['React', 'Supabase Storage', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-5 dias'
+  },
+  {
+    id: 'commission-control',
+    name: 'Controle de Comissões',
+    description: 'Sistema de comissões por agendamento e profissional',
+    category: 'beauty',
+    subcategory: 'Comissão',
+    icon: TrendingUp,
+    color: 'from-yellow-500 to-orange-600',
+    features: ['Cálculo automático', 'Por profissional', 'Metas', 'Relatórios'],
+    techStack: ['React', 'Supabase', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-4 dias'
+  },
+
+  // Imóveis
+  {
+    id: 'contract-management',
+    name: 'Gestão de Contratos com Vencimentos',
+    description: 'Sistema completo de gestão de contratos de aluguel',
+    category: 'real-estate',
+    subcategory: 'Contratos',
+    icon: FileText,
+    color: 'from-blue-500 to-indigo-600',
+    features: ['Contratos digitais', 'Vencimentos automáticos', 'Reajustes', 'Renovações'],
+    techStack: ['React', 'Supabase', 'Digital Signature', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '5-6 dias'
+  },
+  {
+    id: 'rent-billing',
+    name: 'Geração Automática de Boletos',
+    description: 'Sistema automatizado de cobrança de aluguel',
+    category: 'real-estate',
+    subcategory: 'Cobrança',
+    icon: Receipt,
+    color: 'from-green-500 to-emerald-600',
+    features: ['Boletos automáticos', 'Multa e juros', 'PIX integrado', 'Baixa automática'],
+    techStack: ['React', 'Supabase', 'Payment APIs', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-5 dias'
+  },
+  {
+    id: 'property-visits',
+    name: 'Plataforma de Visitas Agendadas',
+    description: 'Sistema de agendamento de visitas a imóveis',
+    category: 'real-estate',
+    subcategory: 'Visitas',
+    icon: Home,
+    color: 'from-purple-500 to-pink-600',
+    features: ['Agendamento online', 'Disponibilidade', 'Confirmações', 'Feedback'],
+    techStack: ['React', 'Supabase', 'Calendar API', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-4 dias'
+  },
+  {
+    id: 'property-comparison',
+    name: 'Comparativo de Imóveis por Bairro',
+    description: 'Sistema de análise comparativa de valores por região',
+    category: 'real-estate',
+    subcategory: 'Análise',
+    icon: BarChart,
+    color: 'from-yellow-500 to-orange-600',
+    features: ['Comparativos automáticos', 'Mapas de calor', 'Relatórios', 'Tendências'],
+    techStack: ['React', 'Maps API', 'Supabase', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '5-7 dias'
+  },
+
+  // Academias
+  {
+    id: 'gym-access-control',
+    name: 'Controle de Planos e Vencimentos',
+    description: 'Sistema completo de gestão de academias',
+    category: 'gym',
+    subcategory: 'Gestão',
+    icon: CreditCard,
+    color: 'from-blue-500 to-purple-600',
+    features: ['Planos personalizados', 'Acesso por QR/biometria', 'Cobrança automática', 'App do aluno'],
+    techStack: ['React Native', 'Supabase', 'Biometric APIs', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '6-8 dias'
+  },
+  {
+    id: 'digital-workout',
+    name: 'Ficha de Treino Digital',
+    description: 'Sistema digital de fichas de treino personalizadas',
+    category: 'gym',
+    subcategory: 'Treino',
+    icon: Dumbbell,
+    color: 'from-orange-500 to-red-600',
+    features: ['Fichas personalizadas', 'Vídeos de exercícios', 'Progresso tracking', 'Evolução'],
+    techStack: ['React Native', 'Supabase', 'Video Streaming', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-6 dias'
+  },
+  {
+    id: 'class-management',
+    name: 'Gestão de Turmas e Horários',
+    description: 'Sistema de aulas coletivas com agendamento',
+    category: 'gym',
+    subcategory: 'Aulas',
+    icon: Users,
+    color: 'from-green-500 to-emerald-600',
+    features: ['Agendamento de aulas', 'Capacidade máxima', 'Lista de espera', 'Avaliações'],
+    techStack: ['React', 'Supabase', 'Calendar API', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-5 dias'
+  },
+  {
+    id: 'physical-assessment',
+    name: 'Avaliação Física com Gráficos',
+    description: 'Sistema de avaliação física com evolução gráfica',
+    category: 'gym',
+    subcategory: 'Avaliação',
+    icon: Activity,
+    color: 'from-purple-500 to-pink-600',
+    features: ['Medidas corporais', 'Gráficos de evolução', 'Fotos comparativas', 'Relatórios'],
+    techStack: ['React', 'Supabase', 'Charts.js', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-5 dias'
+  },
+
+  // Inteligência Artificial
+  {
+    id: 'demand-prediction',
+    name: 'Previsão de Demanda por Produto',
+    description: 'IA para prever demanda e otimizar estoque',
+    category: 'ai',
+    subcategory: 'Previsão',
+    icon: Brain,
+    color: 'from-cyan-500 to-blue-600',
+    features: ['Machine Learning', 'Análise histórica', 'Sazonalidade', 'Otimização'],
+    techStack: ['Python', 'Supabase', 'ML APIs', 'React'],
+    difficulty: 'advanced',
+    estimatedTime: '8-10 dias',
+    popular: true
+  },
+  {
+    id: 'auto-descriptions',
+    name: 'Geração Automática de Descrições',
+    description: 'IA para gerar descrições de produtos automaticamente',
+    category: 'ai',
+    subcategory: 'Conteúdo',
+    icon: FileText,
+    color: 'from-green-500 to-emerald-600',
+    features: ['GPT integrado', 'Descrições otimizadas', 'SEO friendly', 'Múltiplos idiomas'],
+    techStack: ['React', 'OpenAI API', 'Supabase', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-5 dias'
+  },
+  {
+    id: 'customer-classification',
+    name: 'Classificação Automática de Clientes',
+    description: 'IA para segmentar clientes automaticamente',
+    category: 'ai',
+    subcategory: 'Segmentação',
+    icon: Users,
+    color: 'from-purple-500 to-pink-600',
+    features: ['Segmentação inteligente', 'Perfis automáticos', 'Campanhas direcionadas', 'Analytics'],
+    techStack: ['React', 'ML APIs', 'Supabase', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '6-8 dias'
+  },
+  {
+    id: 'chatbot-trained',
+    name: 'Chatbot Treinado com Produtos',
+    description: 'Chatbot com IA treinado na base de produtos da loja',
+    category: 'ai',
+    subcategory: 'Chatbot',
+    icon: Bot,
+    color: 'from-blue-500 to-cyan-600',
+    features: ['IA conversacional', 'Base de conhecimento', 'Integração WhatsApp', 'Aprendizado contínuo'],
+    techStack: ['Node.js', 'OpenAI', 'WhatsApp API', 'Supabase'],
+    difficulty: 'advanced',
+    estimatedTime: '7-9 dias'
+  },
+
+  // Setores Específicos - Pet Shops
+  {
+    id: 'pet-grooming',
+    name: 'Agendamento de Banho e Tosa',
+    description: 'Sistema especializado para pet shops com serviços',
+    category: 'specific',
+    subcategory: 'Pet Shop',
+    icon: Dog,
+    color: 'from-orange-500 to-yellow-600',
+    features: ['Agendamento por pet', 'Histórico de serviços', 'Fotos antes/depois', 'Lembretes'],
+    techStack: ['React', 'Supabase', 'Image Storage', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-4 dias'
+  },
+  {
+    id: 'pet-vaccination',
+    name: 'Carteirinha de Vacinação Digital',
+    description: 'Carteirinha digital de vacinação para pets',
+    category: 'specific',
+    subcategory: 'Pet Shop',
+    icon: Heart,
+    color: 'from-blue-500 to-green-600',
+    features: ['Carteirinha digital', 'Histórico completo', 'Lembretes automáticos', 'QR Code'],
+    techStack: ['React Native', 'Supabase', 'QR Generator', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-4 dias'
+  },
+
+  // Setores Específicos - Farmácias
+  {
+    id: 'controlled-drugs',
+    name: 'Controle de Medicamentos Controlados',
+    description: 'Sistema especializado para farmácias com medicamentos controlados',
+    category: 'specific',
+    subcategory: 'Farmácia',
+    icon: Pill,
+    color: 'from-red-500 to-orange-600',
+    features: ['Receitas obrigatórias', 'Relatórios ANVISA', 'Estoque controlado', 'Rastreabilidade'],
+    techStack: ['React', 'Supabase', 'OCR', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '6-8 dias'
+  },
+  {
+    id: 'health-surveillance',
+    name: 'Relatório para Vigilância Sanitária',
+    description: 'Geração automática de relatórios para órgãos de controle',
+    category: 'specific',
+    subcategory: 'Farmácia',
+    icon: Shield,
+    color: 'from-blue-500 to-purple-600',
+    features: ['Relatórios automáticos', 'Compliance', 'Auditoria', 'Exportação'],
+    techStack: ['React', 'Supabase', 'PDF Generation', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '5-7 dias'
+  },
+
+  // Setores Específicos - Oficinas
+  {
+    id: 'vehicle-budget',
+    name: 'Orçamento por Peça e Mão de Obra',
+    description: 'Sistema especializado para oficinas mecânicas',
+    category: 'specific',
+    subcategory: 'Oficina',
+    icon: Wrench,
+    color: 'from-gray-600 to-blue-600',
+    features: ['Orçamentos detalhados', 'Catálogo de peças', 'Mão de obra', 'Aprovação digital'],
+    techStack: ['React', 'Supabase', 'Digital Signature', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-6 dias'
+  },
+  {
+    id: 'vehicle-history',
+    name: 'Histórico por Veículo',
+    description: 'Histórico completo de manutenções por veículo',
+    category: 'specific',
+    subcategory: 'Oficina',
+    icon: Car,
+    color: 'from-green-500 to-emerald-600',
+    features: ['Histórico por placa', 'Manutenções preventivas', 'Peças trocadas', 'Garantias'],
+    techStack: ['React', 'Supabase', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-4 dias'
+  },
+
+  // Ideias Inovadoras
+  {
+    id: 'hourly-equipment-rental',
+    name: 'Aluguel de Equipamentos por Hora',
+    description: 'Plataforma inovadora para aluguel por hora',
+    category: 'innovative',
+    subcategory: 'Aluguel',
+    icon: Clock,
+    color: 'from-purple-500 to-pink-600',
+    features: ['Reserva por hora', 'Pagamento automático', 'Disponibilidade real-time', 'GPS tracking'],
+    techStack: ['React Native', 'Supabase', 'Payment APIs', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '6-8 dias'
+  },
+  {
+    id: 'food-truck-management',
+    name: 'Gestão de Food Trucks',
+    description: 'Sistema com geolocalização para food trucks',
+    category: 'innovative',
+    subcategory: 'Food Truck',
+    icon: Truck,
+    color: 'from-orange-500 to-red-600',
+    features: ['GPS em tempo real', 'Cardápio móvel', 'Localização para clientes', 'Rota planejada'],
+    techStack: ['React Native', 'Maps API', 'Supabase', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '5-7 dias'
+  },
+  {
+    id: 'local-delivery-network',
+    name: 'Delivery Entre Lojas Locais',
+    description: 'Rede de delivery colaborativo entre estabelecimentos',
+    category: 'innovative',
+    subcategory: 'Delivery',
+    icon: Network,
+    color: 'from-green-500 to-blue-600',
+    features: ['Rede colaborativa', 'Compartilhamento de entregadores', 'Otimização de rotas', 'Comissões'],
+    techStack: ['React', 'Maps API', 'Supabase', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '7-9 dias'
+  },
+  {
+    id: 'pharmacy-drive-thru',
+    name: 'Drive-thru para Farmácias',
+    description: 'Sistema especializado para atendimento drive-thru',
+    category: 'innovative',
+    subcategory: 'Drive-thru',
+    icon: Car,
+    color: 'from-blue-500 to-cyan-600',
+    features: ['Fila virtual', 'Pedido antecipado', 'Notificações', 'Pagamento sem contato'],
+    techStack: ['React Native', 'Supabase', 'Push Notifications', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-6 dias'
+  },
+  {
+    id: 'coworking-scheduler',
+    name: 'Agenda Compartilhada para Coworking',
+    description: 'Sistema de reserva de espaços em coworking',
+    category: 'innovative',
+    subcategory: 'Coworking',
+    icon: Users,
+    color: 'from-purple-500 to-indigo-600',
+    features: ['Reserva de salas', 'Pagamento por uso', 'Check-in digital', 'Recursos compartilhados'],
+    techStack: ['React', 'Supabase', 'Calendar API', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-5 dias'
+  },
+
+  // Templates adicionais para completar
+  {
+    id: 'digital-loyalty-cards',
+    name: 'Cartões Fidelidade Digital',
+    description: 'Sistema digital de cartões fidelidade',
+    category: 'other',
+    subcategory: 'Fidelidade',
+    icon: Star,
+    color: 'from-yellow-500 to-orange-600',
+    features: ['Cartões digitais', 'Pontuação automática', 'Recompensas', 'App mobile'],
+    techStack: ['React Native', 'Supabase', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-4 dias'
+  },
+  {
+    id: 'satisfaction-survey',
+    name: 'Pesquisa de Satisfação QR Code',
+    description: 'Pesquisas rápidas de satisfação via QR Code',
+    category: 'other',
+    subcategory: 'Pesquisa',
+    icon: QrCode,
+    color: 'from-blue-500 to-purple-600',
+    features: ['QR Code por mesa/local', 'Respostas instantâneas', 'Analytics', 'NPS automático'],
+    techStack: ['React', 'Supabase', 'QR Generator', 'Tailwind'],
+    difficulty: 'beginner',
+    estimatedTime: '2-3 dias'
+  },
+  {
+    id: 'toy-rental-platform',
+    name: 'Plataforma de Aluguel de Brinquedos',
+    description: 'Sistema inovador para aluguel de brinquedos',
+    category: 'other',
+    subcategory: 'Aluguel',
+    icon: Star,
+    color: 'from-pink-500 to-purple-600',
+    features: ['Catálogo por idade', 'Higienização controlada', 'Assinatura mensal', 'Troca ilimitada'],
+    techStack: ['React', 'Supabase', 'Subscription APIs', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '4-6 dias'
+  },
+  {
+    id: 'queue-management',
+    name: 'Gerenciamento de Filas',
+    description: 'Sistema digital de controle de filas',
+    category: 'other',
+    subcategory: 'Filas',
+    icon: Users,
+    color: 'from-green-500 to-emerald-600',
+    features: ['Senha digital', 'Estimativa de tempo', 'Notificações', 'Painel digital'],
+    techStack: ['React', 'Supabase', 'WebSocket', 'Tailwind'],
+    difficulty: 'intermediate',
+    estimatedTime: '3-5 dias'
+  },
+  {
+    id: 'franchise-management',
+    name: 'Gestão de Franquias',
+    description: 'Sistema unificado para gestão de franquias',
+    category: 'other',
+    subcategory: 'Franquias',
+    icon: Building,
+    color: 'from-blue-600 to-indigo-600',
+    features: ['Relatórios globais', 'Padrões de marca', 'Performance por unidade', 'Treinamentos'],
+    techStack: ['React', 'Supabase', 'Multi-tenant', 'Tailwind'],
+    difficulty: 'advanced',
+    estimatedTime: '8-10 dias'
   }
 ];
 
