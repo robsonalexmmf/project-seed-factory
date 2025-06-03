@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
+import { Rocket } from 'lucide-react';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -75,7 +77,11 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <Card className="w-full max-w-md">
-        <CardHeader>
+        <CardHeader className="text-center">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <Rocket className="h-8 w-8 text-blue-600" />
+            <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
+          </div>
           <CardTitle>Cadastro {planType !== 'freemium' ? `- Plano ${planType}` : 'Gratuito'}</CardTitle>
           <CardDescription>
             {planType === 'freemium' ? 'Crie sua conta gratuita' : `Cadastre-se para o plano ${planType}`}
