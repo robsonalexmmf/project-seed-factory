@@ -199,6 +199,96 @@ const healthTemplates: ProjectTemplate[] = [
     features: ['Planos Personalizados', 'Acompanhamento', 'Dicas Diárias', 'Comunidade'],
     icon: Crown,
     color: 'bg-gold-600'
+  },
+  {
+    id: 'medical-interpreter',
+    name: 'Intérprete Médico Digital',
+    description: 'Tradução em tempo real para consultas médicas',
+    category: 'health',
+    features: ['Tradução Simultânea', 'Terminologia Médica', 'Múltiplos Idiomas', 'Áudio e Texto'],
+    icon: MessageSquare,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'chronic-disease-manager',
+    name: 'Gestor de Doenças Crônicas',
+    description: 'Acompanhamento completo para pacientes crônicos',
+    category: 'health',
+    features: ['Monitoramento Contínuo', 'Alertas Médicos', 'Relatórios para Médicos', 'Educação do Paciente'],
+    icon: Database,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'dermatology-scanner',
+    name: 'Scanner Dermatológico IA',
+    description: 'Análise de lesões de pele com inteligência artificial',
+    category: 'health',
+    features: ['Análise por Foto', 'Classificação de Risco', 'Histórico de Lesões', 'Alertas de Mudanças'],
+    icon: Network,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'addiction-recovery',
+    name: 'Recuperação de Vícios',
+    description: 'Plataforma de apoio para dependência química',
+    category: 'health',
+    features: ['Grupos de Apoio', 'Contador de Sobriedade', 'SOS 24h', 'Terapia Cognitiva'],
+    icon: CheckCircle,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'posture-monitor',
+    name: 'Monitor de Postura',
+    description: 'Correção de postura para trabalho remoto',
+    category: 'health',
+    features: ['Detecção por Câmera', 'Alertas de Postura', 'Exercícios Corretivos', 'Relatórios Semanais'],
+    icon: Smartphone,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'allergy-tracker',
+    name: 'Rastreador de Alergias',
+    description: 'Monitoramento de alergias e reações',
+    category: 'health',
+    features: ['Diário de Sintomas', 'Scanner de Ingredientes', 'Alertas de Pólen', 'Emergência Alérgica'],
+    icon: Flag,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'cognitive-training',
+    name: 'Treinamento Cognitivo',
+    description: 'Exercícios para saúde mental e memória',
+    category: 'health',
+    features: ['Jogos Cognitivos', 'Avaliação Neuropsicológica', 'Progressão Personalizada', 'Relatórios Clínicos'],
+    icon: Rocket,
+    color: 'bg-cyan-600'
+  },
+  {
+    id: 'hearing-test',
+    name: 'Teste Auditivo Digital',
+    description: 'Avaliação auditiva remota e acompanhamento',
+    category: 'health',
+    features: ['Audiometria Digital', 'Histórico Auditivo', 'Calibração de Aparelhos', 'Terapia Sonora'],
+    icon: MessageSquare,
+    color: 'bg-indigo-600'
+  },
+  {
+    id: 'pain-diary',
+    name: 'Diário da Dor',
+    description: 'Registro e análise de dor crônica',
+    category: 'health',
+    features: ['Escala de Dor', 'Fatores Desencadeantes', 'Padrões Temporais', 'Relatórios Médicos'],
+    icon: Edit,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'home-care-coordination',
+    name: 'Coordenação de Home Care',
+    description: 'Gestão de cuidados domiciliares',
+    category: 'health',
+    features: ['Agendamento de Cuidadores', 'Monitoramento Remoto', 'Família Conectada', 'Planos de Cuidado'],
+    icon: Database,
+    color: 'bg-green-600'
   }
 ];
 
@@ -382,6 +472,96 @@ const businessTemplates: ProjectTemplate[] = [
     features: ['Dashboards', 'Relatórios', 'KPIs', 'Previsões'],
     icon: Network,
     color: 'bg-purple-600'
+  },
+  {
+    id: 'franchise-management',
+    name: 'Gestão de Franquias',
+    description: 'Plataforma completa para redes de franquia',
+    category: 'business',
+    features: ['Portal do Franqueado', 'Royalties', 'Padronização', 'Relatórios Consolidados'],
+    icon: Network,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'sustainability-tracker',
+    name: 'Monitor de Sustentabilidade',
+    description: 'Rastreamento de metas ESG corporativas',
+    category: 'business',
+    features: ['Pegada de Carbono', 'Relatórios ESG', 'Certificações', 'Benchmarking'],
+    icon: Flag,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'innovation-lab',
+    name: 'Laboratório de Inovação',
+    description: 'Gestão de ideias e projetos inovadores',
+    category: 'business',
+    features: ['Brainstorming Colaborativo', 'Prototipagem', 'Avaliação de Viabilidade', 'Portfolio de Projetos'],
+    icon: Rocket,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'compliance-manager',
+    name: 'Gestor de Compliance',
+    description: 'Conformidade regulatória automatizada',
+    category: 'business',
+    features: ['Auditoria Automática', 'Atualizações Regulamentares', 'Relatórios de Conformidade', 'Treinamentos'],
+    icon: CheckCircle,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'contract-lifecycle',
+    name: 'Ciclo de Vida de Contratos',
+    description: 'Gestão completa de contratos empresariais',
+    category: 'business',
+    features: ['Templates Inteligentes', 'Assinatura Digital', 'Renovações Automáticas', 'Análise de Riscos'],
+    icon: Edit,
+    color: 'bg-indigo-600'
+  },
+  {
+    id: 'crisis-management',
+    name: 'Gestão de Crises',
+    description: 'Plataforma para gerenciar situações críticas',
+    category: 'business',
+    features: ['Planos de Contingência', 'Comunicação de Crise', 'Centro de Comando', 'Análise Pós-Crise'],
+    icon: Flag,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'board-governance',
+    name: 'Governança Corporativa',
+    description: 'Gestão de conselhos e governança',
+    category: 'business',
+    features: ['Atas Digitais', 'Votações Online', 'Biblioteca de Documentos', 'Calendário Corporativo'],
+    icon: Crown,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'merger-acquisition',
+    name: 'Fusões e Aquisições',
+    description: 'Plataforma para M&A e due diligence',
+    category: 'business',
+    features: ['Due Diligence Digital', 'Valuation Tools', 'Integration Planning', 'Risk Assessment'],
+    icon: GitBranch,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'workforce-analytics',
+    name: 'Analytics de Força de Trabalho',
+    description: 'Inteligência de dados para RH',
+    category: 'business',
+    features: ['Previsão de Turnover', 'Análise de Performance', 'Planejamento Sucessório', 'Diversidade e Inclusão'],
+    icon: Network,
+    color: 'bg-cyan-600'
+  },
+  {
+    id: 'startup-accelerator',
+    name: 'Aceleradora de Startups',
+    description: 'Plataforma para acelerar novos negócios',
+    category: 'business',
+    features: ['Programa de Mentoria', 'Pitch Deck Builder', 'Investor Matching', 'Progress Tracking'],
+    icon: Rocket,
+    color: 'bg-green-600'
   }
 ];
 
@@ -565,6 +745,96 @@ const deliveryTemplates: ProjectTemplate[] = [
     features: ['Conservação', 'Sabores', 'Promoções', 'Entrega Rápida'],
     icon: CheckCircle,
     color: 'bg-cyan-600'
+  },
+  {
+    id: 'drone-delivery',
+    name: 'Delivery por Drone',
+    description: 'Entrega autônoma usando drones',
+    category: 'delivery',
+    features: ['Voo Autônomo', 'Mapeamento Aéreo', 'Entrega em Áreas Remotas', 'Rastreamento 3D'],
+    icon: Rocket,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'scheduled-delivery',
+    name: 'Delivery Programado',
+    description: 'Entregas com agendamento flexível',
+    category: 'delivery',
+    features: ['Janelas de Entrega', 'Calendário Interativo', 'Reagendamento', 'Preferências do Cliente'],
+    icon: Database,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'bulk-delivery',
+    name: 'Delivery Atacado',
+    description: 'Entregas em grande volume para empresas',
+    category: 'delivery',
+    features: ['Pedidos Corporativos', 'Desconto por Volume', 'Logística Especializada', 'Faturamento B2B'],
+    icon: Network,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'subscription-delivery',
+    name: 'Delivery por Assinatura',
+    description: 'Entregas recorrentes personalizadas',
+    category: 'delivery',
+    features: ['Planos Mensais', 'Curadoria Personalizada', 'Pausar/Retomar', 'Histórico de Preferências'],
+    icon: CheckCircle,
+    color: 'bg-indigo-600'
+  },
+  {
+    id: 'eco-delivery',
+    name: 'Delivery Sustentável',
+    description: 'Entregas com foco em sustentabilidade',
+    category: 'delivery',
+    features: ['Veículos Elétricos', 'Embalagens Biodegradáveis', 'Compensação de Carbono', 'Pontos Verdes'],
+    icon: Flag,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'crowd-delivery',
+    name: 'Delivery Colaborativo',
+    description: 'Entrega compartilhada entre vizinhos',
+    category: 'delivery',
+    features: ['Entregadores Locais', 'Pontos de Coleta Comunitários', 'Economia Compartilhada', 'Cashback Social'],
+    icon: Share,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'same-day-delivery',
+    name: 'Entrega no Mesmo Dia',
+    description: 'Logística ultra-rápida para entregas expressas',
+    category: 'delivery',
+    features: ['Micro-hubs', 'Previsão em Tempo Real', 'Entrega em Horas', 'Priorização Dinâmica'],
+    icon: Rocket,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'temperature-controlled',
+    name: 'Delivery Refrigerado',
+    description: 'Transporte com controle de temperatura',
+    category: 'delivery',
+    features: ['Monitoramento Térmico', 'Alertas de Temperatura', 'Cadeia Fria', 'Certificação HACCP'],
+    icon: FlaskConical,
+    color: 'bg-cyan-600'
+  },
+  {
+    id: 'white-glove-delivery',
+    name: 'Delivery Premium',
+    description: 'Serviço de entrega de alto padrão',
+    category: 'delivery',
+    features: ['Entregador Especializado', 'Montagem Incluída', 'Agendamento VIP', 'Garantia Estendida'],
+    icon: Crown,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'return-logistics',
+    name: 'Logística Reversa',
+    description: 'Sistema completo para devoluções',
+    category: 'delivery',
+    features: ['Coleta de Devoluções', 'Reprocessamento', 'Crédito Automático', 'Análise de Motivos'],
+    icon: GitBranch,
+    color: 'bg-indigo-600'
   }
 ];
 
@@ -748,6 +1018,96 @@ const educationTemplates: ProjectTemplate[] = [
     features: ['Cronograma', 'Metas', 'Pomodoro', 'Progresso'],
     icon: Flag,
     color: 'bg-red-600'
+  },
+  {
+    id: 'adaptive-learning',
+    name: 'Aprendizado Adaptativo',
+    description: 'IA que personaliza o ensino para cada aluno',
+    category: 'education',
+    features: ['Algoritmos Adaptativos', 'Trilhas Personalizadas', 'Análise de Aprendizado', 'Recomendações Inteligentes'],
+    icon: Network,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'micro-learning',
+    name: 'Micro Aprendizado',
+    description: 'Conteúdo educacional em pequenas doses',
+    category: 'education',
+    features: ['Lições de 5 Minutos', 'Notificações Inteligentes', 'Spaced Repetition', 'Gamificação'],
+    icon: Smartphone,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'peer-tutoring',
+    name: 'Tutoria Entre Pares',
+    description: 'Estudantes ensinando outros estudantes',
+    category: 'education',
+    features: ['Matching Inteligente', 'Sistema de Pontos', 'Avaliação Mútua', 'Grupos de Estudo'],
+    icon: Share,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'ar-education',
+    name: 'Educação em Realidade Aumentada',
+    description: 'Aprendizado imersivo com AR',
+    category: 'education',
+    features: ['Modelos 3D Interativos', 'Simulações Realistas', 'Laboratórios Virtuais', 'Experiências Imersivas'],
+    icon: Rocket,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'digital-literacy',
+    name: 'Alfabetização Digital',
+    description: 'Ensino de competências digitais',
+    category: 'education',
+    features: ['Básico de Computador', 'Segurança Digital', 'Pensamento Computacional', 'Cidadania Digital'],
+    icon: Database,
+    color: 'bg-cyan-600'
+  },
+  {
+    id: 'corporate-university',
+    name: 'Universidade Corporativa',
+    description: 'Plataforma de educação empresarial',
+    category: 'education',
+    features: ['Trilhas de Carreira', 'Certificações Internas', 'Mentoria Corporativa', 'ROI de Treinamento'],
+    icon: Crown,
+    color: 'bg-indigo-600'
+  },
+  {
+    id: 'special-needs-education',
+    name: 'Educação Especial',
+    description: 'Plataforma adaptada para necessidades especiais',
+    category: 'education',
+    features: ['Interface Acessível', 'Comunicação Alternativa', 'Adaptações Pedagógicas', 'Família Conectada'],
+    icon: CheckCircle,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'teacher-marketplace',
+    name: 'Marketplace de Professores',
+    description: 'Conecta educadores independentes com alunos',
+    category: 'education',
+    features: ['Perfil de Educador', 'Aulas Particulares', 'Sistema de Avaliação', 'Pagamentos Seguros'],
+    icon: Share,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'learning-analytics',
+    name: 'Analytics de Aprendizado',
+    description: 'Dados inteligentes sobre educação',
+    category: 'education',
+    features: ['Dashboard de Progresso', 'Predição de Performance', 'Insights Pedagógicos', 'Relatórios Automatizados'],
+    icon: Network,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'international-exchange',
+    name: 'Intercâmbio Virtual',
+    description: 'Conexões educacionais globais',
+    category: 'education',
+    features: ['Parcerias Globais', 'Projetos Colaborativos', 'Troca Cultural', 'Certificação Internacional'],
+    icon: Flag,
+    color: 'bg-blue-600'
   }
 ];
 
@@ -931,6 +1291,96 @@ const socialMediaTemplates: ProjectTemplate[] = [
     features: ['Avisos Locais', 'Serviços', 'Segurança', 'Eventos'],
     icon: MessageSquare,
     color: 'bg-blue-600'
+  },
+  {
+    id: 'mental-wellness-community',
+    name: 'Comunidade de Bem-estar Mental',
+    description: 'Rede de apoio para saúde mental',
+    category: 'social',
+    features: ['Grupos de Apoio', 'Anonimato Opcional', 'Recursos Terapêuticos', 'Check-ins Diários'],
+    icon: CheckCircle,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'senior-social-network',
+    name: 'Rede Social Sênior',
+    description: 'Plataforma social adaptada para idosos',
+    category: 'social',
+    features: ['Interface Simplificada', 'Videochamadas Fáceis', 'Compartilhamento Familiar', 'Atividades Locais'],
+    icon: MessageSquare,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'activism-platform',
+    name: 'Plataforma de Ativismo',
+    description: 'Organização de movimentos sociais',
+    category: 'social',
+    features: ['Campanhas', 'Petições Online', 'Eventos de Protesto', 'Doações para Causas'],
+    icon: Flag,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'parenting-network',
+    name: 'Rede de Pais',
+    description: 'Comunidade para pais e responsáveis',
+    category: 'social',
+    features: ['Dicas de Criação', 'Grupos por Idade', 'Trocas de Experiência', 'Especialistas Online'],
+    icon: Share,
+    color: 'bg-pink-600'
+  },
+  {
+    id: 'volunteer-matching',
+    name: 'Match de Voluntários',
+    description: 'Conecta voluntários com organizações',
+    category: 'social',
+    features: ['Busca por Causa', 'Agendamento de Atividades', 'Horas de Voluntariado', 'Impacto Social'],
+    icon: CheckCircle,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'creator-economy',
+    name: 'Economia de Criadores',
+    description: 'Monetização para criadores de conteúdo',
+    category: 'social',
+    features: ['Assinaturas Pagas', 'Conteúdo Exclusivo', 'Tips Digitais', 'Analytics de Criador'],
+    icon: Crown,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'virtual-coworking',
+    name: 'Coworking Virtual',
+    description: 'Espaço de trabalho social online',
+    category: 'social',
+    features: ['Salas Virtuais', 'Focus Time', 'Networking Profissional', 'Produtividade Social'],
+    icon: Network,
+    color: 'bg-cyan-600'
+  },
+  {
+    id: 'cultural-exchange',
+    name: 'Intercâmbio Cultural',
+    description: 'Troca cultural entre pessoas de diferentes países',
+    category: 'social',
+    features: ['Pareamento por País', 'Aulas de Idioma', 'Tradições Culturais', 'Amizades Globais'],
+    icon: Share,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'skill-sharing',
+    name: 'Compartilhamento de Habilidades',
+    description: 'Troca de conhecimentos entre usuários',
+    category: 'social',
+    features: ['Banco de Talentos', 'Escambo de Serviços', 'Avaliações de Qualidade', 'Moeda Virtual'],
+    icon: GitBranch,
+    color: 'bg-indigo-600'
+  },
+  {
+    id: 'anonymous-support',
+    name: 'Suporte Anônimo',
+    description: 'Rede de apoio com privacidade total',
+    category: 'social',
+    features: ['Chat Anônimo', 'Moderação IA', 'Recursos de Crise', 'Verificação de Segurança'],
+    icon: Flag,
+    color: 'bg-green-600'
   }
 ];
 
@@ -1114,6 +1564,96 @@ const ecommerceTemplates: ProjectTemplate[] = [
     features: ['Atividades', 'Clima', 'Guias', 'Expedições'],
     icon: Flag,
     color: 'bg-green-600'
+  },
+  {
+    id: 'nft-marketplace',
+    name: 'Marketplace de NFTs',
+    description: 'Compra e venda de tokens não fungíveis',
+    category: 'ecommerce',
+    features: ['Blockchain Integration', 'Wallet Connection', 'Royalties', 'Coleções Verificadas'],
+    icon: Network,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'virtual-showroom',
+    name: 'Showroom Virtual',
+    description: 'Experiência de compra em realidade virtual',
+    category: 'ecommerce',
+    features: ['VR Shopping', 'Avatar Customization', 'Virtual Try-On', 'Social Shopping'],
+    icon: Rocket,
+    color: 'bg-cyan-600'
+  },
+  {
+    id: 'carbon-neutral-store',
+    name: 'Loja Carbono Neutro',
+    description: 'E-commerce focado em sustentabilidade',
+    category: 'ecommerce',
+    features: ['Pegada de Carbono', 'Produtos Sustentáveis', 'Offsetting', 'Certificações Verdes'],
+    icon: Flag,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'ai-stylist',
+    name: 'Stylist com IA',
+    description: 'Personal stylist virtual para moda',
+    category: 'ecommerce',
+    features: ['Análise de Estilo', 'Recomendações IA', 'Mix and Match', 'Tendências Personalizadas'],
+    icon: Network,
+    color: 'bg-pink-600'
+  },
+  {
+    id: 'social-commerce',
+    name: 'Comércio Social',
+    description: 'Vendas integradas com redes sociais',
+    category: 'ecommerce',
+    features: ['Live Shopping', 'Influencer Integration', 'Social Proof', 'Viral Marketing'],
+    icon: Share,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'voice-commerce',
+    name: 'Comércio por Voz',
+    description: 'Compras através de comandos de voz',
+    category: 'ecommerce',
+    features: ['Voice Assistant', 'Comandos Naturais', 'Lista de Compras', 'Reordenação Inteligente'],
+    icon: MessageSquare,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'local-marketplace',
+    name: 'Marketplace Local',
+    description: 'Comércio hiperlocal por proximidade',
+    category: 'ecommerce',
+    features: ['Geolocalização', 'Vendedores Locais', 'Entrega Rápida', 'Comunidade Local'],
+    icon: Flag,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'collaborative-buying',
+    name: 'Compras Colaborativas',
+    description: 'Poder de compra em grupo',
+    category: 'ecommerce',
+    features: ['Group Buying', 'Descontos por Volume', 'Cronômetro de Oferta', 'Split Shipping'],
+    icon: Share,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'zero-waste-store',
+    name: 'Loja Zero Desperdício',
+    description: 'Produtos sem embalagem e sustentáveis',
+    category: 'ecommerce',
+    features: ['Produtos a Granel', 'Embalagens Retornáveis', 'Ciclo de Vida', 'Impacto Ambiental'],
+    icon: CheckCircle,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'micro-brand-platform',
+    name: 'Plataforma de Micro Marcas',
+    description: 'Marketplace para pequenas marcas autorais',
+    category: 'ecommerce',
+    features: ['Criadores Independentes', 'Storytelling', 'Comunidade de Marca', 'Produção Limitada'],
+    icon: Crown,
+    color: 'bg-indigo-600'
   }
 ];
 
@@ -1296,6 +1836,96 @@ const marketingTemplates: ProjectTemplate[] = [
     category: 'marketing',
     features: ['Menções', 'Sentimento', 'Alertas', 'Influenciadores'],
     icon: Flag,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'growth-hacking-suite',
+    name: 'Suite de Growth Hacking',
+    description: 'Ferramentas para crescimento acelerado',
+    category: 'marketing',
+    features: ['Viral Loops', 'Product-Led Growth', 'Retention Cohorts', 'Growth Experiments'],
+    icon: Rocket,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'customer-journey-mapper',
+    name: 'Mapeador de Jornada do Cliente',
+    description: 'Visualização completa da experiência do cliente',
+    category: 'marketing',
+    features: ['Touchpoint Mapping', 'Emotion Tracking', 'Pain Point Analysis', 'Optimization Suggestions'],
+    icon: GitBranch,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'micro-influencer-platform',
+    name: 'Plataforma de Micro Influenciadores',
+    description: 'Foco em influenciadores de nicho',
+    category: 'marketing',
+    features: ['Nano Influencers', 'Engagement Rates', 'Niche Markets', 'Authentic Content'],
+    icon: Share,
+    color: 'bg-pink-600'
+  },
+  {
+    id: 'marketing-attribution',
+    name: 'Atribuição de Marketing',
+    description: 'Rastreamento de ROI por canal',
+    category: 'marketing',
+    features: ['Multi-touch Attribution', 'Channel Performance', 'Customer Lifetime Value', 'Budget Optimization'],
+    icon: Network,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'personalization-engine',
+    name: 'Motor de Personalização',
+    description: 'Experiências personalizadas em tempo real',
+    category: 'marketing',
+    features: ['Dynamic Content', 'Behavioral Targeting', 'AI Recommendations', 'Real-time Optimization'],
+    icon: Rocket,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'community-marketing',
+    name: 'Marketing Comunitário',
+    description: 'Construção e engajamento de comunidades',
+    category: 'marketing',
+    features: ['Community Building', 'User-Generated Content', 'Brand Advocates', 'Forum Integration'],
+    icon: Share,
+    color: 'bg-cyan-600'
+  },
+  {
+    id: 'predictive-analytics',
+    name: 'Analytics Preditivo',
+    description: 'Previsões baseadas em dados de marketing',
+    category: 'marketing',
+    features: ['Churn Prediction', 'Sales Forecasting', 'Trend Analysis', 'Risk Assessment'],
+    icon: Network,
+    color: 'bg-indigo-600'
+  },
+  {
+    id: 'omnichannel-orchestration',
+    name: 'Orquestração Omnichannel',
+    description: 'Coordenação de campanhas cross-channel',
+    category: 'marketing',
+    features: ['Channel Coordination', 'Message Consistency', 'Cross-device Tracking', 'Unified Customer View'],
+    icon: GitBranch,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'marketing-compliance',
+    name: 'Compliance de Marketing',
+    description: 'Conformidade com regulamentações de dados',
+    category: 'marketing',
+    features: ['GDPR Compliance', 'Cookie Management', 'Data Consent', 'Privacy Controls'],
+    icon: Flag,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'neuromarketing-platform',
+    name: 'Plataforma de Neuromarketing',
+    description: 'Análise de resposta emocional do consumidor',
+    category: 'marketing',
+    features: ['Emotion Recognition', 'Eye Tracking', 'Biometric Analysis', 'Subconscious Insights'],
+    icon: Network,
     color: 'bg-purple-600'
   }
 ];
@@ -1480,6 +2110,96 @@ const financeTemplates: ProjectTemplate[] = [
     features: ['Troco', 'Carteira Diversificada', 'Baixo Risco', 'Educação'],
     icon: Crown,
     color: 'bg-green-600'
+  },
+  {
+    id: 'defi-protocol',
+    name: 'Protocolo DeFi',
+    description: 'Finanças descentralizadas na blockchain',
+    category: 'finance',
+    features: ['Smart Contracts', 'Yield Farming', 'Liquidity Pools', 'Governance Token'],
+    icon: Network,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'neobank-platform',
+    name: 'Neobanco Digital',
+    description: 'Banco 100% digital sem agências',
+    category: 'finance',
+    features: ['Conta Digital', 'Cartão Virtual', 'Open Banking', 'API First'],
+    icon: Smartphone,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'algorithmic-trading',
+    name: 'Trading Algorítmico',
+    description: 'Automação de estratégias de investimento',
+    category: 'finance',
+    features: ['Bots de Trading', 'Backtesting', 'Risk Management', 'Strategy Builder'],
+    icon: Rocket,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'carbon-credits',
+    name: 'Mercado de Créditos de Carbono',
+    description: 'Compra e venda de créditos ambientais',
+    category: 'finance',
+    features: ['Certificação Ambiental', 'Marketplace Verde', 'Impact Measurement', 'ESG Reporting'],
+    icon: Flag,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'financial-wellness',
+    name: 'Bem-estar Financeiro',
+    description: 'Saúde financeira e redução de stress',
+    category: 'finance',
+    features: ['Stress Score', 'Mindfulness Finance', 'Goal Psychology', 'Financial Therapy'],
+    icon: CheckCircle,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'invoice-factoring',
+    name: 'Antecipação de Recebíveis',
+    description: 'Adiantamento de valores a receber',
+    category: 'finance',
+    features: ['Due Diligence', 'Risk Assessment', 'Instant Funding', 'Credit Analysis'],
+    icon: Database,
+    color: 'bg-indigo-600'
+  },
+  {
+    id: 'financial-planning-ai',
+    name: 'Planejamento Financeiro IA',
+    description: 'Inteligência artificial para finanças pessoais',
+    category: 'finance',
+    features: ['Predictive Analytics', 'Smart Budgeting', 'Goal Optimization', 'Risk Profiling'],
+    icon: Network,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'expense-splitting',
+    name: 'Divisão de Gastos',
+    description: 'Split de despesas entre grupos',
+    category: 'finance',
+    features: ['Group Expenses', 'Fair Split Algorithms', 'Payment Requests', 'Debt Settlement'],
+    icon: Share,
+    color: 'bg-cyan-600'
+  },
+  {
+    id: 'financial-therapy',
+    name: 'Terapia Financeira',
+    description: 'Apoio psicológico para questões financeiras',
+    category: 'finance',
+    features: ['Money Mindset', 'Behavioral Finance', 'Emotional Spending', 'Financial Coaching'],
+    icon: MessageSquare,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'blockchain-payments',
+    name: 'Pagamentos Blockchain',
+    description: 'Sistema de pagamentos descentralizado',
+    category: 'finance',
+    features: ['Cross-border Payments', 'Low Fees', 'Smart Contracts', 'Multi-currency'],
+    icon: Network,
+    color: 'bg-orange-600'
   }
 ];
 
@@ -1663,6 +2383,282 @@ const technologyTemplates: ProjectTemplate[] = [
     features: ['Auto-generation', 'Search', 'Versioning', 'Collaboration'],
     icon: Database,
     color: 'bg-blue-600'
+  },
+  {
+    id: 'ml-ops-platform',
+    name: 'Plataforma MLOps',
+    description: 'Operações de Machine Learning em produção',
+    category: 'technology',
+    features: ['Model Deployment', 'A/B Testing', 'Model Monitoring', 'Feature Store'],
+    icon: Network,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'edge-computing',
+    name: 'Computação na Borda',
+    description: 'Processamento distribuído próximo aos usuários',
+    category: 'technology',
+    features: ['Edge Nodes', 'Low Latency', 'Local Processing', 'Sync Strategies'],
+    icon: Rocket,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'quantum-simulator',
+    name: 'Simulador Quântico',
+    description: 'Desenvolvimento de algoritmos quânticos',
+    category: 'technology',
+    features: ['Quantum Circuits', 'Qubit Simulation', 'Algorithm Testing', 'Quantum Gates'],
+    icon: Network,
+    color: 'bg-cyan-600'
+  },
+  {
+    id: 'iot-management',
+    name: 'Gestão de IoT',
+    description: 'Plataforma para dispositivos conectados',
+    category: 'technology',
+    features: ['Device Management', 'Data Collection', 'Remote Control', 'Firmware Updates'],
+    icon: Smartphone,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'digital-twin',
+    name: 'Gêmeo Digital',
+    description: 'Simulação digital de sistemas físicos',
+    category: 'technology',
+    features: ['3D Modeling', 'Real-time Sync', 'Predictive Analytics', 'Simulation Engine'],
+    icon: Network,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'blockchain-validator',
+    name: 'Validador Blockchain',
+    description: 'Nó validador para redes blockchain',
+    category: 'technology',
+    features: ['Consensus Participation', 'Transaction Validation', 'Staking Rewards', 'Network Security'],
+    icon: Flag,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'data-lake-platform',
+    name: 'Plataforma Data Lake',
+    description: 'Armazenamento e processamento de big data',
+    category: 'technology',
+    features: ['Schema-on-Read', 'Data Catalog', 'ETL Pipelines', 'Analytics Engine'],
+    icon: Database,
+    color: 'bg-indigo-600'
+  },
+  {
+    id: 'ai-model-marketplace',
+    name: 'Marketplace de Modelos IA',
+    description: 'Compra e venda de modelos de IA pré-treinados',
+    category: 'technology',
+    features: ['Model Repository', 'Performance Metrics', 'Easy Integration', 'Version Control'],
+    icon: Crown,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'zero-trust-security',
+    name: 'Segurança Zero Trust',
+    description: 'Arquitetura de segurança baseada em confiança zero',
+    category: 'technology',
+    features: ['Identity Verification', 'Device Authentication', 'Network Segmentation', 'Continuous Monitoring'],
+    icon: Flag,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'chaos-engineering',
+    name: 'Engenharia do Caos',
+    description: 'Testes de resiliência em sistemas distribuídos',
+    category: 'technology',
+    features: ['Fault Injection', 'Resilience Testing', 'System Monitoring', 'Recovery Validation'],
+    icon: TestTube,
+    color: 'bg-red-600'
+  }
+];
+
+const productivityTemplates: ProjectTemplate[] = [
+  {
+    id: 'focus-timer',
+    name: 'Timer de Foco',
+    description: 'Pomodoro technique e gestão de tempo',
+    category: 'productivity',
+    features: ['Técnica Pomodoro', 'Bloqueio de Distrações', 'Estatísticas de Foco', 'Metas Diárias'],
+    icon: Rocket,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'habit-tracker',
+    name: 'Rastreador de Hábitos',
+    description: 'Construção e monitoramento de hábitos',
+    category: 'productivity',
+    features: ['Streaks', 'Lembretes Inteligentes', 'Análise de Padrões', 'Gamificação'],
+    icon: CheckCircle,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'mind-mapping',
+    name: 'Mapas Mentais',
+    description: 'Ferramenta colaborativa para brainstorming',
+    category: 'productivity',
+    features: ['Colaboração em Tempo Real', 'Templates', 'Exportação', 'Integração com Tarefas'],
+    icon: GitBranch,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'digital-whiteboard',
+    name: 'Quadro Digital',
+    description: 'Espaço infinito para criatividade',
+    category: 'productivity',
+    features: ['Canvas Infinito', 'Ferramentas de Desenho', 'Colaboração', 'Templates Visuais'],
+    icon: Edit,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'meeting-scheduler',
+    name: 'Agendador de Reuniões',
+    description: 'Coordenação inteligente de horários',
+    category: 'productivity',
+    features: ['Disponibilidade Automática', 'Fusos Horários', 'Integração Calendário', 'Salas Virtuais'],
+    icon: Database,
+    color: 'bg-cyan-600'
+  },
+  {
+    id: 'password-manager',
+    name: 'Gerenciador de Senhas',
+    description: 'Segurança e conveniência para credenciais',
+    category: 'productivity',
+    features: ['Criptografia End-to-End', 'Gerador de Senhas', 'Autofill', 'Auditoria de Segurança'],
+    icon: Flag,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'voice-notes',
+    name: 'Notas por Voz',
+    description: 'Transcrição automática de áudio para texto',
+    category: 'productivity',
+    features: ['Transcrição IA', 'Múltiplos Idiomas', 'Busca por Conteúdo', 'Organização Automática'],
+    icon: MessageSquare,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'goal-tracker',
+    name: 'Rastreador de Metas',
+    description: 'Acompanhamento de objetivos pessoais e profissionais',
+    category: 'productivity',
+    features: ['SMART Goals', 'Marcos Intermediários', 'Progresso Visual', 'Accountability Partners'],
+    icon: Crown,
+    color: 'bg-indigo-600'
+  },
+  {
+    id: 'digital-detox',
+    name: 'Detox Digital',
+    description: 'Controle de uso de dispositivos e apps',
+    category: 'productivity',
+    features: ['Bloqueio de Apps', 'Tempo de Tela', 'Pausas Programadas', 'Relatórios de Uso'],
+    icon: Smartphone,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'workflow-optimizer',
+    name: 'Otimizador de Workflow',
+    description: 'Análise e melhoria de processos pessoais',
+    category: 'productivity',
+    features: ['Mapeamento de Processos', 'Identificação de Gargalos', 'Automação de Tarefas', 'Métricas de Eficiência'],
+    icon: Network,
+    color: 'bg-purple-600'
+  }
+];
+
+const entertainmentTemplates: ProjectTemplate[] = [
+  {
+    id: 'trivia-game',
+    name: 'Jogo de Trivia',
+    description: 'Quiz multiplayer em tempo real',
+    category: 'entertainment',
+    features: ['Multiplayer Online', 'Categorias Diversas', 'Ranking Global', 'Criação de Quiz'],
+    icon: Rocket,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'virtual-karaoke',
+    name: 'Karaokê Virtual',
+    description: 'Cante com amigos online',
+    category: 'entertainment',
+    features: ['Biblioteca Musical', 'Salas Privadas', 'Gravação', 'Duetos Virtuais'],
+    icon: MessageSquare,
+    color: 'bg-pink-600'
+  },
+  {
+    id: 'story-generator',
+    name: 'Gerador de Histórias',
+    description: 'IA para criação colaborativa de narrativas',
+    category: 'entertainment',
+    features: ['IA Criativa', 'Histórias Colaborativas', 'Múltiplos Gêneros', 'Ilustrações Automáticas'],
+    icon: Edit,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'virtual-museum',
+    name: 'Museu Virtual',
+    description: 'Experiências culturais imersivas',
+    category: 'entertainment',
+    features: ['Tours 3D', 'Realidade Aumentada', 'Curadoria Digital', 'Experiências Interativas'],
+    icon: Crown,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'escape-room-online',
+    name: 'Escape Room Online',
+    description: 'Quebra-cabeças em equipe virtual',
+    category: 'entertainment',
+    features: ['Salas Temáticas', 'Colaboração em Tempo Real', 'Pistas Dinâmicas', 'Diferentes Dificuldades'],
+    icon: Flag,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'virtual-concert',
+    name: 'Concerto Virtual',
+    description: 'Experiências musicais imersivas',
+    category: 'entertainment',
+    features: ['Streaming 3D', 'Interação com Artistas', 'Merchandise Virtual', 'Social Viewing'],
+    icon: Smartphone,
+    color: 'bg-cyan-600'
+  },
+  {
+    id: 'meme-generator',
+    name: 'Gerador de Memes',
+    description: 'Criação viral de conteúdo humorístico',
+    category: 'entertainment',
+    features: ['Templates Populares', 'IA de Humor', 'Sharing Social', 'Trending Topics'],
+    icon: Share,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'virtual-board-games',
+    name: 'Jogos de Tabuleiro Virtual',
+    description: 'Clássicos modernizados para o digital',
+    category: 'entertainment',
+    features: ['Múltiplos Jogos', 'Vídeo Chat Integrado', 'Regras Automáticas', 'Torneios Online'],
+    icon: CheckCircle,
+    color: 'bg-indigo-600'
+  },
+  {
+    id: 'podcast-creation',
+    name: 'Criação de Podcast',
+    description: 'Ferramenta completa para podcasters',
+    category: 'entertainment',
+    features: ['Gravação Multi-track', 'Edição Automática', 'Distribuição Automática', 'Analytics'],
+    icon: MessageSquare,
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'interactive-fiction',
+    name: 'Ficção Interativa',
+    description: 'Histórias onde o leitor escolhe o rumo',
+    category: 'entertainment',
+    features: ['Narrativa Ramificada', 'Múltiplos Finais', 'Elementos RPG', 'Criação de Histórias'],
+    icon: Edit,
+    color: 'bg-orange-600'
   }
 ];
 
@@ -1738,6 +2734,22 @@ export const templateCategories: TemplateCategory[] = [
     icon: Network,
     color: 'bg-indigo-600',
     templates: technologyTemplates
+  },
+  {
+    id: 'productivity',
+    name: 'Produtividade',
+    description: 'Ferramentas para otimizar seu tempo',
+    icon: Rocket,
+    color: 'bg-blue-600',
+    templates: productivityTemplates
+  },
+  {
+    id: 'entertainment',
+    name: 'Entretenimento',
+    description: 'Diversão e conteúdo digital',
+    icon: Smartphone,
+    color: 'bg-purple-600',
+    templates: entertainmentTemplates
   }
 ];
 
