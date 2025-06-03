@@ -1,1031 +1,524 @@
-import { 
-  Download, 
-  Rocket, 
-  Bot, 
-  Search,
-  Zap,
-  Star,
-  CheckCircle,
-  Sparkles,
-  Timer,
-  Shield,
-  Globe,
-  Code,
-  Layers,
-  Crown,
-  Lock
-} from 'lucide-react';
+import { LucideIcon, MessageSquare, ShoppingCart, Users, Building, Stethoscope, GraduationCap, Utensils, Car, Home, Briefcase, Headphones, Bot, Phone, Calendar, CreditCard, FileText, BarChart, Globe, Shield, Zap, Camera, Music, Video, Gamepad2, Gift, Heart, Truck, Wrench, FlaskConical, BookOpen, PlaneTakeoff, MapPin, Coffee, Dumbbell } from 'lucide-react';
 
-export const projectTemplates = [
+export interface ProjectTemplate {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  features: string[];
+  icon: LucideIcon;
+  color: string;
+  tech?: string[];
+  complexity?: string;
+  estimatedTime?: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  icon: LucideIcon;
+}
+
+export const categories: Category[] = [
+  { id: 'all', name: 'Todos', icon: Globe },
+  { id: 'ecommerce', name: 'E-commerce', icon: ShoppingCart },
+  { id: 'social', name: 'Social & Comunicação', icon: MessageSquare },
+  { id: 'business', name: 'Negócios & Gestão', icon: Briefcase },
+  { id: 'health', name: 'Saúde & Bem-estar', icon: Stethoscope },
+  { id: 'education', name: 'Educação', icon: GraduationCap },
+  { id: 'food', name: 'Alimentação', icon: Utensils },
+  { id: 'transport', name: 'Transporte', icon: Car },
+  { id: 'realestate', name: 'Imóveis', icon: Home },
+  { id: 'productivity', name: 'Produtividade', icon: Zap },
+  { id: 'entertainment', name: 'Entretenimento', icon: Gamepad2 }
+];
+
+export const projectTemplates: ProjectTemplate[] = [
+  // E-commerce Templates
   {
-    id: 'saas-app',
-    name: 'SaaS App',
-    description: 'A complete SaaS application template with user authentication, subscription management, and more.',
-    category: 'saas',
-    icon: Rocket,
-    features: [
-      'User Authentication',
-      'Subscription Management',
-      'Team Collaboration',
-      'Task Management',
-      'Payment Integration',
-      'Admin Dashboard',
-      'Customer Support',
-      'Analytics'
-    ],
-    tech: ['React', 'Node.js', 'PostgreSQL', 'Stripe', 'Supabase'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
+    id: 'marketplace-multivendor',
+    name: 'Marketplace Multi-vendor',
+    description: 'Plataforma completa para múltiplos vendedores com gestão de produtos, pagamentos e logística',
+    category: 'ecommerce',
+    features: ['Painel de vendedores', 'Gestão de comissões', 'Sistema de avaliações', 'Chat integrado', 'Gestão de fretes'],
+    icon: ShoppingCart,
+    color: 'bg-blue-600'
   },
   {
-    id: 'e-commerce-platform',
-    name: 'E-commerce Platform',
-    description: 'A fully functional e-commerce platform with product catalog, shopping cart, checkout, and payment gateway integration.',
-    category: 'e-commerce',
-    icon: Download,
-    features: [
-      'Product Catalog',
-      'Shopping Cart',
-      'Checkout Process',
-      'Payment Gateway Integration',
-      'Order Management',
-      'Customer Accounts',
-      'Product Reviews',
-      'Discounts and Promotions'
-    ],
-    tech: ['React', 'Node.js', 'MongoDB', 'Stripe', 'Next.js'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
+    id: 'dropshipping-platform',
+    name: 'Plataforma de Dropshipping',
+    description: 'Sistema automatizado para dropshipping com integração de fornecedores e gestão de pedidos',
+    category: 'ecommerce',
+    features: ['Importação automática de produtos', 'Sincronização de estoque', 'Automação de pedidos', 'Análise de margem'],
+    icon: Package,
+    color: 'bg-green-600'
   },
   {
-    id: 'blog-platform',
-    name: 'Blog Platform',
-    description: 'A modern blog platform with content management, user authentication, and social media integration.',
-    category: 'blogging',
-    icon: Globe,
-    features: [
-      'Content Management',
-      'User Authentication',
-      'Social Media Integration',
-      'Commenting System',
-      'SEO Optimization',
-      'Responsive Design',
-      'Customizable Themes',
-      'Analytics'
-    ],
-    tech: ['React', 'Node.js', 'PostgreSQL', 'Next.js'],
-    complexity: 'intermediate',
-    estimatedTime: '2-4 weeks'
+    id: 'subscription-box',
+    name: 'Sistema de Subscription Box',
+    description: 'Plataforma para venda de assinaturas mensais com curadoria de produtos',
+    category: 'ecommerce',
+    features: ['Assinaturas recorrentes', 'Curadoria de produtos', 'Gestão de inventário', 'Portal do assinante'],
+    icon: Box,
+    color: 'bg-purple-600'
+  },
+
+  // Social & Communication Templates
+  {
+    id: 'community-platform',
+    name: 'Plataforma de Comunidade',
+    description: 'Rede social focada em comunidades com fóruns, eventos e gamificação',
+    category: 'social',
+    features: ['Fóruns temáticos', 'Sistema de eventos', 'Gamificação', 'Moderação avançada', 'Chat em tempo real'],
+    icon: Users,
+    color: 'bg-indigo-600'
   },
   {
-    id: 'task-management-app',
-    name: 'Task Management App',
-    description: 'A simple task management application with user authentication, task lists, and collaboration features.',
-    category: 'productivity',
-    icon: Layers,
-    features: [
-      'User Authentication',
-      'Task Lists',
-      'Task Assignment',
-      'Due Dates',
-      'Collaboration Features',
-      'Notifications',
-      'Progress Tracking',
-      'Reporting'
-    ],
-    tech: ['React', 'Node.js', 'MongoDB'],
-    complexity: 'intermediate',
-    estimatedTime: '2-4 weeks'
+    id: 'dating-app',
+    name: 'App de Relacionamentos',
+    description: 'Plataforma de relacionamentos com matching inteligente e chat seguro',
+    category: 'social',
+    features: ['Algoritmo de matching', 'Chat com criptografia', 'Verificação de perfil', 'Filtros avançados'],
+    icon: Heart,
+    color: 'bg-pink-600'
   },
   {
-    id: 'portfolio-website',
-    name: 'Portfolio Website',
-    description: 'A professional portfolio website to showcase your work and skills.',
-    category: 'portfolio',
-    icon: Code,
-    features: [
-      'Project Showcase',
-      'Skills Section',
-      'About Me Section',
-      'Contact Form',
-      'Responsive Design',
-      'Customizable Themes',
-      'Blog Integration',
-      'SEO Optimization'
-    ],
-    tech: ['React', 'HTML', 'CSS', 'JavaScript'],
-    complexity: 'beginner',
-    estimatedTime: '1-2 weeks'
+    id: 'professional-network',
+    name: 'Rede Profissional',
+    description: 'LinkedIn para nichos específicos com foco em networking profissional',
+    category: 'social',
+    features: ['Perfis profissionais', 'Sistema de vagas', 'Networking direcionado', 'Grupos profissionais'],
+    icon: Briefcase,
+    color: 'bg-slate-600'
+  },
+
+  // Business & Management Templates
+  {
+    id: 'crm-advanced',
+    name: 'CRM Avançado',
+    description: 'Sistema completo de gestão de relacionamento com clientes e automação de vendas',
+    category: 'business',
+    features: ['Pipeline de vendas', 'Automação de marketing', 'Relatórios avançados', 'Integração com telefonia'],
+    icon: Users,
+    color: 'bg-blue-600'
   },
   {
-    id: 'crm-system',
-    name: 'CRM System',
-    description: 'A customer relationship management system to manage leads, contacts, and sales opportunities.',
-    category: 'crm',
-    icon: Crown,
-    features: [
-      'Lead Management',
-      'Contact Management',
-      'Sales Opportunity Management',
-      'Task Management',
-      'Email Integration',
-      'Reporting',
-      'Analytics',
-      'User Roles and Permissions'
-    ],
-    tech: ['React', 'Node.js', 'PostgreSQL'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
+    id: 'project-management-ai',
+    name: 'Gestão de Projetos com IA',
+    description: 'Ferramenta de gestão de projetos com inteligência artificial para otimização de recursos',
+    category: 'business',
+    features: ['IA para estimativas', 'Gestão de recursos', 'Análise preditiva', 'Automação de tarefas'],
+    icon: BarChart,
+    color: 'bg-green-600'
   },
   {
-    id: 'social-media-platform',
-    name: 'Social Media Platform',
-    description: 'A social media platform to connect with friends, share updates, and join communities.',
-    category: 'social-media',
-    icon: Globe,
-    features: [
-      'User Profiles',
-      'News Feed',
-      'Post Sharing',
-      'Commenting System',
-      'Friend Requests',
-      'Groups and Communities',
-      'Notifications',
-      'Messaging'
-    ],
-    tech: ['React', 'Node.js', 'MongoDB'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
+    id: 'invoice-automation',
+    name: 'Automação de Faturamento',
+    description: 'Sistema completo de faturamento com automação fiscal e integração bancária',
+    category: 'business',
+    features: ['Emissão automática de NF', 'Integração bancária', 'Cobrança automática', 'Relatórios fiscais'],
+    icon: FileText,
+    color: 'bg-yellow-600'
+  },
+
+  // Health & Wellness Templates
+  {
+    id: 'telemedicine-platform',
+    name: 'Plataforma de Telemedicina',
+    description: 'Sistema completo para consultas médicas online com prontuário eletrônico',
+    category: 'health',
+    features: ['Consultas por vídeo', 'Prontuário eletrônico', 'Prescrição digital', 'Agendamento inteligente'],
+    icon: Stethoscope,
+    color: 'bg-red-600'
   },
   {
-    id: 'job-board',
-    name: 'Job Board',
-    description: 'A job board to connect employers with job seekers.',
-    category: 'job-board',
-    icon: Search,
-    features: [
-      'Job Listings',
-      'Resume Upload',
-      'Job Search',
-      'Application Tracking',
-      'Employer Profiles',
-      'User Authentication',
-      'Notifications',
-      'Reporting'
-    ],
-    tech: ['React', 'Node.js', 'PostgreSQL'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
+    id: 'fitness-tracking',
+    name: 'App de Monitoramento Fitness',
+    description: 'Aplicativo completo para acompanhamento de atividades físicas e nutrição',
+    category: 'health',
+    features: ['Tracking de exercícios', 'Planos nutricionais', 'Gamificação', 'Comunidade fitness'],
+    icon: Dumbbell,
+    color: 'bg-orange-600'
   },
   {
-    id: 'event-management-platform',
-    name: 'Event Management Platform',
-    description: 'An event management platform to create, manage, and promote events.',
-    category: 'event-management',
-    icon: Star,
-    features: [
-      'Event Creation',
-      'Event Management',
-      'Ticketing',
-      'Attendee Management',
-      'Payment Integration',
-      'Marketing Tools',
-      'Reporting',
-      'Analytics'
-    ],
-    tech: ['React', 'Node.js', 'MongoDB'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
+    id: 'mental-health-platform',
+    name: 'Plataforma de Saúde Mental',
+    description: 'Sistema para terapia online e acompanhamento psicológico',
+    category: 'health',
+    features: ['Terapia por vídeo', 'Diário emocional', 'Exercícios de mindfulness', 'Chat de emergência'],
+    icon: Heart,
+    color: 'bg-teal-600'
   },
+
+  // Education Templates
   {
-    id: 'online-learning-platform',
-    name: 'Online Learning Platform',
-    description: 'An online learning platform to create and sell courses.',
-    category: 'online-learning',
-    icon: Layers,
-    features: [
-      'Course Creation',
-      'Course Management',
-      'Video Hosting',
-      'Student Management',
-      'Payment Integration',
-      'Progress Tracking',
-      'Quizzes and Assessments',
-      'Certificates'
-    ],
-    tech: ['React', 'Node.js', 'PostgreSQL'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
-  },
-  {
-    id: 'real-time-chat-application',
-    name: 'Real-Time Chat Application',
-    description: 'A real-time chat application with user authentication, messaging, and group chat features.',
-    category: 'communication',
-    icon: Zap,
-    features: [
-      'User Authentication',
-      'Messaging',
-      'Group Chat',
-      'Real-Time Updates',
-      'File Sharing',
-      'Notifications',
-      'User Presence',
-      'Search'
-    ],
-    tech: ['React', 'Node.js', 'WebSocket'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
-  },
-  {
-    id: 'health-and-fitness-app',
-    name: 'Health and Fitness App',
-    description: 'A health and fitness app to track workouts, nutrition, and progress.',
-    category: 'health-fitness',
-    icon: Shield,
-    features: [
-      'Workout Tracking',
-      'Nutrition Tracking',
-      'Progress Tracking',
-      'Goal Setting',
-      'Social Sharing',
-      'Wearable Integration',
-      'Personalized Recommendations',
-      'Community Features'
-    ],
-    tech: ['React', 'Node.js', 'MongoDB'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
-  },
-  {
-    id: 'file-sharing-platform',
-    name: 'File Sharing Platform',
-    description: 'A file sharing platform to upload, share, and collaborate on files.',
-    category: 'productivity',
-    icon: Layers,
-    features: [
-      'File Upload',
-      'File Sharing',
-      'Collaboration Features',
-      'Version Control',
-      'Access Control',
-      'Notifications',
-      'Search',
-      'Integration with Cloud Storage'
-    ],
-    tech: ['React', 'Node.js', 'AWS S3'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
-  },
-  {
-    id: 'e-learning-platform',
-    name: 'E-Learning Platform',
-    description: 'Create and sell online courses with user progress tracking and interactive lessons.',
+    id: 'lms-advanced',
+    name: 'LMS Avançado',
+    description: 'Plataforma completa de ensino online com IA para personalização de aprendizado',
     category: 'education',
-    icon: Layers,
-    features: [
-      'Course Creation',
-      'User Authentication',
-      'Progress Tracking',
-      'Interactive Lessons',
-      'Payment Integration',
-      'Admin Dashboard',
-      'Discussion Forums',
-      'Certificate Generation'
-    ],
-    tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
+    features: ['IA para aprendizado', 'Aulas ao vivo', 'Gamificação', 'Certificações', 'Análise de progresso'],
+    icon: GraduationCap,
+    color: 'bg-blue-600'
   },
   {
-    id: 'food-delivery-app',
-    name: 'Food Delivery App',
-    description: 'Order food from local restaurants with real-time tracking and secure payments.',
-    category: 'e-commerce',
-    icon: Download,
-    features: [
-      'Restaurant Listings',
-      'Menu Management',
-      'Shopping Cart',
-      'Real-Time Tracking',
-      'Secure Payments',
-      'Order Management',
-      'Customer Reviews',
-      'Discounts and Promotions'
-    ],
-    tech: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
-  },
-  {
-    id: 'hotel-booking-platform',
-    name: 'Hotel Booking Platform',
-    description: 'Book hotels and accommodations with detailed descriptions and customer reviews.',
-    category: 'travel',
+    id: 'language-learning',
+    name: 'App de Idiomas',
+    description: 'Plataforma gamificada para aprendizado de idiomas com IA conversacional',
+    category: 'education',
+    features: ['IA conversacional', 'Gamificação', 'Reconhecimento de voz', 'Aulas personalizadas'],
     icon: Globe,
-    features: [
-      'Hotel Listings',
-      'Room Availability',
-      'Booking Management',
-      'Payment Integration',
-      'Customer Reviews',
-      'Discounts and Promotions',
-      'Loyalty Programs',
-      'Admin Dashboard'
-    ],
-    tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
+    color: 'bg-green-600'
   },
   {
-    id: 'music-streaming-service',
-    name: 'Music Streaming Service',
-    description: 'Stream music online with personalized playlists and social sharing features.',
+    id: 'skill-assessment',
+    name: 'Plataforma de Avaliação de Habilidades',
+    description: 'Sistema para testes e certificações profissionais com proctoring online',
+    category: 'education',
+    features: ['Proctoring online', 'Banco de questões', 'Relatórios detalhados', 'Certificações digitais'],
+    icon: Award,
+    color: 'bg-purple-600'
+  },
+
+  // Food & Restaurant Templates
+  {
+    id: 'ghost-kitchen-platform',
+    name: 'Plataforma Ghost Kitchen',
+    description: 'Sistema completo para gestão de cozinhas virtuais e delivery',
+    category: 'food',
+    features: ['Múltiplas marcas', 'Gestão de cardápio', 'Otimização de entrega', 'Análise de demanda'],
+    icon: Utensils,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'restaurant-table-booking',
+    name: 'Sistema de Reservas de Mesa',
+    description: 'Plataforma para reservas de restaurantes com gestão de capacidade',
+    category: 'food',
+    features: ['Reservas online', 'Gestão de capacidade', 'Lista de espera', 'Programa de fidelidade'],
+    icon: Calendar,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'food-waste-reduction',
+    name: 'Redução de Desperdício Alimentar',
+    description: 'Plataforma para conectar restaurantes com excesso de comida a consumidores',
+    category: 'food',
+    features: ['Ofertas em tempo real', 'Geolocalização', 'Pagamentos integrados', 'Impacto ambiental'],
+    icon: Recycle,
+    color: 'bg-green-600'
+  },
+
+  // Transport Templates
+  {
+    id: 'fleet-management',
+    name: 'Gestão de Frota',
+    description: 'Sistema completo para gerenciamento de frotas com telemetria e manutenção preditiva',
+    category: 'transport',
+    features: ['Telemetria veicular', 'Manutenção preditiva', 'Otimização de rotas', 'Gestão de combustível'],
+    icon: Truck,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'ride-sharing-cargo',
+    name: 'Compartilhamento de Carga',
+    description: 'Plataforma para compartilhamento de espaço em cargas e otimização logística',
+    category: 'transport',
+    features: ['Matching de cargas', 'Otimização de rotas', 'Tracking em tempo real', 'Gestão de pagamentos'],
+    icon: Package,
+    color: 'bg-yellow-600'
+  },
+  {
+    id: 'parking-management',
+    name: 'Gestão de Estacionamentos',
+    description: 'Sistema inteligente para gestão de vagas com IoT e pagamentos automáticos',
+    category: 'transport',
+    features: ['Sensores IoT', 'Pagamento automático', 'Reserva de vagas', 'Análise de ocupação'],
+    icon: Car,
+    color: 'bg-purple-600'
+  },
+
+  // Real Estate Templates
+  {
+    id: 'property-management',
+    name: 'Gestão de Propriedades',
+    description: 'Sistema completo para gestão de imóveis, inquilinos e manutenção',
+    category: 'realestate',
+    features: ['Portal do inquilino', 'Gestão de manutenção', 'Relatórios financeiros', 'Contratos digitais'],
+    icon: Home,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'real-estate-investment',
+    name: 'Investimento Imobiliário',
+    description: 'Plataforma para investimento colaborativo em imóveis com tokenização',
+    category: 'realestate',
+    features: ['Tokenização de imóveis', 'Investimento fracionado', 'Rendimentos automáticos', 'Análise de ROI'],
+    icon: TrendingUp,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'virtual-property-tours',
+    name: 'Tours Virtuais de Imóveis',
+    description: 'Plataforma para visitas virtuais 360° e realidade aumentada',
+    category: 'realestate',
+    features: ['Tours 360°', 'Realidade aumentada', 'Agendamento virtual', 'Análise de engajamento'],
+    icon: Camera,
+    color: 'bg-purple-600'
+  },
+
+  // Productivity Templates
+  {
+    id: 'ai-personal-assistant',
+    name: 'Assistente Pessoal com IA',
+    description: 'Assistente virtual inteligente para gestão de tarefas e produtividade',
+    category: 'productivity',
+    features: ['IA conversacional', 'Agendamento inteligente', 'Análise de produtividade', 'Integração com apps'],
+    icon: Bot,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'team-collaboration',
+    name: 'Colaboração em Equipe',
+    description: 'Plataforma completa para colaboração remota com whiteboard e video calls',
+    category: 'productivity',
+    features: ['Whiteboard colaborativo', 'Video calls HD', 'Gestão de documentos', 'Workflows automatizados'],
+    icon: Users,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'time-tracking-ai',
+    name: 'Controle de Tempo com IA',
+    description: 'Sistema inteligente de controle de tempo com análise automática de produtividade',
+    category: 'productivity',
+    features: ['Tracking automático', 'Análise de produtividade', 'Relatórios inteligentes', 'Integração com calendário'],
+    icon: Clock,
+    color: 'bg-purple-600'
+  },
+
+  // Entertainment Templates
+  {
+    id: 'streaming-platform',
+    name: 'Plataforma de Streaming',
+    description: 'Serviço de streaming de vídeo com recomendações por IA e conteúdo interativo',
     category: 'entertainment',
-    icon: Star,
-    features: [
-      'Music Streaming',
-      'Personalized Playlists',
-      'Social Sharing',
-      'User Authentication',
-      'Artist Profiles',
-      'Album Listings',
-      'Search',
-      'Recommendations'
-    ],
-    tech: ['React', 'Node.js', 'AWS S3'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
+    features: ['Streaming adaptativo', 'IA de recomendação', 'Conteúdo interativo', 'Múltiplas telas'],
+    icon: Video,
+    color: 'bg-red-600'
   },
   {
-    id: 'video-conferencing-app',
-    name: 'Video Conferencing App',
-    description: 'Conduct video conferences with screen sharing and recording capabilities.',
-    category: 'communication',
-    icon: Zap,
-    features: [
-      'Video Conferencing',
-      'Screen Sharing',
-      'Recording',
-      'User Authentication',
-      'Chat',
-      'Whiteboarding',
-      'Breakout Rooms',
-      'Admin Controls'
-    ],
-    tech: ['React', 'Node.js', 'WebSocket'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
+    id: 'gaming-tournament',
+    name: 'Plataforma de Torneios Gaming',
+    description: 'Sistema para organização de torneios de games com brackets e transmissões',
+    category: 'entertainment',
+    features: ['Sistema de brackets', 'Transmissões ao vivo', 'Ranking global', 'Premiações automáticas'],
+    icon: Gamepad2,
+    color: 'bg-orange-600'
   },
   {
-    id: 'online-marketplace',
-    name: 'Online Marketplace',
-    description: 'Buy and sell products online with secure payments and user reviews.',
-    category: 'e-commerce',
-    icon: Download,
-    features: [
-      'Product Listings',
-      'Shopping Cart',
-      'Secure Payments',
-      'User Reviews',
-      'Seller Profiles',
-      'Order Management',
-      'Dispute Resolution',
-      'Admin Dashboard'
-    ],
-    tech: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
+    id: 'virtual-events',
+    name: 'Eventos Virtuais',
+    description: 'Plataforma para eventos online com networking e experiências imersivas',
+    category: 'entertainment',
+    features: ['Ambientes 3D', 'Networking AI', 'Stands virtuais', 'Análise de engajamento'],
+    icon: Calendar,
+    color: 'bg-purple-600'
   },
-  {
-    id: 'personal-finance-tracker',
-    name: 'Personal Finance Tracker',
-    description: 'Track your income, expenses, and investments with detailed reports and budgeting tools.',
-    category: 'finance',
-    icon: Shield,
-    features: [
-      'Income Tracking',
-      'Expense Tracking',
-      'Investment Tracking',
-      'Budgeting Tools',
-      'Detailed Reports',
-      'Goal Setting',
-      'User Authentication',
-      'Notifications'
-    ],
-    tech: ['React', 'Node.js', 'MongoDB'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
-  },
-  {
-    id: 'delivery-app',
-    name: 'Delivery App',
-    description: 'A delivery application template with real-time tracking and driver management.',
-    category: 'e-commerce',
-    icon: Download,
-    features: [
-      'Real-Time Tracking',
-      'Driver Management',
-      'Order Management',
-      'Payment Integration',
-      'Customer Notifications',
-      'Route Optimization',
-      'Analytics',
-      'Admin Dashboard'
-    ],
-    tech: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
-  },
-  {
-    id: 'appointment-scheduling-app',
-    name: 'Appointment Scheduling App',
-    description: 'Schedule appointments with clients and manage your calendar.',
-    category: 'productivity',
-    icon: Timer,
-    features: [
-      'Calendar Integration',
-      'Client Management',
-      'Appointment Reminders',
-      'Online Payments',
-      'Reporting',
-      'User Authentication',
-      'Notifications',
-      'Admin Dashboard'
-    ],
-    tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
-  },
-  {
-    id: 'online-code-editor',
-    name: 'Online Code Editor',
-    description: 'Write and run code online with syntax highlighting and collaboration features.',
-    category: 'development',
-    icon: Code,
-    features: [
-      'Syntax Highlighting',
-      'Code Completion',
-      'Real-Time Collaboration',
-      'Version Control',
-      'Debugging Tools',
-      'Multiple Languages',
-      'User Authentication',
-      'Code Sharing'
-    ],
-    tech: ['React', 'Node.js', 'WebSocket'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
-  },
-  {
-    id: 'online-survey-platform',
-    name: 'Online Survey Platform',
-    description: 'Create and distribute surveys with detailed analytics and reporting.',
-    category: 'productivity',
-    icon: Layers,
-    features: [
-      'Survey Creation',
-      'Survey Distribution',
-      'Data Collection',
-      'Analytics',
-      'Reporting',
-      'User Authentication',
-      'Customizable Themes',
-      'Integration with Third-Party Tools'
-    ],
-    tech: ['React', 'Node.js', 'PostgreSQL'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
-  },
-  {
-    id: 'crypto-tracker',
-    name: 'Crypto Tracker',
-    description: 'Track cryptocurrency prices and portfolio performance.',
-    category: 'finance',
-    icon: Shield,
-    features: [
-      'Real-Time Prices',
-      'Portfolio Tracking',
-      'Alerts',
-      'News',
-      'Charts',
-      'User Authentication',
-      'Notifications',
-      'Integration with Exchanges'
-    ],
-    tech: ['React', 'Node.js', 'MongoDB'],
-    complexity: 'advanced',
-    estimatedTime: '4-6 weeks'
-  },
+
+  // WhatsApp Bot Templates
   {
     id: 'whatsapp-ecommerce-bot',
-    name: 'Bot WhatsApp E-commerce',
-    description: 'Bot de atendimento para lojas online com catálogo de produtos, carrinho e checkout',
-    category: 'customer-service',
+    name: 'Bot E-commerce WhatsApp',
+    description: 'Bot inteligente para vendas via WhatsApp com catálogo integrado e pagamentos',
+    category: 'social',
+    features: ['Catálogo de produtos', 'Carrinho de compras', 'Pagamentos PIX', 'Gestão de pedidos', 'Atendimento 24/7'],
     icon: Bot,
-    features: [
-      'Catálogo de produtos interativo',
-      'Carrinho de compras por WhatsApp',
-      'Processamento de pedidos',
-      'Status de entrega',
-      'Suporte ao cliente automatizado',
-      'Integração com gateways de pagamento',
-      'Análise de vendas',
-      'Remarketing automático'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp Business API', 'Supabase', 'Stripe'],
-    complexity: 'advanced',
-    estimatedTime: '3-4 semanas'
+    color: 'bg-green-600'
   },
   {
     id: 'whatsapp-restaurant-bot',
-    name: 'Bot WhatsApp Restaurante',
-    description: 'Sistema de pedidos para restaurantes via WhatsApp com cardápio digital',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Cardápio digital interativo',
-      'Sistema de pedidos',
-      'Cálculo de taxa de entrega',
-      'Integração com delivery',
-      'Horário de funcionamento',
-      'Promoções automáticas',
-      'Feedback de clientes',
-      'Relatórios de vendas'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase'],
-    complexity: 'intermediate',
-    estimatedTime: '2-3 semanas'
+    name: 'Bot Restaurante WhatsApp',
+    description: 'Assistente virtual para restaurantes com cardápio digital e pedidos automatizados',
+    category: 'food',
+    features: ['Cardápio interativo', 'Pedidos automatizados', 'Delivery tracking', 'Promoções personalizadas'],
+    icon: Utensils,
+    color: 'bg-orange-600'
   },
   {
-    id: 'whatsapp-medical-bot',
-    name: 'Bot WhatsApp Clínica Médica',
-    description: 'Agendamento de consultas e atendimento médico via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Agendamento de consultas',
-      'Lembretes automáticos',
-      'Histórico de pacientes',
-      'Prescrições digitais',
-      'Triagem inicial',
-      'Integração com prontuário',
-      'Telemedicina básica',
-      'Faturamento automático'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'HIPAA Compliance'],
-    complexity: 'advanced',
-    estimatedTime: '4-5 semanas'
+    id: 'whatsapp-appointment-bot',
+    name: 'Bot Agendamento WhatsApp',
+    description: 'Bot para agendamento de consultas e serviços com calendário integrado',
+    category: 'business',
+    features: ['Agendamento inteligente', 'Lembretes automáticos', 'Reagendamento fácil', 'Integração com calendário'],
+    icon: Calendar,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'whatsapp-support-bot',
+    name: 'Bot Suporte WhatsApp',
+    description: 'Bot de atendimento ao cliente com IA para respostas inteligentes e escalação',
+    category: 'business',
+    features: ['IA conversacional', 'Base de conhecimento', 'Escalação para humanos', 'Análise de sentimento'],
+    icon: Headphones,
+    color: 'bg-purple-600'
   },
   {
     id: 'whatsapp-education-bot',
-    name: 'Bot WhatsApp Educacional',
-    description: 'Plataforma de ensino e suporte estudantil via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Distribuição de conteúdo',
-      'Quiz e avaliações',
-      'Cronograma de estudos',
-      'Suporte acadêmico',
-      'Biblioteca digital',
-      'Grupos de estudo',
-      'Certificados digitais',
-      'Progresso do aluno'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase'],
-    complexity: 'intermediate',
-    estimatedTime: '2-3 semanas'
+    name: 'Bot Educacional WhatsApp',
+    description: 'Assistente educacional para cursos online com quizzes e acompanhamento de progresso',
+    category: 'education',
+    features: ['Conteúdo interativo', 'Quizzes automáticos', 'Progresso personalizado', 'Lembretes de estudo'],
+    icon: BookOpen,
+    color: 'bg-indigo-600'
+  },
+  {
+    id: 'whatsapp-health-bot',
+    name: 'Bot Saúde WhatsApp',
+    description: 'Assistente de saúde para lembretes de medicamentos e triagem inicial',
+    category: 'health',
+    features: ['Lembretes de medicação', 'Triagem de sintomas', 'Agendamento médico', 'Histórico de saúde'],
+    icon: Stethoscope,
+    color: 'bg-red-600'
   },
   {
     id: 'whatsapp-real-estate-bot',
-    name: 'Bot WhatsApp Imobiliária',
-    description: 'Atendimento imobiliário com tours virtuais e agendamentos',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Catálogo de imóveis',
-      'Tours virtuais 360°',
-      'Agendamento de visitas',
-      'Calculadora de financiamento',
-      'Documentação digital',
-      'CRM integrado',
-      'Lead scoring',
-      'Relatórios de performance'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', '360° viewer'],
-    complexity: 'advanced',
-    estimatedTime: '3-4 semanas'
+    name: 'Bot Imóveis WhatsApp',
+    description: 'Bot para imobiliárias com busca inteligente de imóveis e agendamento de visitas',
+    category: 'realestate',
+    features: ['Busca por critérios', 'Galeria de fotos', 'Agendamento de visitas', 'Calculadora de financiamento'],
+    icon: Home,
+    color: 'bg-cyan-600'
   },
   {
-    id: 'whatsapp-bank-bot',
-    name: 'Bot WhatsApp Bancário',
-    description: 'Atendimento bancário seguro com transações e consultas',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Consulta de saldo',
-      'Extrato bancário',
-      'Transferências PIX',
-      'Pagamento de boletos',
-      'Cartão de crédito',
-      'Investimentos',
-      'Seguros',
-      'Autenticação biométrica'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'OpenBanking'],
-    complexity: 'expert',
-    estimatedTime: '5-6 semanas'
-  },
-  {
-    id: 'whatsapp-travel-bot',
-    name: 'Bot WhatsApp Agência de Viagem',
-    description: 'Planejamento e reservas de viagem via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Busca de voos e hotéis',
-      'Pacotes personalizados',
-      'Roteiros inteligentes',
-      'Check-in automático',
-      'Seguro viagem',
-      'Câmbio de moedas',
-      'Guia de destinos',
-      'Suporte 24/7'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'Travel APIs'],
-    complexity: 'advanced',
-    estimatedTime: '3-4 semanas'
-  },
-  {
-    id: 'whatsapp-insurance-bot',
-    name: 'Bot WhatsApp Seguradora',
-    description: 'Cotações, sinistros e atendimento de seguros via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Cotação automática',
-      'Abertura de sinistros',
-      'Vistoria digital',
-      'Renovação automática',
-      'Central de ajuda',
-      'Documentos digitais',
-      'Pagamento de prêmios',
-      'Rede credenciada'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'ML'],
-    complexity: 'advanced',
-    estimatedTime: '3-4 semanas'
-  },
-  {
-    id: 'whatsapp-logistics-bot',
-    name: 'Bot WhatsApp Logística',
-    description: 'Rastreamento e gestão de entregas via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Rastreamento em tempo real',
-      'Agendamento de coletas',
-      'Cálculo de fretes',
-      'Proof of delivery',
-      'Otimização de rotas',
-      'Notificações automáticas',
-      'Integração transportadoras',
-      'Analytics logísticos'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'Maps API'],
-    complexity: 'advanced',
-    estimatedTime: '3-4 semanas'
+    id: 'whatsapp-finance-bot',
+    name: 'Bot Financeiro WhatsApp',
+    description: 'Assistente financeiro para controle de gastos e investimentos via WhatsApp',
+    category: 'business',
+    features: ['Controle de gastos', 'Análise financeira', 'Dicas de investimento', 'Alertas de gastos'],
+    icon: CreditCard,
+    color: 'bg-green-600'
   },
   {
     id: 'whatsapp-hr-bot',
-    name: 'Bot WhatsApp Recursos Humanos',
-    description: 'Gestão de funcionários e processos de RH via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Onboarding digital',
-      'Solicitação de férias',
-      'Holerites digitais',
-      'Avaliação de desempenho',
-      'Treinamentos online',
-      'Pesquisas de clima',
-      'Benefícios corporativos',
-      'Canal de denúncias'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase'],
-    complexity: 'intermediate',
-    estimatedTime: '2-3 semanas'
+    name: 'Bot RH WhatsApp',
+    description: 'Bot para recursos humanos com gestão de colaboradores e processos internos',
+    category: 'business',
+    features: ['Gestão de folha de ponto', 'Solicitações de férias', 'Onboarding digital', 'FAQ corporativo'],
+    icon: Users,
+    color: 'bg-slate-600'
   },
   {
-    id: 'whatsapp-automotive-bot',
-    name: 'Bot WhatsApp Concessionária',
-    description: 'Vendas de veículos e agendamento de serviços via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Catálogo de veículos',
-      'Test drive virtual',
-      'Financiamento simulado',
-      'Agendamento revisões',
-      'Peças e acessórios',
-      'Garantia estendida',
-      'Recall automático',
-      'Avaliação trade-in'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'VR'],
-    complexity: 'advanced',
-    estimatedTime: '3-4 semanas'
-  },
-  {
-    id: 'whatsapp-beauty-bot',
-    name: 'Bot WhatsApp Salão de Beleza',
-    description: 'Agendamentos e vendas para salões de beleza via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Agendamento online',
-      'Catálogo de serviços',
-      'Lembretes automáticos',
-      'Programa fidelidade',
-      'Avaliação de serviços',
-      'Produtos de beleza',
-      'Antes e depois',
-      'Promoções personalizadas'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase'],
-    complexity: 'intermediate',
-    estimatedTime: '2-3 semanas'
-  },
-  {
-    id: 'whatsapp-fitness-bot',
-    name: 'Bot WhatsApp Academia',
-    description: 'Personal trainer virtual e gestão de academia via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Planos de treino',
-      'Acompanhamento nutricional',
-      'Check-in academia',
-      'Aulas agendadas',
-      'Medidas corporais',
-      'Motivação diária',
-      'Desafios fitness',
-      'Comunidade fitness'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'Wearables'],
-    complexity: 'intermediate',
-    estimatedTime: '2-3 semanas'
-  },
-  {
-    id: 'whatsapp-legal-bot',
-    name: 'Bot WhatsApp Escritório Jurídico',
-    description: 'Consultoria jurídica e gestão de processos via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Consulta jurídica inicial',
-      'Acompanhamento processos',
-      'Documentos jurídicos',
-      'Agenda de audiências',
-      'Honorários transparentes',
-      'Jurisprudência',
-      'Contratos inteligentes',
-      'Mediação online'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'Legal APIs'],
-    complexity: 'advanced',
-    estimatedTime: '3-4 semanas'
-  },
-  {
-    id: 'whatsapp-veterinary-bot',
-    name: 'Bot WhatsApp Veterinária',
-    description: 'Cuidados veterinários e agendamentos via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Agendamento consultas',
-      'Cartão de vacinas',
-      'Emergências 24h',
-      'Telemedicina vet',
-      'Loja pet online',
-      'Lembretes medicação',
-      'Histórico médico',
-      'Dicas de cuidados'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase'],
-    complexity: 'intermediate',
-    estimatedTime: '2-3 semanas'
-  },
-  {
-    id: 'whatsapp-construction-bot',
-    name: 'Bot WhatsApp Construção Civil',
-    description: 'Gestão de obras e orçamentos via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Orçamentos automáticos',
-      'Acompanhamento obra',
-      'Fornecedores integrados',
-      'Cronograma projeto',
-      'Relatórios progresso',
-      'Documentação técnica',
-      'Controle qualidade',
-      'Gestão equipes'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'IoT'],
-    complexity: 'advanced',
-    estimatedTime: '3-4 semanas'
+    id: 'whatsapp-delivery-bot',
+    name: 'Bot Delivery WhatsApp',
+    description: 'Bot para serviços de delivery com tracking em tempo real e otimização de rotas',
+    category: 'transport',
+    features: ['Tracking em tempo real', 'Otimização de rotas', 'Notificações automáticas', 'Avaliação de entrega'],
+    icon: Truck,
+    color: 'bg-yellow-600'
   },
   {
     id: 'whatsapp-pharmacy-bot',
-    name: 'Bot WhatsApp Farmácia',
-    description: 'Delivery de medicamentos e consultas farmacêuticas via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Catálogo medicamentos',
-      'Receita digital',
-      'Delivery rápido',
-      'Consulta farmacêutica',
-      'Programa fidelidade',
-      'Lembretes medicação',
-      'Interações medicamentosas',
-      'Controle estoque'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'ANVISA API'],
-    complexity: 'advanced',
-    estimatedTime: '3-4 semanas'
+    name: 'Bot Farmácia WhatsApp',
+    description: 'Assistente para farmácias com consulta de medicamentos e delivery',
+    category: 'health',
+    features: ['Consulta de medicamentos', 'Receitas digitais', 'Delivery farmácia', 'Programa de fidelidade'],
+    icon: FlaskConical,
+    color: 'bg-teal-600'
   },
   {
-    id: 'whatsapp-accounting-bot',
-    name: 'Bot WhatsApp Contabilidade',
-    description: 'Serviços contábeis e fiscais automatizados via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Declaração imposto renda',
-      'Emissão de notas fiscais',
-      'Folha de pagamento',
-      'Abertura de empresas',
-      'Consultoria fiscal',
-      'Relatórios contábeis',
-      'Compliance automático',
-      'Planejamento tributário'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'ERP Integration'],
-    complexity: 'expert',
-    estimatedTime: '4-5 semanas'
+    id: 'whatsapp-automotive-bot',
+    name: 'Bot Automotivo WhatsApp',
+    description: 'Bot para concessionárias e oficinas com agendamento e orçamentos',
+    category: 'transport',
+    features: ['Agendamento de serviços', 'Orçamentos automáticos', 'Histórico do veículo', 'Lembretes de manutenção'],
+    icon: Car,
+    color: 'bg-blue-600'
   },
   {
-    id: 'whatsapp-therapy-bot',
-    name: 'Bot WhatsApp Terapia Online',
-    description: 'Suporte psicológico e agendamento de terapias via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Triagem psicológica',
-      'Agendamento sessões',
-      'Diário emocional',
-      'Exercícios terapêuticos',
-      'Meditação guiada',
-      'Rede de apoio',
-      'Emergências psicológicas',
-      'Teleconsulta segura'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'HIPAA'],
-    complexity: 'advanced',
-    estimatedTime: '3-4 semanas'
+    id: 'whatsapp-beauty-bot',
+    name: 'Bot Beleza WhatsApp',
+    description: 'Assistente para salões de beleza com agendamento e consultas de tratamentos',
+    category: 'business',
+    features: ['Agendamento de serviços', 'Consulta de tratamentos', 'Programa de fidelidade', 'Galeria de trabalhos'],
+    icon: Star,
+    color: 'bg-pink-600'
   },
   {
-    id: 'whatsapp-event-bot',
-    name: 'Bot WhatsApp Eventos',
-    description: 'Organização e gestão de eventos via WhatsApp',
-    category: 'customer-service',
-    icon: Bot,
-    features: [
-      'Criação de eventos',
-      'Venda de ingressos',
-      'Check-in digital',
-      'Networking participantes',
-      'Agenda personalizada',
-      'Transmissão ao vivo',
-      'Feedback eventos',
-      'Certificados participação'
-    ],
-    tech: ['React', 'Node.js', 'WhatsApp API', 'Supabase', 'Streaming'],
-    complexity: 'advanced',
-    estimatedTime: '3-4 semanas'
+    id: 'whatsapp-travel-bot',
+    name: 'Bot Viagem WhatsApp',
+    description: 'Assistente de viagens com pesquisa de destinos e reservas automatizadas',
+    category: 'business',
+    features: ['Pesquisa de destinos', 'Reservas automáticas', 'Itinerários personalizados', 'Clima e dicas locais'],
+    icon: PlaneTakeoff,
+    color: 'bg-indigo-600'
+  },
+  {
+    id: 'whatsapp-pet-bot',
+    name: 'Bot Pet Care WhatsApp',
+    description: 'Assistente para pet shops e veterinárias com agendamento e cuidados',
+    category: 'health',
+    features: ['Agendamento veterinário', 'Lembretes de vacina', 'Dicas de cuidados', 'Emergências 24h'],
+    icon: Heart,
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'whatsapp-legal-bot',
+    name: 'Bot Jurídico WhatsApp',
+    description: 'Assistente jurídico com consultas automatizadas e agendamento de advogados',
+    category: 'business',
+    features: ['Consultas jurídicas', 'Documentos automáticos', 'Agendamento de advogados', 'Acompanhamento de processos'],
+    icon: Shield,
+    color: 'bg-slate-600'
+  },
+  {
+    id: 'whatsapp-fitness-bot',
+    name: 'Bot Fitness WhatsApp',
+    description: 'Personal trainer virtual com treinos personalizados e acompanhamento nutricional',
+    category: 'health',
+    features: ['Treinos personalizados', 'Acompanhamento nutricional', 'Motivação diária', 'Progresso visual'],
+    icon: Dumbbell,
+    color: 'bg-red-600'
+  },
+  {
+    id: 'whatsapp-insurance-bot',
+    name: 'Bot Seguros WhatsApp',
+    description: 'Assistente para seguradoras com cotações automáticas e sinistros',
+    category: 'business',
+    features: ['Cotações automáticas', 'Abertura de sinistros', 'Acompanhamento de processos', 'Renovação automática'],
+    icon: Shield,
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'whatsapp-bank-bot',
+    name: 'Bot Bancário WhatsApp',
+    description: 'Assistente bancário com consultas de saldo, transferências e investimentos',
+    category: 'business',
+    features: ['Consulta de saldo', 'Transferências seguras', 'Investimentos automáticos', 'Análise de gastos'],
+    icon: CreditCard,
+    color: 'bg-green-600'
+  },
+  {
+    id: 'whatsapp-agriculture-bot',
+    name: 'Bot Agricultura WhatsApp',
+    description: 'Assistente para produtores rurais com monitoramento de cultivos e clima',
+    category: 'business',
+    features: ['Monitoramento de cultivos', 'Previsão do tempo', 'Dicas de plantio', 'Mercado agrícola'],
+    icon: Sprout,
+    color: 'bg-green-600'
   }
 ];
 
-export const categories = [
-  {
-    id: 'all',
-    name: 'Todos',
-    icon: Globe
-  },
-  {
-    id: 'saas',
-    name: 'SaaS',
-    icon: Rocket
-  },
-  {
-    id: 'e-commerce',
-    name: 'E-commerce',
-    icon: Download
-  },
-  {
-    id: 'blogging',
-    name: 'Blogging',
-    icon: Globe
-  },
-  {
-    id: 'productivity',
-    name: 'Produtividade',
-    icon: Layers
-  },
-  {
-    id: 'portfolio',
-    name: 'Portfólio',
-    icon: Code
-  },
-  {
-    id: 'crm',
-    name: 'CRM',
-    icon: Crown
-  },
-  {
-    id: 'social-media',
-    name: 'Social Media',
-    icon: Globe
-  },
-  {
-    id: 'job-board',
-    name: 'Job Board',
-    icon: Search
-  },
-  {
-    id: 'event-management',
-    name: 'Event Management',
-    icon: Star
-  },
-  {
-    id: 'online-learning',
-    name: 'Online Learning',
-    icon: Layers
-  },
-  {
-    id: 'communication',
-    name: 'Communication',
-    icon: Zap
-  },
-  {
-    id: 'health-fitness',
-    name: 'Health & Fitness',
-    icon: Shield
-  },
-  {
-    id: 'finance',
-    name: 'Finanças',
-    icon: Shield
-  },
-  {
-   id: 'travel',
-   name: 'Viagens',
-   icon: Globe
-  },
-  {
-    id: 'entertainment',
-    name: 'Entretenimento',
-    icon: Star
-  },
-  {
-    id: 'development',
-    name: 'Desenvolvimento',
-    icon: Code
-  },
-  {
-    id: 'customer-service',
-    name: 'Atendimento',
-    icon: Bot
-  }
-];
-
-export const getTemplatesByCategory = (category: string) => {
-  if (category === 'all') {
+export const getTemplatesByCategory = (categoryId: string): ProjectTemplate[] => {
+  if (categoryId === 'all') {
     return projectTemplates;
   }
-  return projectTemplates.filter(template => template.category === category);
+  return projectTemplates.filter(template => template.category === categoryId);
 };
 
-export const searchTemplates = (searchTerm: string) => {
-  const lowerSearchTerm = searchTerm.toLowerCase();
-  return projectTemplates.filter(template => {
-    return (
-      template.name.toLowerCase().includes(lowerSearchTerm) ||
-      template.description.toLowerCase().includes(lowerSearchTerm) ||
-      template.features.some(feature => feature.toLowerCase().includes(lowerSearchTerm))
-    );
-  });
+export const searchTemplates = (searchTerm: string): ProjectTemplate[] => {
+  const term = searchTerm.toLowerCase();
+  return projectTemplates.filter(template => 
+    template.name.toLowerCase().includes(term) ||
+    template.description.toLowerCase().includes(term) ||
+    template.features.some(feature => feature.toLowerCase().includes(term))
+  );
 };
