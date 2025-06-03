@@ -20,11 +20,70 @@ const Login = () => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate('/generator');
+        // Verificar se é admin
+        const { data: userProfile } = await supabase
+          .from('users')
+          .select('plan_type')
+          .eq('id', session.user.id)
+          .single();
+        
+        if (userProfile?.plan_type === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/generator');
+        }
       }
     };
     checkAuth();
   }, [navigate]);
+
+  const createAdminUser = async () => {
+    try {
+      // Tentar criar o usuário admin no Supabase Auth
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email: 'admin@admin.com',
+        password: '320809eu',
+        options: {
+          data: {
+            full_name: 'Administrator',
+            plan_type: 'admin'
+          },
+          emailRedirectTo: undefined // Não precisa de confirmação de email para admin
+        }
+      });
+
+      if (signUpError && !signUpError.message.includes('already registered')) {
+        throw signUpError;
+      }
+
+      // Se o usuário foi criado ou já existe, criar/atualizar a entrada na tabela users
+      if (signUpData.user) {
+        const { error: upsertError } = await supabase
+          .from('users')
+          .upsert({
+            id: signUpData.user.id,
+            email: 'admin@admin.com',
+            full_name: 'Administrator',
+            plan_type: 'admin',
+            projects_generated: 0,
+            monthly_limit: -1, // Ilimitado para admin
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'id'
+          });
+
+        if (upsertError) {
+          console.error('Erro ao criar entrada na tabela users:', upsertError);
+        }
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Erro ao criar usuário admin:', error);
+      return false;
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,37 +92,29 @@ const Login = () => {
     try {
       // Verificar se é admin
       if (email === 'admin@admin.com' && password === '320809eu') {
-        // Login admin via Supabase
-        const { data, error } = await supabase.auth.signInWithPassword({
+        // Tentar login primeiro
+        const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
           email,
           password
         });
 
-        if (error) {
-          // Se admin não existe no Supabase, criar conta
-          const { error: signUpError } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-              data: {
-                full_name: 'Administrator',
-                plan_type: 'admin'
-              }
+        if (loginError) {
+          // Se erro de login, tentar criar o usuário admin
+          console.log('Usuário admin não encontrado, criando...');
+          const adminCreated = await createAdminUser();
+          
+          if (adminCreated) {
+            // Tentar login novamente após criar
+            const { data: retryLoginData, error: retryLoginError } = await supabase.auth.signInWithPassword({
+              email,
+              password
+            });
+
+            if (retryLoginError) {
+              throw retryLoginError;
             }
-          });
-
-          if (signUpError) {
-            throw signUpError;
-          }
-
-          // Tentar login novamente
-          const { error: loginError } = await supabase.auth.signInWithPassword({
-            email,
-            password
-          });
-
-          if (loginError) {
-            throw loginError;
+          } else {
+            throw new Error('Erro ao criar usuário administrador');
           }
         }
 
@@ -73,7 +124,7 @@ const Login = () => {
           description: "Bem-vindo ao painel administrativo.",
         });
       } else {
-        // Login normal
+        // Login normal para outros usuários
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password
@@ -90,6 +141,7 @@ const Login = () => {
         });
       }
     } catch (error: any) {
+      console.error('Erro no login:', error);
       toast({
         title: "Erro no login",
         description: error.message || "Email ou senha incorretos.",
@@ -143,6 +195,11 @@ const Login = () => {
             <Link to="/register" className="text-sm text-blue-600 hover:underline">
               Não tem conta? Cadastre-se grátis
             </Link>
+          </div>
+          <div className="mt-2 text-center">
+            <p className="text-xs text-gray-500">
+              Admin: admin@admin.com / 320809eu
+            </p>
           </div>
         </CardContent>
       </Card>
