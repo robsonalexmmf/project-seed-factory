@@ -23,7 +23,7 @@ import {
   Lock
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-import { projectTemplates, categories, getTemplatesByCategory, searchTemplates } from '@/utils/projectTemplates';
+import { projectTemplates, templateCategories, getTemplatesByCategory, searchTemplates } from '@/utils/projectTemplates';
 import { generateAndDownloadProject } from '@/utils/projectGenerator';
 import TemplateCard from '@/components/TemplateCard';
 import ProjectGeneratorModal from '@/components/ProjectGeneratorModal';
@@ -189,7 +189,7 @@ const Index = () => {
   };
 
   const totalTemplates = projectTemplates.length;
-  const categoryCounts = categories.map(cat => ({
+  const categoryCounts = templateCategories.map(cat => ({
     ...cat,
     count: cat.id === 'all' ? totalTemplates : getTemplatesByCategory(cat.id).length
   }));
@@ -349,7 +349,7 @@ const Index = () => {
               {searchTerm ? (
                 <>Encontrados <span className="font-black text-blue-600 text-3xl">{filteredTemplates.length}</span> templates para <span className="text-purple-600 font-bold">"{searchTerm}"</span></>
               ) : (
-                <>Exibindo <span className="font-black text-blue-600 text-3xl">{filteredTemplates.length}</span> templates da categoria <span className="font-bold text-purple-600">{categories.find(c => c.id === selectedCategory)?.name}</span></>
+                <>Exibindo <span className="font-black text-blue-600 text-3xl">{filteredTemplates.length}</span> templates da categoria <span className="font-bold text-purple-600">{templateCategories.find(c => c.id === selectedCategory)?.name}</span></>
               )}
             </p>
           </div>
@@ -364,7 +364,7 @@ const Index = () => {
                   template={template}
                   isSelected={false}
                   onSelect={() => handleTemplateSelect(template)}
-                  categoryName={categories.find(c => c.id === template.category)?.name || ''}
+                  categoryName={templateCategories.find(c => c.id === template.category)?.name || ''}
                 />
                 {/* Overlay para usuários sem limite */}
                 {user && ((user.plan_type === 'freemium' && projectsRemaining === 0) || (user.plan_type === 'pro' && projectsRemaining === 0)) && (
