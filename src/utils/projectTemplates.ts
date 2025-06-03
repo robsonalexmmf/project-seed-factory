@@ -1,4 +1,3 @@
-
 import { 
   Store, 
   Users, 
@@ -70,7 +69,8 @@ import {
   Truck,
   Pizza,
   IceCream,
-  Sandwich
+  Sandwich,
+  CheckCircle
 } from 'lucide-react';
 
 export interface ProjectTemplate {
