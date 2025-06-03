@@ -13,7 +13,7 @@ interface TemplateCardProps {
     category: string;
     features: string[];
     icon: LucideIcon;
-    color: string;
+    color?: string;
   };
   isSelected: boolean;
   onSelect: () => void;
@@ -26,6 +26,9 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   onSelect, 
   categoryName 
 }) => {
+  // Default color if not provided
+  const templateColor = template.color || 'bg-blue-600';
+  
   // Mapear cores para gradientes mais bonitos
   const getGradientClass = (color: string) => {
     const gradientMap: { [key: string]: string } = {
@@ -45,6 +48,8 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
       'bg-lime-600': 'from-lime-500 to-green-500',
       'bg-amber-600': 'from-amber-500 to-orange-500',
       'bg-slate-600': 'from-slate-500 to-gray-600',
+      'bg-sky-600': 'from-sky-500 to-blue-600',
+      'bg-gray-600': 'from-gray-500 to-slate-600',
     };
     return gradientMap[color] || 'from-blue-500 to-purple-600';
   };
@@ -67,6 +72,8 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
       'bg-lime-600': 'bg-gradient-to-r from-lime-100 to-green-200',
       'bg-amber-600': 'bg-gradient-to-r from-amber-100 to-orange-200',
       'bg-slate-600': 'bg-gradient-to-r from-slate-100 to-gray-200',
+      'bg-sky-600': 'bg-gradient-to-r from-sky-100 to-blue-200',
+      'bg-gray-600': 'bg-gradient-to-r from-gray-100 to-slate-200',
     };
     return iconMap[color] || 'bg-gradient-to-r from-blue-100 to-purple-200';
   };
@@ -89,18 +96,20 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
       'bg-lime-600': 'text-lime-600',
       'bg-amber-600': 'text-amber-600',
       'bg-slate-600': 'text-slate-600',
+      'bg-sky-600': 'text-sky-600',
+      'bg-gray-600': 'text-gray-600',
     };
     return textMap[color] || 'text-blue-600';
   };
 
   return (
     <Card className="group cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105 bg-white/80 backdrop-blur-sm border-2 border-gray-100 hover:border-gray-200 overflow-hidden">
-      <div className={`h-2 bg-gradient-to-r ${getGradientClass(template.color)}`}></div>
+      <div className={`h-2 bg-gradient-to-r ${getGradientClass(templateColor)}`}></div>
       
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between mb-4">
-          <div className={`p-4 rounded-2xl ${getIconBgClass(template.color)} shadow-lg group-hover:scale-110 transition-transform`}>
-            <template.icon className={`w-8 h-8 ${getTextColorClass(template.color)}`} />
+          <div className={`p-4 rounded-2xl ${getIconBgClass(templateColor)} shadow-lg group-hover:scale-110 transition-transform`}>
+            <template.icon className={`w-8 h-8 ${getTextColorClass(templateColor)}`} />
           </div>
           <Badge variant="secondary" className="text-sm font-semibold px-3 py-1 bg-gradient-to-r from-gray-100 to-gray-200">
             {categoryName}
@@ -143,7 +152,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
 
         <Button 
           onClick={onSelect}
-          className={`w-full bg-gradient-to-r ${getGradientClass(template.color)} hover:shadow-lg transition-all duration-300 text-white font-bold py-3 px-6 rounded-xl group-hover:scale-105`}
+          className={`w-full bg-gradient-to-r ${getGradientClass(templateColor)} hover:shadow-lg transition-all duration-300 text-white font-bold py-3 px-6 rounded-xl group-hover:scale-105`}
         >
           <Rocket className="w-5 h-5 mr-2" />
           Usar Template
