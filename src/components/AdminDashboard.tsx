@@ -80,9 +80,6 @@ const AdminDashboard = () => {
     }
 
     loadAdminData();
-    
-    // Tornar o usuário robsonalexmmfata@gmail.com admin automaticamente
-    makeUserAdmin('robsonalexmmfata@gmail.com').catch(console.error);
   }, [userProfile, authLoading, navigate]);
 
   const loadAdminData = async () => {
