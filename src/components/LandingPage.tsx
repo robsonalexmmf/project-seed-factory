@@ -34,7 +34,7 @@ const LandingPage = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <Rocket className="h-8 w-8 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-900">SaaS Generator AI</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="outline" onClick={handleLogin}>Login</Button>
@@ -215,10 +215,10 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <Rocket className="h-6 w-6" />
-            <span className="text-xl font-bold">SaaS Generator AI</span>
+            <span className="text-xl font-bold">Idealyze</span>
           </div>
           <p className="text-gray-400">
-            © 2024 SaaS Generator AI. Todos os direitos reservados.
+            © 2024 Idealyze. Todos os direitos reservados.
           </p>
         </div>
       </footer>
