@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,23 +19,12 @@ const Register = () => {
 
   const planType = new URLSearchParams(location.search).get('plan') || 'freemium';
 
-  useEffect(() => {
-    // Verificar se já está logado
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        navigate('/generator');
-      }
-    };
-    checkAuth();
-  }, [navigate]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -55,12 +44,7 @@ const Register = () => {
         description: "Sua conta foi criada com sucesso.",
       });
 
-      // Se for plano pago, redirecionar para checkout
-      if (planType === 'pro' || planType === 'business') {
-        navigate(`/checkout?plan=${planType}`);
-      } else {
-        navigate('/generator');
-      }
+      navigate('/generator');
     } catch (error: any) {
       toast({
         title: "Erro no cadastro",

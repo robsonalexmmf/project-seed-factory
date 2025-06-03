@@ -20,97 +20,21 @@ const Login = () => {
     setLoading(true);
 
     try {
-      console.log('Tentando fazer login com:', email);
-      
-      const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password
       });
 
-      if (loginError) {
-        console.log('Erro no login:', loginError);
-        
-        // Se é o admin e falhou, criar diretamente
-        if (email === 'admin@admin.com' && password === '320809eu') {
-          console.log('Criando usuário admin...');
-          
-          // Tentar criar admin
-          const { data: signUpData } = await supabase.auth.signUp({
-            email: 'admin@admin.com',
-            password: '320809eu',
-            options: {
-              data: {
-                full_name: 'Administrator',
-                plan_type: 'admin'
-              }
-            }
-          });
-
-          if (signUpData.user) {
-            // Criar entrada na tabela users
-            await supabase
-              .from('users')
-              .upsert({
-                id: signUpData.user.id,
-                email: 'admin@admin.com',
-                full_name: 'Administrator',
-                plan_type: 'admin',
-                projects_generated: 0,
-                monthly_limit: -1,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-              }, {
-                onConflict: 'id'
-              });
-
-            toast({
-              title: "Admin criado!",
-              description: "Usuário admin foi criado. Faça login novamente.",
-            });
-            setLoading(false);
-            return;
-          }
-        }
-        
-        throw loginError;
+      if (error) {
+        throw error;
       }
 
-      // Login bem-sucedido
-      console.log('Login realizado com sucesso:', loginData);
-      
-      if (loginData.user) {
-        // Verificar se é admin
-        if (email === 'admin@admin.com' || loginData.user.user_metadata?.plan_type === 'admin') {
-          navigate('/admin');
-          toast({
-            title: "Login realizado com sucesso!",
-            description: "Bem-vindo ao painel administrativo.",
-          });
-          setLoading(false);
-          return;
-        }
+      toast({
+        title: "Login realizado com sucesso!",
+        description: "Bem-vindo de volta!",
+      });
 
-        // Para outros usuários, verificar na tabela users
-        const { data: userProfile, error: profileError } = await supabase
-          .from('users')
-          .select('plan_type')
-          .eq('id', loginData.user.id)
-          .single();
-
-        if (profileError) {
-          console.error('Erro ao buscar perfil do usuário:', profileError);
-          navigate('/generator');
-        } else if (userProfile?.plan_type === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/generator');
-        }
-
-        toast({
-          title: "Login realizado com sucesso!",
-          description: "Bem-vindo de volta!",
-        });
-      }
+      navigate('/generator');
     } catch (error: any) {
       console.error('Erro no login:', error);
       toast({
@@ -166,11 +90,6 @@ const Login = () => {
             <Link to="/register" className="text-sm text-blue-600 hover:underline">
               Não tem conta? Cadastre-se grátis
             </Link>
-          </div>
-          <div className="mt-2 text-center">
-            <p className="text-xs text-gray-500">
-              Admin: admin@admin.com / 320809eu
-            </p>
           </div>
         </CardContent>
       </Card>
