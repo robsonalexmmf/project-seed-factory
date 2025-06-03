@@ -1,4 +1,4 @@
-import { LucideIcon, Store, Heart, GraduationCap, Briefcase, Utensils, Car, Home, Calendar, BarChart, Gamepad2, DollarSign, Megaphone, MessageCircle, Monitor, Bot, Users, ShoppingCart, Stethoscope, BookOpen, Building, Pizza, Truck, MapPin, Clock, TrendingUp, Music, Zap, Shield, Camera, Palette, Headphones, Phone, Mail, Globe, Settings, Star, Award, Target, Lightbulb, Coffee, Plane, Gift, Lock, FileText, CreditCard, Smartphone, Laptop, Tablet, Watch, Speaker, Headset, Microphone, Video, Image, Film, Radio, Tv, Wifi, Bluetooth, Battery, Power, Cpu, HardDrive, Database, Cloud, Server, Code, Terminal, Bug, Wrench, Hammer, Scissors, Paintbrush, Brush, Pen, Pencil, Ruler, Calculator, Compass, Map, Navigation, Route, Location, Flag, Bell, Alarm, Timer, Stopwatch, Archive, Folder, File, Download, Upload, Send, Inbox, Outbox, Trash, Search, Filter, Sort, List, Grid, Layout, Sidebar, Menu, MoreHorizontal, MoreVertical, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, X, Check, Info, AlertTriangle, AlertCircle, HelpCircle, Eye, EyeOff, ThumbsUp, ThumbsDown, Share, Bookmark, Tag, Link, Paperclip, Clip, Copy, Cut, Paste, Undo, Redo, Repeat, Shuffle, SkipBack, SkipForward, Play, Pause, Stop, Record, FastForward, Rewind, Volume, Volume1, Volume2, VolumeX, Mute, Shirt, Diamond, Smile, Activity, Apple, Flower } from 'lucide-react';
+import { LucideIcon, Store, Heart, GraduationCap, Briefcase, Utensils, Car, Home, Calendar, BarChart, Gamepad2, DollarSign, Megaphone, MessageCircle, Monitor, Bot, Users, ShoppingCart, Stethoscope, BookOpen, Building, Pizza, Truck, MapPin, Clock, TrendingUp, Music, Zap, Shield, Camera, Palette, Headphones, Phone, Mail, Globe, Settings, Star, Award, Target, Lightbulb, Coffee, Plane, Gift, Lock, FileText, CreditCard, Smartphone, Laptop, Tablet, Watch, Speaker, Headset, Video, Image, Film, Radio, Tv, Wifi, Bluetooth, Battery, Power, Cpu, HardDrive, Database, Cloud, Server, Code, Terminal, Bug, Wrench, Hammer, Scissors, Paintbrush, Brush, Pen, Pencil, Ruler, Calculator, Compass, Map, Navigation, Route, Flag, Bell, Timer, Archive, Folder, File, Download, Upload, Send, Inbox, Outbox, Trash, Search, Filter, Sort, List, Grid, Layout, Sidebar, Menu, MoreHorizontal, MoreVertical, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, X, Check, Info, AlertTriangle, AlertCircle, HelpCircle, Eye, EyeOff, ThumbsUp, ThumbsDown, Share, Bookmark, Tag, Link, Paperclip, Copy, Undo, Redo, Repeat, Shuffle, SkipBack, SkipForward, Play, Pause, FastForward, Rewind, Volume, Volume1, Volume2, VolumeX, Shirt, Diamond, Smile, Activity, Apple, Flower } from 'lucide-react';
 
 export interface ProjectTemplate {
   id: string;
@@ -10,6 +10,28 @@ export interface ProjectTemplate {
   difficulty: 'Iniciante' | 'Intermediário' | 'Avançado';
   color: string;
 }
+
+export interface TemplateCategory {
+  id: string;
+  name: string;
+  icon: LucideIcon;
+}
+
+export const templateCategories: TemplateCategory[] = [
+  { id: 'all', name: 'Todos', icon: Grid },
+  { id: 'business', name: 'Negócios', icon: Briefcase },
+  { id: 'health', name: 'Saúde', icon: Heart },
+  { id: 'education', name: 'Educação', icon: GraduationCap },
+  { id: 'food', name: 'Alimentação', icon: Utensils },
+  { id: 'transport', name: 'Transporte', icon: Car },
+  { id: 'real-estate', name: 'Imóveis', icon: Home },
+  { id: 'productivity', name: 'Produtividade', icon: Target },
+  { id: 'analytics', name: 'Analytics', icon: BarChart },
+  { id: 'entertainment', name: 'Entretenimento', icon: Gamepad2 },
+  { id: 'finance', name: 'Finanças', icon: DollarSign },
+  { id: 'marketing', name: 'Marketing', icon: Megaphone },
+  { id: 'communication', name: 'Comunicação', icon: MessageCircle }
+];
 
 export const projectTemplates: ProjectTemplate[] = [
   // BUSINESS CATEGORY (expanding to 100+ templates)
@@ -855,4 +877,13 @@ export const getTemplatesByCategory = (category: string) => {
 
 export const getAllCategories = () => {
   return Array.from(new Set(projectTemplates.map(template => template.category)));
+};
+
+export const searchTemplates = (searchTerm: string) => {
+  const term = searchTerm.toLowerCase();
+  return projectTemplates.filter(template => 
+    template.name.toLowerCase().includes(term) ||
+    template.description.toLowerCase().includes(term) ||
+    template.features.some(feature => feature.toLowerCase().includes(term))
+  );
 };
