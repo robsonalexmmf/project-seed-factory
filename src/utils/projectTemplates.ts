@@ -1,4 +1,4 @@
-import { LucideIcon, MessageSquare, ShoppingCart, Users, Building, Stethoscope, GraduationCap, Utensils, Car, Home, Briefcase, Headphones, Bot, Phone, Calendar, CreditCard, FileText, BarChart, Globe, Shield, Zap, Camera, Music, Video, Gamepad2, Gift, Heart, Truck, Wrench, FlaskConical, BookOpen, PlaneTakeoff, MapPin, Coffee, Dumbbell } from 'lucide-react';
+import { LucideIcon, MessageSquare, ShoppingCart, Users, Building, Stethoscope, GraduationCap, Utensils, Car, Home, Briefcase, Headphones, Bot, Phone, Calendar, CreditCard, FileText, BarChart, Globe, Shield, Zap, Camera, Music, Video, Gamepad2, Gift, Heart, Truck, Wrench, FlaskConical, BookOpen, PlaneTakeoff, MapPin, Coffee, Dumbbell, Package, Box, Award, Recycle, TrendingUp, Clock, Star, Sprout } from 'lucide-react';
 
 export interface ProjectTemplate {
   id: string;
