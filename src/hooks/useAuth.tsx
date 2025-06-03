@@ -68,7 +68,13 @@ export const useAuth = () => {
         return;
       }
 
-      setUserProfile(data);
+      // Cast the plan_type to the correct union type
+      const userProfile: UserProfile = {
+        ...data,
+        plan_type: data.plan_type as 'freemium' | 'pro' | 'business' | 'admin'
+      };
+
+      setUserProfile(userProfile);
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
