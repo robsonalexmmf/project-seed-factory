@@ -187,19 +187,51 @@ const AdminDashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Button className="w-full justify-start" variant="outline">
+              <Button 
+                className="w-full justify-start" 
+                variant="outline"
+                onClick={() => navigate('/user-management')}
+              >
                 <Users className="w-4 h-4 mr-2" />
                 Gerenciar Usuários ({stats.totalUsers})
               </Button>
-              <Button className="w-full justify-start" variant="outline">
+              <Button 
+                className="w-full justify-start" 
+                variant="outline"
+                onClick={() => navigate('/reports')}
+              >
                 <BarChart className="w-4 h-4 mr-2" />
                 Relatórios Detalhados
               </Button>
-              <Button className="w-full justify-start" variant="outline">
+              <Button 
+                className="w-full justify-start" 
+                variant="outline"
+                onClick={() => {
+                  const users = JSON.parse(localStorage.getItem('users') || '[]');
+                  const csvContent = [
+                    'Email,Nome,Plano,Projetos Gerados,Data de Cadastro',
+                    ...users.map((user: any) => 
+                      `${user.email},${user.full_name || ''},${user.plan_type},${user.projects_generated || 0},${user.created_at}`
+                    )
+                  ].join('\n');
+                  
+                  const blob = new Blob([csvContent], { type: 'text/csv' });
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `usuarios_${new Date().toISOString().split('T')[0]}.csv`;
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                }}
+              >
                 <Download className="w-4 h-4 mr-2" />
                 Exportar Dados
               </Button>
-              <Button className="w-full justify-start" variant="outline">
+              <Button 
+                className="w-full justify-start" 
+                variant="outline"
+                onClick={() => window.open('https://dashboard.stripe.com', '_blank')}
+              >
                 <Shield className="w-4 h-4 mr-2" />
                 Configurar Pagamentos
               </Button>

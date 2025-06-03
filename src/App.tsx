@@ -12,6 +12,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Checkout from "./pages/Checkout";
 import Subscription from "./pages/Subscription";
+import UserManagement from "./pages/UserManagement";
+import Reports from "./pages/Reports";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +31,8 @@ const App = () => (
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/generator" element={<Index />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/user-management" element={<UserManagement />} />
+          <Route path="/reports" element={<Reports />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
