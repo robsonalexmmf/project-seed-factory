@@ -30,44 +30,29 @@ export const makeUserAdmin = async (email: string) => {
       });
       return data[0];
     } else {
-      // Se o usuário não existe na tabela users, verificar se existe no auth
-      const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers();
-      
-      if (authError) {
-        console.error('Erro ao buscar usuários do auth:', authError);
-        throw new Error('Usuário não encontrado no sistema');
+      // Se o usuário não existe na tabela users, criar entrada diretamente
+      const { data: newUser, error: createError } = await supabase
+        .from('users')
+        .insert({
+          email: email,
+          full_name: '',
+          plan_type: 'admin',
+          projects_generated: 0,
+          monthly_limit: -1
+        })
+        .select();
+
+      if (createError) {
+        console.error('Erro ao criar usuário admin:', createError);
+        throw createError;
       }
 
-      const authUser = authUsers.users.find(u => u.email === email);
-      
-      if (authUser) {
-        // Criar entrada na tabela users
-        const { data: newUser, error: createError } = await supabase
-          .from('users')
-          .insert({
-            id: authUser.id,
-            email: email,
-            full_name: authUser.user_metadata?.full_name || '',
-            plan_type: 'admin',
-            projects_generated: 0,
-            monthly_limit: -1
-          })
-          .select();
-
-        if (createError) {
-          console.error('Erro ao criar usuário admin:', createError);
-          throw createError;
-        }
-
-        console.log('Usuário criado como admin:', newUser[0]);
-        toast({
-          title: "Usuário promovido a admin",
-          description: `${email} agora é um administrador do sistema.`,
-        });
-        return newUser[0];
-      } else {
-        throw new Error('Usuário não encontrado no sistema');
-      }
+      console.log('Usuário criado como admin:', newUser[0]);
+      toast({
+        title: "Usuário promovido a admin",
+        description: `${email} agora é um administrador do sistema.`,
+      });
+      return newUser[0];
     }
   } catch (error) {
     console.error('Erro ao tornar usuário admin:', error);
