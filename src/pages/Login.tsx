@@ -15,114 +15,105 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const createAdminUser = async () => {
-    try {
-      // Tentar criar o usuário admin no Supabase Auth
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-        email: 'admin@admin.com',
-        password: '320809eu',
-        options: {
-          data: {
-            full_name: 'Administrator',
-            plan_type: 'admin'
-          },
-          emailRedirectTo: undefined // Não precisa de confirmação de email para admin
-        }
-      });
-
-      if (signUpError && !signUpError.message.includes('already registered')) {
-        throw signUpError;
-      }
-
-      // Se o usuário foi criado ou já existe, criar/atualizar a entrada na tabela users
-      if (signUpData.user) {
-        const { error: upsertError } = await supabase
-          .from('users')
-          .upsert({
-            id: signUpData.user.id,
-            email: 'admin@admin.com',
-            full_name: 'Administrator',
-            plan_type: 'admin',
-            projects_generated: 0,
-            monthly_limit: -1, // Ilimitado para admin
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }, {
-            onConflict: 'id'
-          });
-
-        if (upsertError) {
-          console.error('Erro ao criar entrada na tabela users:', upsertError);
-        }
-      }
-
-      return true;
-    } catch (error) {
-      console.error('Erro ao criar usuário admin:', error);
-      return false;
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // Verificar se é admin
-      if (email === 'admin@admin.com' && password === '320809eu') {
-        // Tentar login primeiro
-        const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
+      // Tentar login primeiro
+      const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
-        if (loginError) {
-          // Se erro de login, tentar criar o usuário admin
-          console.log('Usuário admin não encontrado, criando...');
-          const adminCreated = await createAdminUser();
+      if (loginError) {
+        // Se é o admin e falhou o login, pode ser que não existe ainda
+        if (email === 'admin@admin.com' && password === '320809eu') {
+          console.log('Tentando criar usuário admin...');
           
-          if (adminCreated) {
-            // Tentar login novamente após criar
+          // Tentar criar o usuário admin
+          const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+            email: 'admin@admin.com',
+            password: '320809eu',
+            options: {
+              data: {
+                full_name: 'Administrator',
+                plan_type: 'admin'
+              },
+              emailRedirectTo: undefined // Não precisamos de confirmação para admin
+            }
+          });
+
+          if (signUpError) {
+            console.error('Erro ao criar usuário admin:', signUpError);
+            throw new Error('Não foi possível criar o usuário administrador');
+          }
+
+          // Se criou com sucesso, tentar login novamente
+          if (signUpData.user) {
             const { data: retryLoginData, error: retryLoginError } = await supabase.auth.signInWithPassword({
               email,
               password
             });
 
             if (retryLoginError) {
-              throw retryLoginError;
+              console.error('Erro no segundo login:', retryLoginError);
+              throw new Error('Usuário admin criado mas não foi possível fazer login. Tente novamente.');
             }
-          } else {
-            throw new Error('Erro ao criar usuário administrador');
+
+            // Criar entrada na tabela users manualmente
+            const { error: upsertError } = await supabase
+              .from('users')
+              .upsert({
+                id: signUpData.user.id,
+                email: 'admin@admin.com',
+                full_name: 'Administrator',
+                plan_type: 'admin',
+                projects_generated: 0,
+                monthly_limit: -1,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              }, {
+                onConflict: 'id'
+              });
+
+            if (upsertError) {
+              console.error('Erro ao criar entrada na tabela users:', upsertError);
+            }
+
+            navigate('/admin');
+            toast({
+              title: "Admin criado e logado com sucesso!",
+              description: "Bem-vindo ao painel administrativo.",
+            });
+            return;
           }
         }
+        
+        throw loginError;
+      }
 
-        // Redirecionar para dashboard admin
-        navigate('/admin');
-        toast({
-          title: "Login realizado com sucesso!",
-          description: "Bem-vindo ao painel administrativo.",
-        });
-      } else {
-        // Login normal para outros usuários
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
-
-        if (error) {
-          throw error;
+      // Login bem-sucedido - verificar tipo de usuário
+      if (loginData.user) {
+        // Se for admin (verificar pelos metadados primeiro)
+        if (email === 'admin@admin.com' || loginData.user.user_metadata?.plan_type === 'admin') {
+          navigate('/admin');
+          toast({
+            title: "Login realizado com sucesso!",
+            description: "Bem-vindo ao painel administrativo.",
+          });
+          return;
         }
 
-        // Verificar o tipo de usuário após login bem-sucedido
+        // Para outros usuários, verificar na tabela users
         const { data: userProfile, error: profileError } = await supabase
           .from('users')
           .select('plan_type')
-          .eq('id', data.user.id)
+          .eq('id', loginData.user.id)
           .single();
 
         if (profileError) {
           console.error('Erro ao buscar perfil do usuário:', profileError);
-          // Redirecionar para generator por padrão se houver erro
           navigate('/generator');
         } else if (userProfile?.plan_type === 'admin') {
           navigate('/admin');
