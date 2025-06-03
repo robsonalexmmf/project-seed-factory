@@ -23,6 +23,14 @@ const Checkout = () => {
     }
   }, [planType, navigate]);
 
+  // Redirect to login if not authenticated after loading is complete
+  useEffect(() => {
+    if (!authLoading && !user) {
+      console.log('User not authenticated, redirecting to login');
+      navigate('/login');
+    }
+  }, [user, authLoading, navigate]);
+
   const planDetails = {
     pro: {
       name: 'Pro',
@@ -110,10 +118,32 @@ const Checkout = () => {
     setLoading(false);
   };
 
+  // Show loading while authentication is being checked
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">Carregando...</div>
+        <div className="text-center">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <Rocket className="h-8 w-8 text-blue-600" />
+            <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
+          </div>
+          <div className="text-center">Verificando autenticação...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // If user is not authenticated, this will be handled by the useEffect above
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <Rocket className="h-8 w-8 text-blue-600" />
+            <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
+          </div>
+          <div className="text-center">Redirecionando para login...</div>
+        </div>
       </div>
     );
   }
@@ -204,9 +234,9 @@ const Checkout = () => {
                 {loading ? 'Processando...' : `Pagar R$ ${currentPlan?.price.toFixed(2)}`}
               </Button>
 
-              {!user && (
-                <div className="text-center text-sm text-red-600">
-                  Você precisa estar logado para continuar
+              {user && (
+                <div className="text-center text-sm text-green-600">
+                  Logado como: {user.email}
                 </div>
               )}
 
