@@ -7,62 +7,19 @@ import { Badge } from '@/components/ui/badge';
 import { Check, CreditCard, ArrowLeft, Rocket } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const { user, userProfile, loading: authLoading } = useAuth();
 
   const planType = new URLSearchParams(location.search).get('plan');
 
   useEffect(() => {
-    const checkAuth = async () => {
-      // Verificar sessão do Supabase primeiro
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
-      if (error) {
-        console.error('Erro ao verificar sessão:', error);
-      }
-
-      if (session && session.user) {
-        setUser(session.user);
-        console.log('Usuário autenticado via Supabase:', session.user);
-      } else {
-        // Verificar localStorage para usuários freemium
-        const userData = localStorage.getItem('user');
-        if (userData) {
-          const parsedUser = JSON.parse(userData);
-          setUser(parsedUser);
-          console.log('Usuário encontrado no localStorage:', parsedUser);
-          
-          // Se não é freemium e não é admin, precisa fazer login no Supabase
-          if (parsedUser.plan_type !== 'freemium' && parsedUser.email !== 'admin@admin.com') {
-            toast({
-              title: "Sessão expirada",
-              description: "Por favor, faça login novamente para continuar.",
-              variant: "destructive"
-            });
-            navigate('/login');
-            return;
-          }
-        } else {
-          // Nenhum usuário encontrado, redirecionar para registro
-          toast({
-            title: "Login necessário",
-            description: "Por favor, faça login para continuar com a assinatura.",
-            variant: "destructive"
-          });
-          navigate('/register');
-          return;
-        }
-      }
-    };
-
     if (!planType) {
       navigate('/subscription');
-    } else {
-      checkAuth();
     }
   }, [planType, navigate]);
 
@@ -84,7 +41,7 @@ const Checkout = () => {
   const handlePayment = async () => {
     if (!user) {
       toast({
-        title: "Erro de autenticação",
+        title: "Login necessário",
         description: "Você precisa estar logado para fazer o checkout.",
         variant: "destructive"
       });
@@ -98,25 +55,14 @@ const Checkout = () => {
       console.log('Iniciando processo de checkout para plano:', planType);
       console.log('Usuário:', user);
 
-      // Para usuários freemium do localStorage, criar conta no Supabase primeiro
-      if (user.plan_type === 'freemium' && user.email !== 'admin@admin.com') {
-        toast({
-          title: "Criando conta",
-          description: "Redirecionando para criar sua conta...",
-        });
-        navigate(`/register?plan=${planType}&email=${user.email}`);
-        return;
-      }
-
-      // Verificar sessão do Supabase para usuários autenticados
-      const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError) {
         console.error('Erro ao obter sessão:', sessionError);
         throw new Error('Erro ao verificar sessão de autenticação');
       }
 
-      if (!currentSession || !currentSession.access_token) {
+      if (!session || !session.access_token) {
         console.error('Nenhuma sessão ativa encontrada');
         toast({
           title: "Sessão expirada",
@@ -132,7 +78,7 @@ const Checkout = () => {
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: { planType },
         headers: {
-          Authorization: `Bearer ${currentSession.access_token}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
       });
 
@@ -163,6 +109,14 @@ const Checkout = () => {
 
     setLoading(false);
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">Carregando...</div>
+      </div>
+    );
+  }
 
   if (!currentPlan) {
     return (
@@ -245,10 +199,16 @@ const Checkout = () => {
                 onClick={handlePayment} 
                 className="w-full" 
                 size="lg"
-                disabled={loading}
+                disabled={loading || !user}
               >
                 {loading ? 'Processando...' : `Pagar R$ ${currentPlan?.price.toFixed(2)}`}
               </Button>
+
+              {!user && (
+                <div className="text-center text-sm text-red-600">
+                  Você precisa estar logado para continuar
+                </div>
+              )}
 
               <div className="text-xs text-gray-500 text-center">
                 Pagamento seguro processado pelo Stripe. Cancele a qualquer momento.

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { Rocket } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -16,41 +17,38 @@ const Register = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Pegar o plano da URL se vier do botão de assinatura
   const planType = new URLSearchParams(location.search).get('plan') || 'freemium';
+
+  useEffect(() => {
+    // Verificar se já está logado
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate('/generator');
+      }
+    };
+    checkAuth();
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      
-      // Verificar se email já existe
-      if (users.find((u: any) => u.email === email)) {
-        toast({
-          title: "Erro no cadastro",
-          description: "Este email já está cadastrado.",
-          variant: "destructive"
-        });
-        setLoading(false);
-        return;
-      }
-
-      const newUser = {
-        id: Date.now().toString(),
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        full_name: fullName,
-        plan_type: planType,
-        projects_generated: 0,
-        monthly_limit: planType === 'freemium' ? 2 : planType === 'pro' ? 10 : -1,
-        created_at: new Date().toISOString()
-      };
+        options: {
+          data: {
+            full_name: fullName,
+            plan_type: planType
+          }
+        }
+      });
 
-      users.push(newUser);
-      localStorage.setItem('users', JSON.stringify(users));
-      localStorage.setItem('user', JSON.stringify(newUser));
+      if (error) {
+        throw error;
+      }
 
       toast({
         title: "Cadastro realizado!",
@@ -63,10 +61,10 @@ const Register = () => {
       } else {
         navigate('/generator');
       }
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Erro no cadastro",
-        description: "Erro interno do servidor.",
+        description: error.message || "Erro ao criar conta.",
         variant: "destructive"
       });
     }

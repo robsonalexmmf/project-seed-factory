@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { Rocket } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,43 +15,84 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Verificar se já está logado
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate('/generator');
+      }
+    };
+    checkAuth();
+  }, [navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Verificar se é admin
-    if (email === 'admin@admin.com' && password === '320809eu') {
-      localStorage.setItem('user', JSON.stringify({
-        id: 'admin',
-        email: 'admin@admin.com',
-        plan_type: 'admin',
-        projects_generated: 0,
-        monthly_limit: -1
-      }));
-      navigate('/admin');
-      toast({
-        title: "Login realizado com sucesso!",
-        description: "Bem-vindo ao painel administrativo.",
-      });
-      setLoading(false);
-      return;
-    }
+    try {
+      // Verificar se é admin
+      if (email === 'admin@admin.com' && password === '320809eu') {
+        // Login admin via Supabase
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
 
-    // Simular login de usuário normal
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find((u: any) => u.email === email && u.password === password);
+        if (error) {
+          // Se admin não existe no Supabase, criar conta
+          const { error: signUpError } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: {
+                full_name: 'Administrator',
+                plan_type: 'admin'
+              }
+            }
+          });
 
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
-      navigate('/generator');
-      toast({
-        title: "Login realizado com sucesso!",
-        description: "Bem-vindo de volta!",
-      });
-    } else {
+          if (signUpError) {
+            throw signUpError;
+          }
+
+          // Tentar login novamente
+          const { error: loginError } = await supabase.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (loginError) {
+            throw loginError;
+          }
+        }
+
+        navigate('/admin');
+        toast({
+          title: "Login realizado com sucesso!",
+          description: "Bem-vindo ao painel administrativo.",
+        });
+      } else {
+        // Login normal
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        navigate('/generator');
+        toast({
+          title: "Login realizado com sucesso!",
+          description: "Bem-vindo de volta!",
+        });
+      }
+    } catch (error: any) {
       toast({
         title: "Erro no login",
-        description: "Email ou senha incorretos.",
+        description: error.message || "Email ou senha incorretos.",
         variant: "destructive"
       });
     }

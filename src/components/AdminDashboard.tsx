@@ -14,48 +14,118 @@ import {
   Shield
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+
+interface AdminStats {
+  totalUsers: number;
+  activeSubscriptions: number;
+  monthlyRevenue: number;
+  projectsGenerated: number;
+}
+
+interface RecentUser {
+  id: string;
+  email: string;
+  full_name?: string;
+  plan_type: string;
+  created_at: string;
+}
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]);
-  const [stats, setStats] = useState({
+  const { userProfile, loading: authLoading } = useAuth();
+  const [users, setUsers] = useState<RecentUser[]>([]);
+  const [stats, setStats] = useState<AdminStats>({
     totalUsers: 0,
     activeSubscriptions: 0,
     monthlyRevenue: 0,
     projectsGenerated: 0
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Verificar se é admin
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (!user.id || user.plan_type !== 'admin') {
+    if (authLoading) return;
+
+    if (!userProfile || userProfile.plan_type !== 'admin') {
       navigate('/login');
       return;
     }
 
-    // Carregar dados dos usuários
-    const allUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    setUsers(allUsers);
+    loadAdminData();
+  }, [userProfile, authLoading, navigate]);
 
-    // Calcular estatísticas
-    const totalUsers = allUsers.length;
-    const activeSubscriptions = allUsers.filter((u: any) => u.plan_type !== 'freemium').length;
-    const monthlyRevenue = allUsers.reduce((total: number, u: any) => {
-      if (u.plan_type === 'pro') return total + 29.90;
-      if (u.plan_type === 'business') return total + 80.00;
-      return total;
-    }, 0);
-    const projectsGenerated = allUsers.reduce((total: number, u: any) => total + (u.projects_generated || 0), 0);
+  const loadAdminData = async () => {
+    try {
+      // Carregar todos os usuários
+      const { data: allUsers, error: usersError } = await supabase
+        .from('users')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    setStats({
-      totalUsers,
-      activeSubscriptions,
-      monthlyRevenue,
-      projectsGenerated
-    });
-  }, [navigate]);
+      if (usersError) throw usersError;
 
-  const recentUsers = users.slice(-5).reverse();
+      setUsers(allUsers || []);
+
+      // Calcular estatísticas
+      const totalUsers = allUsers?.length || 0;
+      const activeSubscriptions = allUsers?.filter(u => u.plan_type !== 'freemium').length || 0;
+      const monthlyRevenue = allUsers?.reduce((total, u) => {
+        if (u.plan_type === 'pro') return total + 29.90;
+        if (u.plan_type === 'business') return total + 79.90;
+        return total;
+      }, 0) || 0;
+      const projectsGenerated = allUsers?.reduce((total, u) => total + (u.projects_generated || 0), 0) || 0;
+
+      setStats({
+        totalUsers,
+        activeSubscriptions,
+        monthlyRevenue,
+        projectsGenerated
+      });
+    } catch (error) {
+      console.error('Error loading admin data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const exportData = async () => {
+    try {
+      const { data: users, error } = await supabase
+        .from('users')
+        .select('*');
+
+      if (error) throw error;
+
+      const csvContent = [
+        'Email,Nome,Plano,Projetos Gerados,Data de Cadastro',
+        ...(users || []).map((user: any) => 
+          `${user.email},${user.full_name || ''},${user.plan_type},${user.projects_generated || 0},${user.created_at}`
+        )
+      ].join('\n');
+      
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `usuarios_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error exporting data:', error);
+    }
+  };
+
+  const recentUsers = users.slice(0, 5);
+
+  if (authLoading || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">Carregando...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -66,11 +136,6 @@ const AdminDashboard = () => {
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Dashboard Admin</h1>
               <p className="text-gray-600">Gerencie usuários e monitore a plataforma</p>
-              <div className="mt-2">
-                <Badge variant="outline" className="text-xs">
-                  Credenciais Admin: admin@admin.com / 320809eu
-                </Badge>
-              </div>
             </div>
             <div className="flex space-x-3">
               <Button variant="outline" onClick={() => navigate('/generator')}>
@@ -153,7 +218,7 @@ const AdminDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentUsers.map((user: any) => (
+                {recentUsers.map((user) => (
                   <div key={user.id} className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
                       <div className="font-medium">{user.full_name || user.email}</div>
@@ -206,23 +271,7 @@ const AdminDashboard = () => {
               <Button 
                 className="w-full justify-start" 
                 variant="outline"
-                onClick={() => {
-                  const users = JSON.parse(localStorage.getItem('users') || '[]');
-                  const csvContent = [
-                    'Email,Nome,Plano,Projetos Gerados,Data de Cadastro',
-                    ...users.map((user: any) => 
-                      `${user.email},${user.full_name || ''},${user.plan_type},${user.projects_generated || 0},${user.created_at}`
-                    )
-                  ].join('\n');
-                  
-                  const blob = new Blob([csvContent], { type: 'text/csv' });
-                  const url = window.URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = `usuarios_${new Date().toISOString().split('T')[0]}.csv`;
-                  a.click();
-                  window.URL.revokeObjectURL(url);
-                }}
+                onClick={exportData}
               >
                 <Download className="w-4 h-4 mr-2" />
                 Exportar Dados
@@ -258,23 +307,23 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center p-6 border rounded-lg">
                 <div className="text-3xl font-bold text-gray-600 mb-2">
-                  {users.filter((u: any) => u.plan_type === 'freemium').length}
+                  {users.filter(u => u.plan_type === 'freemium').length}
                 </div>
                 <div className="text-sm font-medium">Freemium</div>
                 <div className="text-xs text-gray-500">Plano gratuito</div>
               </div>
               <div className="text-center p-6 border rounded-lg">
                 <div className="text-3xl font-bold text-blue-600 mb-2">
-                  {users.filter((u: any) => u.plan_type === 'pro').length}
+                  {users.filter(u => u.plan_type === 'pro').length}
                 </div>
                 <div className="text-sm font-medium">Pro (R$ 29,90)</div>
                 <div className="text-xs text-gray-500">10 projetos/mês</div>
               </div>
               <div className="text-center p-6 border rounded-lg">
                 <div className="text-3xl font-bold text-purple-600 mb-2">
-                  {users.filter((u: any) => u.plan_type === 'business').length}
+                  {users.filter(u => u.plan_type === 'business').length}
                 </div>
-                <div className="text-sm font-medium">Business (R$ 80,00)</div>
+                <div className="text-sm font-medium">Business (R$ 79,90)</div>
                 <div className="text-xs text-gray-500">Projetos ilimitados</div>
               </div>
             </div>

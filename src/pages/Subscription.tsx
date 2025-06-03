@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,42 +6,32 @@ import { Badge } from '@/components/ui/badge';
 import { Check, Crown, Star, Zap, RefreshCw, Settings, Rocket } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 const Subscription = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
+  const { user, userProfile, loading: authLoading } = useAuth();
   const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      // Verificar sessão do Supabase primeiro
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
-      if (session && session.user) {
-        setUser(session.user);
-        checkSubscription(session.user);
+    const initializeSubscription = async () => {
+      if (authLoading) return;
+
+      if (user) {
+        await checkSubscription();
       } else {
-        // Verificar localStorage para usuários freemium
-        const userData = localStorage.getItem('user');
-        if (userData) {
-          const parsedUser = JSON.parse(userData);
-          setUser(parsedUser);
-          // Para usuários freemium do localStorage, não verificar assinatura Stripe
-          if (parsedUser.plan_type === 'freemium') {
-            setSubscriptionData({ subscribed: false, subscription_tier: null });
-          }
-        }
+        setSubscriptionData({ subscribed: false, subscription_tier: null });
         setLoading(false);
       }
     };
 
-    checkAuth();
-  }, []);
+    initializeSubscription();
+  }, [user, authLoading]);
 
-  const checkSubscription = async (userData?: any) => {
-    if (!userData && !user) return;
+  const checkSubscription = async () => {
+    if (!user) return;
     
     setRefreshing(true);
     try {
@@ -121,19 +110,11 @@ const Subscription = () => {
   ];
 
   const handlePlanSelect = (planId: string) => {
-    // Se o usuário não está logado de forma alguma, redirecionar para registro
     if (!user) {
       navigate(`/register?plan=${planId}`);
       return;
     }
 
-    // Se é usuário freemium do localStorage, redirecionar para checkout
-    if (user.plan_type === 'freemium' || user.email === 'admin@admin.com') {
-      navigate(`/checkout?plan=${planId}`);
-      return;
-    }
-
-    // Se tem sessão Supabase ativa, ir para checkout
     navigate(`/checkout?plan=${planId}`);
   };
 
@@ -141,7 +122,7 @@ const Subscription = () => {
     return subscriptionData?.subscribed && subscriptionData?.subscription_tier === planId;
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 flex items-center justify-center">
         <div className="text-center">
@@ -173,7 +154,7 @@ const Subscription = () => {
           </p>
 
           {/* Status da Assinatura */}
-          {user && subscriptionData && (
+          {user && userProfile && subscriptionData && (
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 mb-6">
               <div className="flex items-center justify-center space-x-4 text-white">
                 <div className="text-center">
@@ -185,7 +166,7 @@ const Subscription = () => {
                       </span>
                     ) : (
                       <span className="text-yellow-300">
-                        {user.plan_type === 'freemium' ? 'Plano Freemium' : 'Sem assinatura ativa'}
+                        {userProfile.plan_type === 'freemium' ? 'Plano Freemium' : 'Sem assinatura ativa'}
                       </span>
                     )}
                   </div>
@@ -196,8 +177,7 @@ const Subscription = () => {
                   )}
                 </div>
                 <div className="flex gap-2">
-                  {/* Só mostrar botão de atualizar para usuários com sessão Supabase */}
-                  {user.email !== 'admin@admin.com' && user.plan_type !== 'freemium' && (
+                  {user && (
                     <Button
                       onClick={() => checkSubscription()}
                       disabled={refreshing}

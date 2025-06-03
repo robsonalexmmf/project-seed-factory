@@ -8,67 +8,132 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ArrowLeft, Search, UserCheck, UserX, Crown, Users } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+
+interface User {
+  id: string;
+  email: string;
+  full_name?: string;
+  plan_type: string;
+  projects_generated: number;
+  monthly_limit: number;
+  created_at: string;
+}
 
 const UserManagement = () => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]);
+  const { userProfile, loading: authLoading } = useAuth();
+  const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Verificar se é admin
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (!user.id || user.plan_type !== 'admin') {
+    if (authLoading) return;
+
+    if (!userProfile || userProfile.plan_type !== 'admin') {
       navigate('/login');
       return;
     }
 
-    // Carregar usuários
-    const allUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    setUsers(allUsers);
-    setFilteredUsers(allUsers);
-  }, [navigate]);
+    loadUsers();
+  }, [userProfile, authLoading, navigate]);
 
   useEffect(() => {
-    const filtered = users.filter((user: any) =>
+    const filtered = users.filter((user) =>
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (user.full_name && user.full_name.toLowerCase().includes(searchTerm.toLowerCase()))
     );
     setFilteredUsers(filtered);
   }, [searchTerm, users]);
 
-  const updateUserPlan = (userId: string, newPlan: string) => {
-    const updatedUsers = users.map((user: any) => {
-      if (user.id === userId) {
-        const updatedUser = { ...user, plan_type: newPlan };
-        if (newPlan === 'freemium') updatedUser.monthly_limit = 2;
-        if (newPlan === 'pro') updatedUser.monthly_limit = 10;
-        if (newPlan === 'business') updatedUser.monthly_limit = -1;
-        return updatedUser;
-      }
-      return user;
-    });
+  const loadUsers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    setUsers(updatedUsers);
-    setFilteredUsers(updatedUsers);
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
-    
-    toast({
-      title: "Plano atualizado",
-      description: `Usuário alterado para plano ${newPlan}`,
-    });
+      if (error) throw error;
+
+      setUsers(data || []);
+      setFilteredUsers(data || []);
+    } catch (error) {
+      console.error('Error loading users:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao carregar usuários",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const deleteUser = (userId: string) => {
-    const updatedUsers = users.filter((user: any) => user.id !== userId);
-    setUsers(updatedUsers);
-    setFilteredUsers(updatedUsers);
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
-    
-    toast({
-      title: "Usuário removido",
-      description: "Usuário foi removido do sistema",
-    });
+  const updateUserPlan = async (userId: string, newPlan: string) => {
+    try {
+      const monthlyLimit = newPlan === 'freemium' ? 2 : newPlan === 'pro' ? 10 : -1;
+
+      const { error } = await supabase
+        .from('users')
+        .update({ 
+          plan_type: newPlan,
+          monthly_limit: monthlyLimit,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      // Atualizar estado local
+      const updatedUsers = users.map(user => 
+        user.id === userId 
+          ? { ...user, plan_type: newPlan, monthly_limit: monthlyLimit }
+          : user
+      );
+      setUsers(updatedUsers);
+      setFilteredUsers(updatedUsers);
+
+      toast({
+        title: "Plano atualizado",
+        description: `Usuário alterado para plano ${newPlan}`,
+      });
+    } catch (error) {
+      console.error('Error updating user plan:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao atualizar plano do usuário",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const deleteUser = async (userId: string) => {
+    try {
+      const { error } = await supabase
+        .from('users')
+        .delete()
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      const updatedUsers = users.filter(user => user.id !== userId);
+      setUsers(updatedUsers);
+      setFilteredUsers(updatedUsers);
+
+      toast({
+        title: "Usuário removido",
+        description: "Usuário foi removido do sistema",
+      });
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao remover usuário",
+        variant: "destructive"
+      });
+    }
   };
 
   const getPlanColor = (plan: string) => {
@@ -78,6 +143,14 @@ const UserManagement = () => {
       default: return 'outline';
     }
   };
+
+  if (authLoading || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">Carregando...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -130,7 +203,7 @@ const UserManagement = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredUsers.map((user: any) => (
+                {filteredUsers.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell>
                       <div>
