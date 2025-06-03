@@ -1,10 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, CreditCard } from 'lucide-react';
+import { Check, CreditCard, ArrowLeft } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const Checkout = () => {
   const location = useLocation();
@@ -40,32 +42,33 @@ const Checkout = () => {
     setLoading(true);
 
     try {
-      // Simular processamento de pagamento
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      // Atualizar usuário com novo plano
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const userIndex = users.findIndex((u: any) => u.id === user.id);
+      console.log('Iniciando processo de checkout para plano:', planType);
       
-      if (userIndex !== -1) {
-        users[userIndex].plan_type = planType;
-        users[userIndex].monthly_limit = planType === 'pro' ? 10 : -1;
-        users[userIndex].subscription_active = true;
-        users[userIndex].subscription_date = new Date().toISOString();
-        
-        localStorage.setItem('users', JSON.stringify(users));
-        localStorage.setItem('user', JSON.stringify(users[userIndex]));
-      }
-
-      toast({
-        title: "Pagamento aprovado!",
-        description: `Bem-vindo ao plano ${currentPlan?.name}! Sua assinatura está ativa.`,
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { planType }
       });
 
-      navigate('/generator');
+      if (error) {
+        console.error('Erro no checkout:', error);
+        throw new Error(error.message);
+      }
+
+      if (data?.url) {
+        console.log('Redirecionando para Stripe checkout:', data.url);
+        // Abre o checkout do Stripe em uma nova aba
+        window.open(data.url, '_blank');
+        
+        toast({
+          title: "Redirecionando para pagamento",
+          description: "Você será redirecionado para o Stripe para completar o pagamento.",
+        });
+      } else {
+        throw new Error('URL de checkout não foi retornada');
+      }
     } catch (error) {
+      console.error('Erro no processo de checkout:', error);
       toast({
-        title: "Erro no pagamento",
+        title: "Erro no checkout",
         description: "Tente novamente ou entre em contato com o suporte.",
         variant: "destructive"
       });
@@ -75,7 +78,17 @@ const Checkout = () => {
   };
 
   if (!currentPlan) {
-    return <div>Plano não encontrado</div>;
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Plano não encontrado</h2>
+          <Button onClick={() => navigate('/subscription')}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar para planos
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -122,41 +135,17 @@ const Checkout = () => {
           <Card>
             <CardHeader>
               <CardTitle>Método de Pagamento</CardTitle>
-              <CardDescription>Escolha como deseja pagar</CardDescription>
+              <CardDescription>Pagamento seguro via Stripe</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                <label className="flex items-center p-4 border rounded-lg cursor-pointer">
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="stripe"
-                    checked={paymentMethod === 'stripe'}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="mr-3"
-                  />
-                  <CreditCard className="w-5 h-5 mr-3" />
+                <div className="flex items-center p-4 border rounded-lg bg-blue-50 border-blue-200">
+                  <CreditCard className="w-5 h-5 mr-3 text-blue-600" />
                   <div>
-                    <div className="font-medium">Cartão de Crédito</div>
-                    <div className="text-sm text-gray-500">Via Stripe - Seguro e confiável</div>
+                    <div className="font-medium text-blue-900">Stripe Checkout</div>
+                    <div className="text-sm text-blue-700">Cartão de crédito, PIX, boleto</div>
                   </div>
-                </label>
-                
-                <label className="flex items-center p-4 border rounded-lg cursor-pointer">
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="mercadopago"
-                    checked={paymentMethod === 'mercadopago'}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="mr-3"
-                  />
-                  <CreditCard className="w-5 h-5 mr-3" />
-                  <div>
-                    <div className="font-medium">Mercado Pago</div>
-                    <div className="text-sm text-gray-500">PIX, Cartão, Boleto</div>
-                  </div>
-                </label>
+                </div>
               </div>
 
               <Button 
@@ -169,8 +158,17 @@ const Checkout = () => {
               </Button>
 
               <div className="text-xs text-gray-500 text-center">
-                Pagamento seguro. Cancele a qualquer momento.
+                Pagamento seguro processado pelo Stripe. Cancele a qualquer momento.
               </div>
+
+              <Button 
+                variant="outline"
+                onClick={() => navigate('/subscription')}
+                className="w-full"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Voltar para planos
+              </Button>
             </CardContent>
           </Card>
         </div>

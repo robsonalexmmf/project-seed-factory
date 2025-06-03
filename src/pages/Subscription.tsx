@@ -1,13 +1,73 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, Crown, Star, Zap } from 'lucide-react';
+import { Check, Crown, Star, Zap, RefreshCw, Settings } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const Subscription = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+  const [subscriptionData, setSubscriptionData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+      checkSubscription(parsedUser);
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  const checkSubscription = async (userData?: any) => {
+    if (!userData && !user) return;
+    
+    setRefreshing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('check-subscription');
+      
+      if (error) {
+        console.error('Erro ao verificar assinatura:', error);
+        return;
+      }
+
+      setSubscriptionData(data);
+      console.log('Status da assinatura:', data);
+    } catch (error) {
+      console.error('Erro ao verificar assinatura:', error);
+    } finally {
+      setRefreshing(false);
+      setLoading(false);
+    }
+  };
+
+  const handleManageSubscription = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('customer-portal');
+      
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
+    } catch (error) {
+      console.error('Erro ao abrir portal:', error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível abrir o portal de gerenciamento.",
+        variant: "destructive"
+      });
+    }
+  };
 
   const plans = [
     {
@@ -46,17 +106,27 @@ const Subscription = () => {
   ];
 
   const handlePlanSelect = (planId: string) => {
-    // Verificar se o usuário está logado
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    
-    if (!user.id) {
-      // Se não estiver logado, vai para cadastro
+    if (!user?.id) {
       navigate(`/register?plan=${planId}`);
     } else {
-      // Se já estiver logado, vai direto para o checkout
       navigate(`/checkout?plan=${planId}`);
     }
   };
+
+  const isCurrentPlan = (planId: string) => {
+    return subscriptionData?.subscribed && subscriptionData?.subscription_tier === planId;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 flex items-center justify-center">
+        <div className="text-center">
+          <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
+          <p className="text-gray-600">Carregando informações...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
@@ -69,6 +139,52 @@ const Subscription = () => {
           <p className="text-xl text-blue-100 mb-8">
             Desbloqueie todo o potencial do gerador de SaaS
           </p>
+
+          {/* Status da Assinatura */}
+          {user && subscriptionData && (
+            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 mb-6">
+              <div className="flex items-center justify-center space-x-4 text-white">
+                <div className="text-center">
+                  <div className="text-sm text-blue-100">Status atual:</div>
+                  <div className="font-bold text-lg">
+                    {subscriptionData.subscribed ? (
+                      <span className="text-green-300">
+                        Plano {subscriptionData.subscription_tier === 'pro' ? 'Pro' : 'Business'} Ativo
+                      </span>
+                    ) : (
+                      <span className="text-yellow-300">Sem assinatura ativa</span>
+                    )}
+                  </div>
+                  {subscriptionData.subscription_end && (
+                    <div className="text-sm text-blue-100 mt-1">
+                      Renova em: {new Date(subscriptionData.subscription_end).toLocaleDateString('pt-BR')}
+                    </div>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => checkSubscription()}
+                    disabled={refreshing}
+                    variant="outline"
+                    className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+                  >
+                    <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+                    Atualizar
+                  </Button>
+                  {subscriptionData.subscribed && (
+                    <Button
+                      onClick={handleManageSubscription}
+                      variant="outline"
+                      className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+                    >
+                      <Settings className="w-4 h-4 mr-2" />
+                      Gerenciar
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -77,14 +193,28 @@ const Subscription = () => {
         <div className="grid md:grid-cols-2 gap-8">
           {plans.map((plan) => {
             const IconComponent = plan.icon;
+            const isCurrentUserPlan = isCurrentPlan(plan.id);
+            
             return (
               <Card 
                 key={plan.id}
                 className={`relative overflow-hidden transition-all duration-300 hover:scale-105 ${
-                  plan.popular ? 'ring-4 ring-blue-500 shadow-2xl' : 'shadow-xl'
+                  isCurrentUserPlan 
+                    ? 'ring-4 ring-green-500 shadow-2xl' 
+                    : plan.popular 
+                      ? 'ring-4 ring-blue-500 shadow-2xl' 
+                      : 'shadow-xl'
                 }`}
               >
-                {plan.popular && (
+                {isCurrentUserPlan && (
+                  <div className="absolute top-0 left-0 right-0">
+                    <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-center py-2 font-bold">
+                      SEU PLANO ATUAL
+                    </div>
+                  </div>
+                )}
+                
+                {!isCurrentUserPlan && plan.popular && (
                   <div className="absolute top-0 left-0 right-0">
                     <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-center py-2 font-bold">
                       MAIS POPULAR
@@ -92,7 +222,7 @@ const Subscription = () => {
                   </div>
                 )}
 
-                <CardHeader className={`${plan.popular ? 'pt-16' : 'pt-8'} text-center`}>
+                <CardHeader className={`${isCurrentUserPlan || plan.popular ? 'pt-16' : 'pt-8'} text-center`}>
                   <div className={`bg-gradient-to-r ${plan.color} rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6`}>
                     <IconComponent className="w-10 h-10 text-white" />
                   </div>
@@ -123,8 +253,9 @@ const Subscription = () => {
                     onClick={() => handlePlanSelect(plan.id)}
                     className={`w-full py-4 text-lg font-bold bg-gradient-to-r ${plan.color} hover:opacity-90 transition-all duration-300`}
                     size="lg"
+                    disabled={isCurrentUserPlan}
                   >
-                    Escolher {plan.name}
+                    {isCurrentUserPlan ? 'Plano Atual' : `Escolher ${plan.name}`}
                   </Button>
                 </CardContent>
               </Card>
@@ -171,7 +302,6 @@ const Subscription = () => {
           </div>
         </div>
 
-        {/* Back Link */}
         <div className="mt-12 text-center">
           <Link to="/generator" className="text-blue-600 hover:underline text-lg">
             ← Voltar ao Gerador
