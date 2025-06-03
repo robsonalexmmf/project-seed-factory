@@ -13,7 +13,8 @@ import {
   Download,
   BarChart,
   Shield,
-  UserPlus
+  UserPlus,
+  Crown
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -22,6 +23,7 @@ import { toast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import UserProfile from './UserProfile';
+import { makeUserAdmin } from '@/utils/makeUserAdmin';
 
 interface AdminStats {
   totalUsers: number;
@@ -50,6 +52,8 @@ const AdminDashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const [addUserModalOpen, setAddUserModalOpen] = useState(false);
+  const [makeAdminModalOpen, setMakeAdminModalOpen] = useState(false);
+  const [adminEmail, setAdminEmail] = useState('');
   const [newUserData, setNewUserData] = useState({
     email: '',
     fullName: '',
@@ -76,6 +80,9 @@ const AdminDashboard = () => {
     }
 
     loadAdminData();
+    
+    // Tornar o usuário robsonalexmmfata@gmail.com admin automaticamente
+    makeUserAdmin('robsonalexmmfata@gmail.com').catch(console.error);
   }, [userProfile, authLoading, navigate]);
 
   const loadAdminData = async () => {
@@ -218,6 +225,26 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleMakeAdmin = async () => {
+    if (!adminEmail.trim()) {
+      toast({
+        title: "Email obrigatório",
+        description: "Por favor, digite um email válido",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      await makeUserAdmin(adminEmail.trim());
+      setAdminEmail('');
+      setMakeAdminModalOpen(false);
+      await loadAdminData();
+    } catch (error) {
+      console.error('Erro ao tornar usuário admin:', error);
+    }
+  };
+
   const exportData = async () => {
     try {
       const { data: users, error } = await supabase
@@ -281,6 +308,43 @@ const AdminDashboard = () => {
             </div>
             <div className="flex items-center space-x-3">
               <UserProfile />
+              <Dialog open={makeAdminModalOpen} onOpenChange={setMakeAdminModalOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline">
+                    <Crown className="w-4 h-4 mr-2" />
+                    Tornar Admin
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Tornar Usuário Administrador</DialogTitle>
+                    <DialogDescription>
+                      Digite o email do usuário que deseja promover a administrador.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="adminEmail">Email do Usuário</Label>
+                      <Input
+                        id="adminEmail"
+                        type="email"
+                        value={adminEmail}
+                        onChange={(e) => setAdminEmail(e.target.value)}
+                        placeholder="usuario@exemplo.com"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <Button variant="outline" onClick={() => setMakeAdminModalOpen(false)}>
+                      Cancelar
+                    </Button>
+                    <Button onClick={handleMakeAdmin} disabled={!adminEmail.trim()}>
+                      <Crown className="w-4 h-4 mr-2" />
+                      Tornar Admin
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <Dialog open={addUserModalOpen} onOpenChange={setAddUserModalOpen}>
                 <DialogTrigger asChild>
                   <Button variant="outline">
