@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -21,7 +22,9 @@ import {
   Layers,
   Crown,
   Lock,
-  LogOut
+  LogOut,
+  Settings,
+  Users
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { projectTemplates, templateCategories, getTemplatesByCategory, searchTemplates } from '@/utils/projectTemplates';
@@ -206,10 +209,25 @@ const Index = () => {
       <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 shadow-2xl">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          {/* User Status and Logout */}
+          {/* User Status and Navigation */}
           {userProfile && (
             <div className="absolute top-4 right-4">
               <div className="flex items-center space-x-4">
+                {/* Admin Dashboard Access */}
+                {userProfile.plan_type === 'admin' && (
+                  <Link to="/admin">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+                    >
+                      <Settings className="w-4 h-4 mr-2" />
+                      Admin Dashboard
+                    </Button>
+                  </Link>
+                )}
+                
+                {/* User Status Card */}
                 <div className="bg-white/10 backdrop-blur-lg rounded-lg px-4 py-2 border border-white/20">
                   <div className="flex items-center space-x-2 text-white text-sm">
                     {userProfile.plan_type === 'admin' ? (
@@ -222,8 +240,13 @@ const Index = () => {
                       <Timer className="w-4 h-4 text-green-300" />
                     )}
                     <span className="font-semibold capitalize">{userProfile.plan_type}</span>
+                    <div className="h-4 w-px bg-white/30 mx-2"></div>
+                    <span className="text-xs">
+                      {userProfile.projects_generated} projetos usados
+                    </span>
                   </div>
                 </div>
+                
                 <Button
                   onClick={handleLogout}
                   variant="outline"
@@ -259,7 +282,7 @@ const Index = () => {
             {userProfile && (
               <div className="flex justify-center mb-8">
                 <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                  <div className="flex items-center space-x-4 text-white">
+                  <div className="flex items-center space-x-6 text-white">
                     <div className="flex items-center space-x-2">
                       {userProfile.plan_type === 'admin' ? (
                         <Crown className="w-6 h-6 text-yellow-300" />
@@ -270,9 +293,23 @@ const Index = () => {
                       ) : (
                         <Timer className="w-6 h-6 text-green-300" />
                       )}
-                      <span className="font-bold text-lg capitalize">{userProfile.plan_type}</span>
+                      <span className="font-bold text-lg capitalize">Plano {userProfile.plan_type}</span>
                     </div>
+                    
                     <div className="h-6 w-px bg-white/30"></div>
+                    
+                    <div className="text-center">
+                      <div className="text-sm text-blue-100">Projetos Usados</div>
+                      <div className="text-xl font-bold">
+                        {userProfile.projects_generated}
+                        {userProfile.plan_type === 'freemium' && ' / 2'}
+                        {userProfile.plan_type === 'pro' && ' / 10'}
+                        {(userProfile.plan_type === 'business' || userProfile.plan_type === 'admin') && ' / ∞'}
+                      </div>
+                    </div>
+                    
+                    <div className="h-6 w-px bg-white/30"></div>
+                    
                     <div className="text-lg">
                       {projectsRemaining === -1 ? (
                         <span className="text-green-300 font-bold">Projetos Ilimitados</span>
@@ -282,7 +319,9 @@ const Index = () => {
                         </span>
                       )}
                     </div>
-                    {(userProfile.plan_type === 'freemium' && projectsRemaining === 0) && (
+                    
+                    {((userProfile.plan_type === 'freemium' && projectsRemaining <= 1) || 
+                      (userProfile.plan_type === 'pro' && projectsRemaining <= 2)) && (
                       <Link to="/subscription">
                         <Button variant="outline" className="bg-white/20 border-white/30 text-white hover:bg-white/30">
                           <Crown className="w-4 h-4 mr-2" />
