@@ -1,4 +1,4 @@
-import { LucideIcon, Store, Heart, GraduationCap, Briefcase, Utensils, Car, Home, Calendar, BarChart, Gamepad2, DollarSign, Megaphone, MessageCircle, Monitor, Bot, Users, ShoppingCart, Stethoscope, BookOpen, Building, Pizza, Truck, MapPin, Clock, TrendingUp, Music, Zap, Shield, Camera, Palette, Headphones, Phone, Mail, Globe, Settings, Star, Award, Target, Lightbulb, Coffee, Plane, Gift, Lock, FileText, CreditCard, Smartphone, Laptop, Tablet, Watch, Speaker, Headset, Video, Image, Film, Radio, Tv, Wifi, Bluetooth, Battery, Power, Cpu, HardDrive, Database, Cloud, Server, Code, Terminal, Bug, Wrench, Hammer, Scissors, Paintbrush, Brush, Pen, Pencil, Ruler, Calculator, Compass, Map, Navigation, Route, Flag, Bell, Timer, Archive, Folder, File, Download, Upload, Send, Inbox, Outbox, Trash, Search, Filter, Sort, List, Grid, Layout, Sidebar, Menu, MoreHorizontal, MoreVertical, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, X, Check, Info, AlertTriangle, AlertCircle, HelpCircle, Eye, EyeOff, ThumbsUp, ThumbsDown, Share, Bookmark, Tag, Link, Paperclip, Copy, Undo, Redo, Repeat, Shuffle, SkipBack, SkipForward, Play, Pause, FastForward, Rewind, Volume, Volume1, Volume2, VolumeX, Shirt, Diamond, Smile, Activity, Apple, Flower } from 'lucide-react';
+import { LucideIcon, Store, Heart, GraduationCap, Briefcase, Utensils, Car, Home, Calendar, BarChart, Gamepad2, DollarSign, Megaphone, MessageCircle, Monitor, Bot, Users, ShoppingCart, Stethoscope, BookOpen, Building, Pizza, Truck, MapPin, Clock, TrendingUp, Music, Zap, Shield, Camera, Palette, Headphones, Phone, Mail, Globe, Settings, Star, Award, Target, Lightbulb, Coffee, Plane, Gift, Lock, FileText, CreditCard, Smartphone, Laptop, Tablet, Watch, Speaker, Headset, Video, Image, Film, Radio, Tv, Wifi, Bluetooth, Battery, Power, Cpu, HardDrive, Database, Cloud, Server, Code, Terminal, Bug, Wrench, Hammer, Scissors, Paintbrush, Brush, Pen, Pencil, Ruler, Calculator, Compass, Map, Navigation, Route, Flag, Bell, Timer, Archive, Folder, File, Download, Upload, Send, Inbox, Trash, Search, Filter, List, Grid, Layout, Sidebar, Menu, MoreHorizontal, MoreVertical, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, X, Check, Info, AlertTriangle, AlertCircle, HelpCircle, Eye, EyeOff, ThumbsUp, ThumbsDown, Share, Bookmark, Tag, Link, Paperclip, Copy, Undo, Redo, Repeat, Shuffle, SkipBack, SkipForward, Play, Pause, FastForward, Rewind, Volume, Volume1, Volume2, VolumeX, Shirt, Diamond, Smile, Activity, Apple, Flower } from 'lucide-react';
 
 export interface ProjectTemplate {
   id: string;
@@ -34,7 +34,6 @@ export const templateCategories: TemplateCategory[] = [
 ];
 
 export const projectTemplates: ProjectTemplate[] = [
-  // BUSINESS CATEGORY (expanding to 100+ templates)
   {
     id: 'business-crm',
     name: 'CRM Completo',
@@ -295,8 +294,6 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Intermediário',
     color: 'bg-gray-600'
   },
-
-  // HEALTH CATEGORY (expanding to 60+ templates)
   {
     id: 'health-telemedicine',
     name: 'Telemedicina',
@@ -397,8 +394,6 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Avançado',
     color: 'bg-orange-600'
   },
-
-  // EDUCATION CATEGORY (expanding to 50+ templates)
   {
     id: 'education-lms',
     name: 'Plataforma EAD',
@@ -479,8 +474,6 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Intermediário',
     color: 'bg-yellow-500'
   },
-
-  // FOOD CATEGORY (expanding to 40+ templates)
   {
     id: 'food-delivery',
     name: 'Delivery Food',
@@ -541,8 +534,6 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Intermediário',
     color: 'bg-green-500'
   },
-
-  // TRANSPORT CATEGORY
   {
     id: 'transport-ride-sharing',
     name: 'Compartilhamento Viagens',
@@ -573,8 +564,6 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Intermediário',
     color: 'bg-blue-500'
   },
-
-  // REAL ESTATE CATEGORY
   {
     id: 'real-estate-marketplace',
     name: 'Marketplace Imóveis',
@@ -595,8 +584,6 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Avançado',
     color: 'bg-blue-600'
   },
-
-  // PRODUCTIVITY CATEGORY
   {
     id: 'productivity-task-manager',
     name: 'Gerenciador Tarefas',
@@ -617,8 +604,6 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Intermediário',
     color: 'bg-purple-600'
   },
-
-  // ANALYTICS CATEGORY
   {
     id: 'analytics-dashboard',
     name: 'Dashboard Analítico',
@@ -639,8 +624,6 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Avançado',
     color: 'bg-purple-600'
   },
-
-  // ENTERTAINMENT CATEGORY
   {
     id: 'entertainment-streaming',
     name: 'Plataforma Streaming',
@@ -671,8 +654,6 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Avançado',
     color: 'bg-blue-600'
   },
-
-  // FINANCE CATEGORY
   {
     id: 'finance-personal',
     name: 'Finanças Pessoais',
@@ -703,8 +684,6 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Avançado',
     color: 'bg-orange-600'
   },
-
-  // MARKETING CATEGORY
   {
     id: 'marketing-email',
     name: 'Email Marketing',
@@ -735,8 +714,6 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Intermediário',
     color: 'bg-green-600'
   },
-
-  // COMMUNICATION CATEGORY
   {
     id: 'communication-chat',
     name: 'Chat Empresarial',
@@ -767,8 +744,6 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Intermediário',
     color: 'bg-green-600'
   },
-
-  // Additional WhatsApp Bots for various niches
   {
     id: 'whatsapp-bot-loja-roupas',
     name: 'Bot WhatsApp Loja Roupas',
@@ -868,6 +843,926 @@ export const projectTemplates: ProjectTemplate[] = [
     icon: Gamepad2,
     difficulty: 'Intermediário',
     color: 'bg-yellow-600'
+  },
+  {
+    id: 'whatsapp-bot-lavanderia',
+    name: 'Bot WhatsApp Lavanderia',
+    description: 'Bot para lavanderias e serviços de limpeza',
+    category: 'business',
+    features: ['Coleta e entrega', 'Tipos de serviço', 'Preços', 'Status pedido'],
+    icon: Shirt,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-500'
+  },
+  {
+    id: 'whatsapp-bot-cerimonial',
+    name: 'Bot WhatsApp Cerimonial',
+    description: 'Bot para cerimoniais e organizadores de eventos',
+    category: 'business',
+    features: ['Tipos de evento', 'Orçamentos', 'Decoração', 'Fornecedores'],
+    icon: Gift,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'whatsapp-bot-corretor-seguros',
+    name: 'Bot WhatsApp Corretor Seguros',
+    description: 'Bot para corretores de seguros',
+    category: 'business',
+    features: ['Cotações seguros', 'Sinistros', 'Renovações', 'Documentos'],
+    icon: Shield,
+    difficulty: 'Avançado',
+    color: 'bg-green-700'
+  },
+  {
+    id: 'whatsapp-bot-despachante',
+    name: 'Bot WhatsApp Despachante',
+    description: 'Bot para despachantes documentalistas',
+    category: 'business',
+    features: ['Serviços veiculares', 'CNH', 'Documentos', 'Agendamentos'],
+    icon: FileText,
+    difficulty: 'Intermediário',
+    color: 'bg-gray-600'
+  },
+  {
+    id: 'whatsapp-bot-jardinagem',
+    name: 'Bot WhatsApp Jardinagem',
+    description: 'Bot para serviços de jardinagem e paisagismo',
+    category: 'business',
+    features: ['Manutenção jardins', 'Paisagismo', 'Plantas', 'Orçamentos'],
+    icon: Flower,
+    difficulty: 'Intermediário',
+    color: 'bg-green-500'
+  },
+  {
+    id: 'whatsapp-bot-security',
+    name: 'Bot WhatsApp Segurança',
+    description: 'Bot para empresas de segurança privada',
+    category: 'business',
+    features: ['Vigilância', 'Monitoramento', 'Relatórios', 'Emergências'],
+    icon: Shield,
+    difficulty: 'Avançado',
+    color: 'bg-red-700'
+  },
+  {
+    id: 'whatsapp-bot-climatizacao',
+    name: 'Bot WhatsApp Climatização',
+    description: 'Bot para empresas de ar condicionado',
+    category: 'business',
+    features: ['Instalação', 'Manutenção', 'Limpeza', 'Orçamentos'],
+    icon: Zap,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'whatsapp-bot-mudancas',
+    name: 'Bot WhatsApp Mudanças',
+    description: 'Bot para empresas de mudanças e fretes',
+    category: 'business',
+    features: ['Orçamentos mudança', 'Embalagem', 'Transporte', 'Seguro'],
+    icon: Truck,
+    difficulty: 'Intermediário',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'whatsapp-bot-manicure',
+    name: 'Bot WhatsApp Manicure',
+    description: 'Bot para manicures e pedicures',
+    category: 'business',
+    features: ['Agendamentos', 'Serviços unhas', 'Domicílio', 'Promoções'],
+    icon: Palette,
+    difficulty: 'Iniciante',
+    color: 'bg-pink-500'
+  },
+  {
+    id: 'whatsapp-bot-vidracaria',
+    name: 'Bot WhatsApp Vidraçaria',
+    description: 'Bot para vidraçarias e serralharias',
+    category: 'business',
+    features: ['Vidros temperados', 'Esquadrias', 'Medidas', 'Instalação'],
+    icon: Home,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-700'
+  },
+  {
+    id: 'whatsapp-bot-grafica',
+    name: 'Bot WhatsApp Gráfica',
+    description: 'Bot para gráficas e serviços de impressão',
+    category: 'business',
+    features: ['Impressões', 'Design gráfico', 'Materiais', 'Orçamentos'],
+    icon: Paintbrush,
+    difficulty: 'Intermediário',
+    color: 'bg-purple-500'
+  },
+  {
+    id: 'whatsapp-bot-chaveiro',
+    name: 'Bot WhatsApp Chaveiro',
+    description: 'Bot para chaveiros e serviços de chaves',
+    category: 'business',
+    features: ['Cópias chaves', 'Emergência 24h', 'Cofres', 'Fechaduras'],
+    icon: Lock,
+    difficulty: 'Iniciante',
+    color: 'bg-yellow-600'
+  },
+  {
+    id: 'whatsapp-bot-borracharia',
+    name: 'Bot WhatsApp Borracharia',
+    description: 'Bot para borracharias e serviços de pneus',
+    category: 'business',
+    features: ['Troca pneus', 'Alinhamento', 'Balanceamento', 'Socorro 24h'],
+    icon: Car,
+    difficulty: 'Intermediário',
+    color: 'bg-gray-700'
+  },
+  {
+    id: 'whatsapp-bot-dedetizadora',
+    name: 'Bot WhatsApp Dedetizadora',
+    description: 'Bot para dedetizadoras e controle de pragas',
+    category: 'business',
+    features: ['Dedetização', 'Desratização', 'Orçamentos', 'Emergência'],
+    icon: Bug,
+    difficulty: 'Intermediário',
+    color: 'bg-green-700'
+  },
+  {
+    id: 'whatsapp-bot-eletricista',
+    name: 'Bot WhatsApp Eletricista',
+    description: 'Bot para eletricistas e serviços elétricos',
+    category: 'business',
+    features: ['Instalações elétricas', 'Emergência 24h', 'Orçamentos', 'Manutenção'],
+    icon: Zap,
+    difficulty: 'Intermediário',
+    color: 'bg-yellow-500'
+  },
+  {
+    id: 'whatsapp-bot-encanador',
+    name: 'Bot WhatsApp Encanador',
+    description: 'Bot para encanadores e serviços hidráulicos',
+    category: 'business',
+    features: ['Vazamentos', 'Instalações', 'Desentupimento', 'Emergência 24h'],
+    icon: Wrench,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'whatsapp-bot-pintor',
+    name: 'Bot WhatsApp Pintor',
+    description: 'Bot para pintores e serviços de pintura',
+    category: 'business',
+    features: ['Pintura residencial', 'Comercial', 'Texturas', 'Orçamentos'],
+    icon: Brush,
+    difficulty: 'Intermediário',
+    color: 'bg-orange-500'
+  },
+  {
+    id: 'whatsapp-bot-marcenaria',
+    name: 'Bot WhatsApp Marcenaria',
+    description: 'Bot para marceneiros e móveis planejados',
+    category: 'business',
+    features: ['Móveis planejados', 'Projetos 3D', 'Materiais', 'Instalação'],
+    icon: Hammer,
+    difficulty: 'Avançado',
+    color: 'bg-brown-600'
+  },
+  {
+    id: 'whatsapp-bot-tapecaria',
+    name: 'Bot WhatsApp Tapeçaria',
+    description: 'Bot para tapeçarias e estofados',
+    category: 'business',
+    features: ['Reforma estofados', 'Tecidos', 'Orçamentos', 'Coleta entrega'],
+    icon: Palette,
+    difficulty: 'Intermediário',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'whatsapp-bot-personal-trainer',
+    name: 'Bot WhatsApp Personal Trainer',
+    description: 'Bot para personal trainers',
+    category: 'business',
+    features: ['Treinos personalizados', 'Avaliação física', 'Dietas', 'Agendamentos'],
+    icon: Activity,
+    difficulty: 'Intermediário',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'whatsapp-bot-massoterapia',
+    name: 'Bot WhatsApp Massoterapia',
+    description: 'Bot para massoterapeutas e spas',
+    category: 'business',
+    features: ['Tipos massagem', 'Agendamentos', 'Domicílio', 'Pacotes'],
+    icon: Heart,
+    difficulty: 'Intermediário',
+    color: 'bg-purple-500'
+  },
+  {
+    id: 'whatsapp-bot-veterinario',
+    name: 'Bot WhatsApp Veterinário',
+    description: 'Bot para clínicas veterinárias',
+    category: 'business',
+    features: ['Consultas', 'Vacinas', 'Emergência', 'Pet shop'],
+    icon: Heart,
+    difficulty: 'Avançado',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'whatsapp-bot-costureira',
+    name: 'Bot WhatsApp Costureira',
+    description: 'Bot para costureiras e ateliês',
+    category: 'business',
+    features: ['Ajustes roupas', 'Consertos', 'Sob medida', 'Orçamentos'],
+    icon: Shirt,
+    difficulty: 'Intermediário',
+    color: 'bg-pink-500'
+  },
+  {
+    id: 'whatsapp-bot-sapateiro',
+    name: 'Bot WhatsApp Sapateiro',
+    description: 'Bot para sapateiros e conserto calçados',
+    category: 'business',
+    features: ['Conserto sapatos', 'Solado', 'Conserto bolsas', 'Orçamentos'],
+    icon: Settings,
+    difficulty: 'Iniciante',
+    color: 'bg-brown-600'
+  },
+  {
+    id: 'whatsapp-bot-relojoeiro',
+    name: 'Bot WhatsApp Relojoeiro',
+    description: 'Bot para relojoeiros e conserto relógios',
+    category: 'business',
+    features: ['Conserto relógios', 'Baterias', 'Pulseiras', 'Orçamentos'],
+    icon: Watch,
+    difficulty: 'Intermediário',
+    color: 'bg-gray-600'
+  },
+  {
+    id: 'health-dermatology',
+    name: 'Dermatologia Digital',
+    description: 'Plataforma para consultas dermatológicas online',
+    category: 'health',
+    features: ['Análise de pele', 'Telemedicina', 'Prescrições', 'Acompanhamento'],
+    icon: Monitor,
+    difficulty: 'Avançado',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'health-pediatrics',
+    name: 'Pediatria Digital',
+    description: 'Sistema para acompanhamento pediátrico',
+    category: 'health',
+    features: ['Crescimento infantil', 'Vacinas', 'Consultas', 'Emergência'],
+    icon: Heart,
+    difficulty: 'Avançado',
+    color: 'bg-pink-600'
+  },
+  {
+    id: 'health-cardiology',
+    name: 'Cardiologia Digital',
+    description: 'Monitoramento cardíaco e pressão arterial',
+    category: 'health',
+    features: ['Pressão arterial', 'ECG', 'Medicamentos', 'Exercícios'],
+    icon: Heart,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'health-diabetes',
+    name: 'Controle Diabetes',
+    description: 'App para controle de diabetes e glicemia',
+    category: 'health',
+    features: ['Glicemia', 'Insulina', 'Alimentação', 'Exercícios'],
+    icon: Activity,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'health-pregnancy',
+    name: 'Acompanhamento Gestação',
+    description: 'App para acompanhar gravidez semana a semana',
+    category: 'health',
+    features: ['Desenvolvimento fetal', 'Exames', 'Sintomas', 'Consultas'],
+    icon: Heart,
+    difficulty: 'Intermediário',
+    color: 'bg-pink-500'
+  },
+  {
+    id: 'health-allergies',
+    name: 'Controle Alergias',
+    description: 'Sistema para controle de alergias e reações',
+    category: 'health',
+    features: ['Alergênos', 'Sintomas', 'Medicamentos', 'Emergência'],
+    icon: AlertTriangle,
+    difficulty: 'Intermediário',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'health-physiotherapy',
+    name: 'Fisioterapia Digital',
+    description: 'Exercícios e acompanhamento fisioterapêutico',
+    category: 'health',
+    features: ['Exercícios guiados', 'Evolução', 'Dor', 'Reabilitação'],
+    icon: Activity,
+    difficulty: 'Intermediário',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'health-mental-therapy',
+    name: 'Terapia Online',
+    description: 'Plataforma para terapia e saúde mental',
+    category: 'health',
+    features: ['Sessões online', 'Diário emocional', 'Exercícios', 'Crise'],
+    icon: Heart,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'education-math-tutoring',
+    name: 'Reforço Matemática',
+    description: 'Plataforma de reforço escolar em matemática',
+    category: 'education',
+    features: ['Exercícios adaptativos', 'Vídeo aulas', 'Progressão', 'Gamificação'],
+    icon: Calculator,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'education-science-lab',
+    name: 'Laboratório Virtual',
+    description: 'Experimentos científicos virtuais',
+    category: 'education',
+    features: ['Simulações', 'Química', 'Física', 'Biologia'],
+    icon: Target,
+    difficulty: 'Avançado',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'education-music-theory',
+    name: 'Teoria Musical',
+    description: 'Aprendizado de teoria musical interativo',
+    category: 'education',
+    features: ['Notas musicais', 'Acordes', 'Ritmos', 'Ouvido musical'],
+    icon: Music,
+    difficulty: 'Intermediário',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'education-art-classes',
+    name: 'Aulas de Arte',
+    description: 'Plataforma para ensino de artes visuais',
+    category: 'education',
+    features: ['Técnicas pintura', 'Desenho', 'História arte', 'Portfolio'],
+    icon: Paintbrush,
+    difficulty: 'Intermediário',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'education-coding-kids',
+    name: 'Programação Infantil',
+    description: 'Ensino de programação para crianças',
+    category: 'education',
+    features: ['Scratch', 'Jogos educativos', 'Robótica', 'Projetos'],
+    icon: Code,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'education-geography',
+    name: 'Geografia Interativa',
+    description: 'Ensino de geografia com mapas interativos',
+    category: 'education',
+    features: ['Mapas 3D', 'Países', 'Capitais', 'Geografia física'],
+    icon: Globe,
+    difficulty: 'Intermediário',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'education-history',
+    name: 'História Mundial',
+    description: 'Linha do tempo interativa da história',
+    category: 'education',
+    features: ['Timeline histórica', 'Eventos importantes', 'Personalidades', 'Civilizações'],
+    icon: BookOpen,
+    difficulty: 'Intermediário',
+    color: 'bg-brown-600'
+  },
+  {
+    id: 'education-chemistry',
+    name: 'Química Interativa',
+    description: 'Tabela periódica e reações químicas',
+    category: 'education',
+    features: ['Tabela periódica', 'Reações', 'Moléculas 3D', 'Experimentos'],
+    icon: Target,
+    difficulty: 'Avançado',
+    color: 'bg-green-700'
+  },
+  {
+    id: 'food-bakery',
+    name: 'Padaria Digital',
+    description: 'Sistema para padarias e confeitarias',
+    category: 'food',
+    features: ['Encomendas', 'Catálogo pães', 'Delivery', 'Promoções'],
+    icon: Coffee,
+    difficulty: 'Intermediário',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'food-catering',
+    name: 'Catering & Buffet',
+    description: 'Sistema para buffets e catering',
+    category: 'food',
+    features: ['Menu eventos', 'Orçamentos', 'Agendamentos', 'Equipamentos'],
+    icon: Utensils,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'food-diet-tracker',
+    name: 'Diário Alimentar',
+    description: 'Rastreamento de dieta e nutrição',
+    category: 'food',
+    features: ['Registro refeições', 'Macros', 'Água', 'Peso'],
+    icon: Apple,
+    difficulty: 'Intermediário',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'food-wine-cellar',
+    name: 'Adega Virtual',
+    description: 'Gestão de coleção de vinhos',
+    category: 'food',
+    features: ['Catálogo vinhos', 'Harmonização', 'Notas degustação', 'Estoque'],
+    icon: Coffee,
+    difficulty: 'Intermediário',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'food-grocery-list',
+    name: 'Lista Compras Inteligente',
+    description: 'Lista de compras com IA e preços',
+    category: 'food',
+    features: ['Lista automática', 'Preços comparados', 'Ofertas', 'Receitas'],
+    icon: List,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'food-coffee-shop',
+    name: 'Cafeteria Digital',
+    description: 'Sistema para cafeterias e coffee shops',
+    category: 'food',
+    features: ['Menu cafés', 'Programa fidelidade', 'Pedidos mobile', 'Eventos'],
+    icon: Coffee,
+    difficulty: 'Intermediário',
+    color: 'bg-brown-600'
+  },
+  {
+    id: 'food-ice-cream',
+    name: 'Sorveteria App',
+    description: 'Sistema para sorveterias e açaí',
+    category: 'food',
+    features: ['Sabores disponíveis', 'Combos', 'Delivery gelado', 'Promoções'],
+    icon: Gift,
+    difficulty: 'Intermediário',
+    color: 'bg-pink-600'
+  },
+  {
+    id: 'food-food-truck',
+    name: 'Food Truck Localizador',
+    description: 'App para localizar food trucks',
+    category: 'food',
+    features: ['GPS localização', 'Menu tempo real', 'Horários', 'Avaliações'],
+    icon: Truck,
+    difficulty: 'Avançado',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'transport-bike-sharing',
+    name: 'Bike Sharing',
+    description: 'Sistema de compartilhamento de bicicletas',
+    category: 'transport',
+    features: ['Aluguel bikes', 'Estações', 'GPS tracking', 'Pagamentos'],
+    icon: Car,
+    difficulty: 'Avançado',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'transport-gas-station',
+    name: 'Posto Combustível',
+    description: 'App para postos de gasolina',
+    category: 'transport',
+    features: ['Preços combustível', 'Localização postos', 'Pagamento app', 'Conveniência'],
+    icon: Car,
+    difficulty: 'Intermediário',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'transport-public-transit',
+    name: 'Transporte Público',
+    description: 'App para horários de ônibus e trens',
+    category: 'transport',
+    features: ['Horários tempo real', 'Rotas', 'Tarifas', 'Acessibilidade'],
+    icon: Car,
+    difficulty: 'Avançado',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'transport-car-rental',
+    name: 'Aluguel Carros',
+    description: 'Sistema de aluguel de veículos',
+    category: 'transport',
+    features: ['Frota disponível', 'Reservas', 'Documentos', 'Seguros'],
+    icon: Car,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'transport-taxi-driver',
+    name: 'App Taxista',
+    description: 'App para motoristas de táxi',
+    category: 'transport',
+    features: ['Corridas disponíveis', 'Navegação', 'Pagamentos', 'Histórico'],
+    icon: Car,
+    difficulty: 'Avançado',
+    color: 'bg-yellow-600'
+  },
+  {
+    id: 'transport-motorcycle-delivery',
+    name: 'Delivery Moto',
+    description: 'App para entregadores de moto',
+    category: 'transport',
+    features: ['Rotas otimizadas', 'Entregas', 'Ganhos', 'Segurança'],
+    icon: Car,
+    difficulty: 'Avançado',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'real-estate-rental',
+    name: 'Aluguel Temporada',
+    description: 'Plataforma estilo Airbnb para aluguéis',
+    category: 'real-estate',
+    features: ['Reservas', 'Calendário disponibilidade', 'Pagamentos', 'Avaliações'],
+    icon: Home,
+    difficulty: 'Avançado',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'real-estate-property-management',
+    name: 'Gestão Imóveis',
+    description: 'Sistema para administradoras de imóveis',
+    category: 'real-estate',
+    features: ['Inquilinos', 'Pagamentos', 'Manutenção', 'Contratos'],
+    icon: Building,
+    difficulty: 'Avançado',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'real-estate-construction',
+    name: 'Acompanhamento Obra',
+    description: 'Sistema para acompanhar construções',
+    category: 'real-estate',
+    features: ['Cronograma obra', 'Fotos progresso', 'Materiais', 'Orçamento'],
+    icon: Hammer,
+    difficulty: 'Avançado',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'real-estate-evaluation',
+    name: 'Avaliação Imóveis',
+    description: 'Sistema para avaliação de imóveis',
+    category: 'real-estate',
+    features: ['Comparativo preços', 'Características', 'Relatórios', 'Mapas valor'],
+    icon: BarChart,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'real-estate-architecture',
+    name: 'Projetos Arquitetônicos',
+    description: 'Plataforma para arquitetos e projetos',
+    category: 'real-estate',
+    features: ['Portfolio projetos', 'Orçamentos', 'Plantas 3D', 'Clientes'],
+    icon: Home,
+    difficulty: 'Avançado',
+    color: 'bg-blue-700'
+  },
+  {
+    id: 'productivity-habit-tracker',
+    name: 'Rastreador Hábitos',
+    description: 'App para formar e acompanhar hábitos',
+    category: 'productivity',
+    features: ['Hábitos diários', 'Streaks', 'Estatísticas', 'Recompensas'],
+    icon: Target,
+    difficulty: 'Intermediário',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'productivity-note-taking',
+    name: 'Bloco Notas Avançado',
+    description: 'Sistema avançado de anotações',
+    category: 'productivity',
+    features: ['Notas markdown', 'Tags', 'Busca avançada', 'Sincronização'],
+    icon: Pen,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'productivity-password-manager',
+    name: 'Gerenciador Senhas',
+    description: 'Cofre seguro para senhas',
+    category: 'productivity',
+    features: ['Senhas seguras', 'Gerador senhas', 'Autenticação 2FA', 'Sincronização'],
+    icon: Lock,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'productivity-expense-tracker',
+    name: 'Controle Gastos',
+    description: 'App para controlar gastos pessoais',
+    category: 'productivity',
+    features: ['Categorias gastos', 'Orçamento mensal', 'Relatórios', 'Metas'],
+    icon: DollarSign,
+    difficulty: 'Intermediário',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'productivity-calendar-scheduler',
+    name: 'Agenda Inteligente',
+    description: 'Calendário com IA para otimizar tempo',
+    category: 'productivity',
+    features: ['Agendamento automático', 'Conflitos', 'Lembretes', 'Integração'],
+    icon: Calendar,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'productivity-document-scanner',
+    name: 'Scanner Documentos',
+    description: 'App para digitalizar documentos',
+    category: 'productivity',
+    features: ['Scan OCR', 'PDF', 'Organização', 'Cloud storage'],
+    icon: Camera,
+    difficulty: 'Intermediário',
+    color: 'bg-gray-600'
+  },
+  {
+    id: 'analytics-website-tracker',
+    name: 'Analytics Website',
+    description: 'Análise completa de tráfego web',
+    category: 'analytics',
+    features: ['Visitantes únicos', 'Conversões', 'Heatmaps', 'A/B testing'],
+    icon: BarChart,
+    difficulty: 'Avançado',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'analytics-business-intelligence',
+    name: 'Business Intelligence',
+    description: 'Dashboards executivos e KPIs',
+    category: 'analytics',
+    features: ['KPIs tempo real', 'Relatórios automáticos', 'Previsões', 'Alertas'],
+    icon: TrendingUp,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'analytics-sales-funnel',
+    name: 'Funil Vendas',
+    description: 'Análise de funil de vendas e conversão',
+    category: 'analytics',
+    features: ['Etapas funil', 'Taxa conversão', 'Lead scoring', 'ROI'],
+    icon: BarChart,
+    difficulty: 'Avançado',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'analytics-customer-behavior',
+    name: 'Comportamento Cliente',
+    description: 'Análise comportamental de clientes',
+    category: 'analytics',
+    features: ['Jornada cliente', 'Segmentação', 'Churn prediction', 'LTV'],
+    icon: Users,
+    difficulty: 'Avançado',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'analytics-inventory-analytics',
+    name: 'Analytics Estoque',
+    description: 'Análise inteligente de estoque',
+    category: 'analytics',
+    features: ['Previsão demanda', 'Giro estoque', 'Produtos em falta', 'Sazonalidade'],
+    icon: BarChart,
+    difficulty: 'Avançado',
+    color: 'bg-blue-700'
+  },
+  {
+    id: 'entertainment-podcast',
+    name: 'Plataforma Podcast',
+    description: 'Streaming e criação de podcasts',
+    category: 'entertainment',
+    features: ['Upload episódios', 'Player personalizado', 'Assinantes', 'Analytics'],
+    icon: Radio,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'entertainment-karaoke',
+    name: 'Karaokê Digital',
+    description: 'App de karaokê com milhares de músicas',
+    category: 'entertainment',
+    features: ['Biblioteca músicas', 'Gravação performances', 'Competições', 'Social'],
+    icon: Music,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'entertainment-book-club',
+    name: 'Clube do Livro',
+    description: 'Rede social para leitores',
+    category: 'entertainment',
+    features: ['Resenhas livros', 'Grupos leitura', 'Metas leitura', 'Recomendações'],
+    icon: BookOpen,
+    difficulty: 'Intermediário',
+    color: 'bg-brown-600'
+  },
+  {
+    id: 'entertainment-trivia-game',
+    name: 'Quiz Trivia',
+    description: 'Jogo de perguntas e respostas',
+    category: 'entertainment',
+    features: ['Múltiplas categorias', 'Multiplayer', 'Ranking', 'Premiações'],
+    icon: HelpCircle,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'entertainment-photo-contest',
+    name: 'Concurso Fotos',
+    description: 'Plataforma para concursos fotográficos',
+    category: 'entertainment',
+    features: ['Upload fotos', 'Votação pública', 'Categorias', 'Prêmios'],
+    icon: Camera,
+    difficulty: 'Intermediário',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'entertainment-virtual-events',
+    name: 'Eventos Virtuais',
+    description: 'Plataforma para eventos online',
+    category: 'entertainment',
+    features: ['Streaming ao vivo', 'Networking', 'Stands virtuais', 'Interação'],
+    icon: Video,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'finance-investment-tracker',
+    name: 'Carteira Investimentos',
+    description: 'Acompanhamento de investimentos',
+    category: 'finance',
+    features: ['Portfolio ações', 'Rendimentos', 'Diversificação', 'Alertas'],
+    icon: TrendingUp,
+    difficulty: 'Avançado',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'finance-loan-calculator',
+    name: 'Simulador Financiamentos',
+    description: 'Calculadora de empréstimos e financiamentos',
+    category: 'finance',
+    features: ['Simulações empréstimo', 'Comparativo bancos', 'Parcelas', 'Juros'],
+    icon: Calculator,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'finance-tax-calculator',
+    name: 'Calculadora Impostos',
+    description: 'Cálculo de impostos e declaração IR',
+    category: 'finance',
+    features: ['Cálculo IR', 'Deduções', 'Simulação restituição', 'Dicas fiscais'],
+    icon: Calculator,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'finance-insurance-manager',
+    name: 'Gestão Seguros',
+    description: 'Gerenciamento de apólices de seguro',
+    category: 'finance',
+    features: ['Apólices ativas', 'Vencimentos', 'Sinistros', 'Renovações'],
+    icon: Shield,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-700'
+  },
+  {
+    id: 'finance-retirement-planner',
+    name: 'Planejamento Aposentadoria',
+    description: 'Calculadora de aposentadoria',
+    category: 'finance',
+    features: ['Simulação aposentadoria', 'INSS', 'Previdência privada', 'Metas'],
+    icon: Target,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'marketing-influencer-platform',
+    name: 'Plataforma Influencers',
+    description: 'Conecta marcas com influenciadores',
+    category: 'marketing',
+    features: ['Matching marca-influencer', 'Campanhas', 'Analytics', 'Pagamentos'],
+    icon: Star,
+    difficulty: 'Avançado',
+    color: 'bg-pink-600'
+  },
+  {
+    id: 'marketing-referral-system',
+    name: 'Sistema Indicações',
+    description: 'Programa de indicações e recompensas',
+    category: 'marketing',
+    features: ['Links únicos', 'Comissões', 'Gamificação', 'Tracking'],
+    icon: Share,
+    difficulty: 'Avançado',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'marketing-survey-maker',
+    name: 'Criador Pesquisas',
+    description: 'Ferramenta para criar pesquisas de mercado',
+    category: 'marketing',
+    features: ['Templates pesquisa', 'Análise respostas', 'Exportação dados', 'Relatórios'],
+    icon: HelpCircle,
+    difficulty: 'Intermediário',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'marketing-content-calendar',
+    name: 'Calendário Conteúdo',
+    description: 'Planejamento de conteúdo para redes sociais',
+    category: 'marketing',
+    features: ['Agendamento posts', 'Templates', 'Aprovações', 'Analytics'],
+    icon: Calendar,
+    difficulty: 'Intermediário',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'marketing-qr-generator',
+    name: 'Gerador QR Code',
+    description: 'Criação de QR codes para marketing',
+    category: 'marketing',
+    features: ['QR personalizados', 'Analytics scans', 'Campanhas', 'Designs'],
+    icon: Target,
+    difficulty: 'Iniciante',
+    color: 'bg-gray-600'
+  },
+  {
+    id: 'communication-help-desk',
+    name: 'Help Desk',
+    description: 'Sistema de suporte e tickets',
+    category: 'communication',
+    features: ['Tickets suporte', 'Base conhecimento', 'Chat ao vivo', 'SLA'],
+    icon: HelpCircle,
+    difficulty: 'Avançado',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'communication-forum',
+    name: 'Fórum Comunidade',
+    description: 'Fórum de discussões e comunidade',
+    category: 'communication',
+    features: ['Tópicos discussão', 'Moderação', 'Reputação', 'Categorias'],
+    icon: MessageCircle,
+    difficulty: 'Avançado',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'communication-messenger',
+    name: 'Messenger Empresarial',
+    description: 'Chat interno para empresas',
+    category: 'communication',
+    features: ['Chat departamentos', 'Arquivos', 'Integrações', 'Mobile'],
+    icon: MessageCircle,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'communication-webinar',
+    name: 'Plataforma Webinar',
+    description: 'Sistema para webinars e apresentações',
+    category: 'communication',
+    features: ['Transmissão ao vivo', 'Interação audiência', 'Gravações', 'Relatórios'],
+    icon: Video,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'communication-voice-recorder',
+    name: 'Gravador Voz',
+    description: 'App para gravação e transcrição de áudio',
+    category: 'communication',
+    features: ['Gravação HD', 'Transcrição automática', 'Notas', 'Compartilhamento'],
+    icon: Radio,
+    difficulty: 'Intermediário',
+    color: 'bg-orange-600'
   }
 ];
 
