@@ -20,18 +20,20 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // Tentar login primeiro
+      console.log('Tentando fazer login com:', email);
+      
       const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
         email,
         password
       });
 
       if (loginError) {
-        // Se é o admin e falhou o login, pode ser que não existe ainda
+        console.log('Erro no login:', loginError);
+        
+        // Se é o admin e falhou o login, tentar criar
         if (email === 'admin@admin.com' && password === '320809eu') {
           console.log('Tentando criar usuário admin...');
           
-          // Tentar criar o usuário admin
           const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
             email: 'admin@admin.com',
             password: '320809eu',
@@ -39,29 +41,22 @@ const Login = () => {
               data: {
                 full_name: 'Administrator',
                 plan_type: 'admin'
-              },
-              emailRedirectTo: undefined // Não precisamos de confirmação para admin
+              }
             }
           });
 
           if (signUpError) {
             console.error('Erro ao criar usuário admin:', signUpError);
+            if (signUpError.message.includes('rate limit') || signUpError.message.includes('seconds')) {
+              throw new Error('Muitas tentativas. Aguarde alguns minutos e tente novamente.');
+            }
             throw new Error('Não foi possível criar o usuário administrador');
           }
 
-          // Se criou com sucesso, tentar login novamente
+          console.log('Usuário admin criado:', signUpData);
+
           if (signUpData.user) {
-            const { data: retryLoginData, error: retryLoginError } = await supabase.auth.signInWithPassword({
-              email,
-              password
-            });
-
-            if (retryLoginError) {
-              console.error('Erro no segundo login:', retryLoginError);
-              throw new Error('Usuário admin criado mas não foi possível fazer login. Tente novamente.');
-            }
-
-            // Criar entrada na tabela users manualmente
+            // Criar entrada na tabela users
             const { error: upsertError } = await supabase
               .from('users')
               .upsert({
@@ -81,11 +76,23 @@ const Login = () => {
               console.error('Erro ao criar entrada na tabela users:', upsertError);
             }
 
+            // Se o usuário foi criado mas precisa confirmar email
+            if (!signUpData.session) {
+              toast({
+                title: "Usuário admin criado!",
+                description: "Verifique seu email para confirmar a conta e tente fazer login novamente.",
+              });
+              setLoading(false);
+              return;
+            }
+
+            // Se foi criado e já tem sessão
             navigate('/admin');
             toast({
               title: "Admin criado e logado com sucesso!",
               description: "Bem-vindo ao painel administrativo.",
             });
+            setLoading(false);
             return;
           }
         }
@@ -93,15 +100,18 @@ const Login = () => {
         throw loginError;
       }
 
-      // Login bem-sucedido - verificar tipo de usuário
+      // Login bem-sucedido
+      console.log('Login realizado com sucesso:', loginData);
+      
       if (loginData.user) {
-        // Se for admin (verificar pelos metadados primeiro)
+        // Verificar se é admin
         if (email === 'admin@admin.com' || loginData.user.user_metadata?.plan_type === 'admin') {
           navigate('/admin');
           toast({
             title: "Login realizado com sucesso!",
             description: "Bem-vindo ao painel administrativo.",
           });
+          setLoading(false);
           return;
         }
 
