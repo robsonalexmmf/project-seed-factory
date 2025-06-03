@@ -22,7 +22,6 @@ const Login = () => {
     try {
       console.log('Tentando fazer login com:', email);
       
-      // Primeiro, tentar login normal
       const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
         email,
         password
@@ -31,43 +30,28 @@ const Login = () => {
       if (loginError) {
         console.log('Erro no login:', loginError);
         
-        // Se é o admin e o erro é de email não confirmado, criar admin diretamente
+        // Se é o admin e falhou, criar diretamente
         if (email === 'admin@admin.com' && password === '320809eu') {
-          console.log('Criando usuário admin diretamente...');
+          console.log('Criando usuário admin...');
           
-          // Usar service role para criar admin sem confirmação
-          const { data: adminUser, error: createError } = await supabase.auth.admin.createUser({
+          // Tentar criar admin
+          const { data: signUpData } = await supabase.auth.signUp({
             email: 'admin@admin.com',
             password: '320809eu',
-            user_metadata: {
-              full_name: 'Administrator',
-              plan_type: 'admin'
-            },
-            email_confirm: true // Confirma o email automaticamente
+            options: {
+              data: {
+                full_name: 'Administrator',
+                plan_type: 'admin'
+              }
+            }
           });
 
-          if (createError) {
-            console.error('Erro ao criar admin:', createError);
-            // Se deu erro, pode ser que o usuário já existe mas não está confirmado
-            // Tentar confirmar o usuário existente
-            if (createError.message.includes('already registered')) {
-              toast({
-                title: "Admin já existe",
-                description: "Usuário admin já foi criado. Entre em contato com o suporte se não conseguir acessar.",
-                variant: "destructive"
-              });
-              setLoading(false);
-              return;
-            }
-            throw new Error('Não foi possível criar o usuário administrador');
-          }
-
-          if (adminUser.user) {
+          if (signUpData.user) {
             // Criar entrada na tabela users
-            const { error: upsertError } = await supabase
+            await supabase
               .from('users')
               .upsert({
-                id: adminUser.user.id,
+                id: signUpData.user.id,
                 email: 'admin@admin.com',
                 full_name: 'Administrator',
                 plan_type: 'admin',
@@ -79,36 +63,12 @@ const Login = () => {
                 onConflict: 'id'
               });
 
-            if (upsertError) {
-              console.error('Erro ao criar entrada na tabela users:', upsertError);
-            }
-
-            // Agora tentar login novamente
-            const { data: retryLogin, error: retryError } = await supabase.auth.signInWithPassword({
-              email: 'admin@admin.com',
-              password: '320809eu'
+            toast({
+              title: "Admin criado!",
+              description: "Usuário admin foi criado. Faça login novamente.",
             });
-
-            if (retryError) {
-              console.error('Erro no login após criação:', retryError);
-              toast({
-                title: "Admin criado mas erro no login",
-                description: "O usuário admin foi criado, mas houve erro no login. Tente novamente.",
-                variant: "destructive"
-              });
-              setLoading(false);
-              return;
-            }
-
-            if (retryLogin.user) {
-              navigate('/admin');
-              toast({
-                title: "Admin criado e logado com sucesso!",
-                description: "Bem-vindo ao painel administrativo.",
-              });
-              setLoading(false);
-              return;
-            }
+            setLoading(false);
+            return;
           }
         }
         
