@@ -118,6 +118,7 @@ const Login = () => {
           }
         }
 
+        // Redirecionar para dashboard admin
         navigate('/admin');
         toast({
           title: "Login realizado com sucesso!",
@@ -134,7 +135,23 @@ const Login = () => {
           throw error;
         }
 
-        navigate('/generator');
+        // Verificar o tipo de usuário após login bem-sucedido
+        const { data: userProfile, error: profileError } = await supabase
+          .from('users')
+          .select('plan_type')
+          .eq('id', data.user.id)
+          .single();
+
+        if (profileError) {
+          console.error('Erro ao buscar perfil do usuário:', profileError);
+          // Redirecionar para generator por padrão se houver erro
+          navigate('/generator');
+        } else if (userProfile?.plan_type === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/generator');
+        }
+
         toast({
           title: "Login realizado com sucesso!",
           description: "Bem-vindo de volta!",
