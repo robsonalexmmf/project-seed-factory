@@ -1,15 +1,20 @@
 
 import { makeUserAdmin } from './makeUserAdmin';
+import { createAdminUser } from './createAdminUser';
 
 // Promover email específico para admin
 export const promoteSpecificEmailToAdmin = async () => {
   try {
+    // Primeiro, tentar criar o usuário admin se não existir
+    await createAdminUser();
+    
+    // Depois, promover para admin
     await makeUserAdmin('robsonalexmmfata@gmail.com');
-    console.log('Email robsonalexmmfata@gmail.com promovido a admin com sucesso');
+    console.log('Email robsonalexmmfata@gmail.com processado para admin');
   } catch (error) {
-    console.error('Erro ao promover email para admin:', error);
+    console.error('Erro ao processar usuário admin:', error);
   }
 };
 
-// Executar automaticamente quando o módulo for importado
-promoteSpecificEmailToAdmin();
+// Não executar automaticamente quando o módulo for importado
+// A execução será feita apenas quando chamada explicitamente

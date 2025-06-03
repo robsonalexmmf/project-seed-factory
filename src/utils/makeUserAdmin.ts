@@ -6,23 +6,35 @@ export const makeUserAdmin = async (email: string) => {
   try {
     console.log('Tornando usuário admin:', email);
     
-    // Atualizar o usuário na tabela users para ser admin
-    const { data, error } = await supabase
+    // Primeiro, verificar se o usuário já existe na tabela users
+    const { data: existingUser, error: fetchError } = await supabase
       .from('users')
-      .update({ 
-        plan_type: 'admin',
-        monthly_limit: -1,
-        updated_at: new Date().toISOString()
-      })
+      .select('*')
       .eq('email', email)
-      .select();
+      .maybeSingle();
 
-    if (error) {
-      console.error('Erro ao tornar usuário admin:', error);
-      throw error;
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      console.error('Erro ao buscar usuário:', fetchError);
+      throw fetchError;
     }
 
-    if (data && data.length > 0) {
+    if (existingUser) {
+      // Usuário existe, atualizar para admin
+      const { data, error } = await supabase
+        .from('users')
+        .update({ 
+          plan_type: 'admin',
+          monthly_limit: -1,
+          updated_at: new Date().toISOString()
+        })
+        .eq('email', email)
+        .select();
+
+      if (error) {
+        console.error('Erro ao atualizar usuário para admin:', error);
+        throw error;
+      }
+
       console.log('Usuário atualizado para admin:', data[0]);
       toast({
         title: "Usuário promovido a admin",
@@ -30,29 +42,17 @@ export const makeUserAdmin = async (email: string) => {
       });
       return data[0];
     } else {
-      // Se o usuário não existe na tabela users, criar entrada diretamente
-      const { data: newUser, error: createError } = await supabase
-        .from('users')
-        .insert({
-          email: email,
-          full_name: '',
-          plan_type: 'admin',
-          projects_generated: 0,
-          monthly_limit: -1
-        })
-        .select();
-
-      if (createError) {
-        console.error('Erro ao criar usuário admin:', createError);
-        throw createError;
-      }
-
-      console.log('Usuário criado como admin:', newUser[0]);
+      // Usuário não existe, mas vamos tentar criar
+      // Isso pode falhar se o usuário não estiver no auth.users ainda
+      console.log('Usuário não encontrado na tabela users. Pode ser necessário fazer login primeiro.');
+      
       toast({
-        title: "Usuário promovido a admin",
-        description: `${email} agora é um administrador do sistema.`,
+        title: "Usuário não encontrado",
+        description: `${email} precisa fazer login primeiro para ser promovido a admin.`,
+        variant: "destructive"
       });
-      return newUser[0];
+      
+      return null;
     }
   } catch (error) {
     console.error('Erro ao tornar usuário admin:', error);
