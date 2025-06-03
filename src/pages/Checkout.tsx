@@ -12,21 +12,44 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [session, setSession] = useState<any>(null);
 
   const planType = new URLSearchParams(location.search).get('plan');
 
   useEffect(() => {
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setUser(user);
+    const checkAuth = async () => {
+      // Primeiro verificar se há sessão ativa
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error) {
+        console.error('Erro ao verificar sessão:', error);
+      }
+
+      if (session && session.user) {
+        setSession(session);
+        setUser(session.user);
+        console.log('Usuário autenticado via Supabase:', session.user);
       } else {
+        // Se não há sessão do Supabase, verificar localStorage
         const userData = localStorage.getItem('user');
         if (userData) {
           const parsedUser = JSON.parse(userData);
           setUser(parsedUser);
+          console.log('Usuário encontrado no localStorage:', parsedUser);
+          
+          // Se é um usuário do localStorage, redirecionar para login para criar sessão Supabase
+          if (parsedUser.email !== 'admin@admin.com') {
+            toast({
+              title: "Sessão expirada",
+              description: "Por favor, faça login novamente para continuar.",
+              variant: "destructive"
+            });
+            navigate('/login');
+            return;
+          }
         } else {
           navigate('/register');
+          return;
         }
       }
     };
@@ -34,7 +57,7 @@ const Checkout = () => {
     if (!planType) {
       navigate('/subscription');
     } else {
-      checkUser();
+      checkAuth();
     }
   }, [planType, navigate]);
 
@@ -70,10 +93,23 @@ const Checkout = () => {
       console.log('Iniciando processo de checkout para plano:', planType);
       console.log('Usuário:', user);
 
-      const { data: { session } } = await supabase.auth.getSession();
+      // Verificar se temos sessão ativa do Supabase
+      const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
       
-      if (!session) {
-        throw new Error('Nenhuma sessão ativa encontrada. Faça login novamente.');
+      if (sessionError) {
+        console.error('Erro ao obter sessão:', sessionError);
+        throw new Error('Erro ao verificar sessão de autenticação');
+      }
+
+      if (!currentSession || !currentSession.access_token) {
+        console.error('Nenhuma sessão ativa encontrada');
+        toast({
+          title: "Sessão expirada",
+          description: "Por favor, faça login novamente para continuar.",
+          variant: "destructive"
+        });
+        navigate('/login');
+        return;
       }
 
       console.log('Sessão encontrada, chamando edge function...');
@@ -81,7 +117,7 @@ const Checkout = () => {
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: { planType },
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${currentSession.access_token}`,
         },
       });
 
