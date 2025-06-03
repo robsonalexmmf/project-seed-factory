@@ -1,4 +1,3 @@
-
 import { 
   ShoppingCart, 
   Users, 
@@ -94,10 +93,13 @@ export const templateCategories: TemplateCategory[] = [
   { id: 'productivity', name: 'Produtividade', icon: Zap },
   { id: 'analytics', name: 'Analytics', icon: TrendingUp },
   { id: 'entertainment', name: 'Entretenimento', icon: Monitor },
+  { id: 'finance', name: 'Financeiro', icon: DollarSign },
+  { id: 'marketing', name: 'Marketing', icon: Megaphone },
+  { id: 'communication', name: 'Comunicação', icon: MessageSquare },
 ];
 
 export const projectTemplates: ProjectTemplate[] = [
-  // E-commerce Templates (70 templates)
+  // E-commerce Templates (50 templates)
   {
     id: 'ecommerce-marketplace',
     name: 'Marketplace Multi-Vendor',
@@ -618,160 +620,10 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Médio',
     color: 'bg-pink-600'
   },
-  {
-    id: 'ecommerce-progressive',
-    name: 'Progressive Commerce',
-    description: 'E-commerce com experiência progressiva e adaptativa',
-    category: 'ecommerce',
-    features: ['Progressive loading', 'Offline support', 'Smart caching', 'Adaptive UI'],
-    icon: Zap,
-    difficulty: 'Avançado',
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'ecommerce-eco',
-    name: 'Eco Commerce',
-    description: 'E-commerce focado em produtos sustentáveis',
-    category: 'ecommerce',
-    features: ['Pegada carbono', 'Produtos eco', 'Certificações verdes', 'Offset carbono'],
-    icon: Home,
-    difficulty: 'Médio',
-    color: 'bg-green-700'
-  },
-  {
-    id: 'ecommerce-ai-powered',
-    name: 'AI-Powered Commerce',
-    description: 'E-commerce com IA para recomendações e chatbot',
-    category: 'ecommerce',
-    features: ['AI recommendations', 'Chatbot', 'Price optimization', 'Demand forecasting'],
-    icon: Bot,
-    difficulty: 'Avançado',
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'ecommerce-headless',
-    name: 'Headless Commerce',
-    description: 'E-commerce headless com API-first approach',
-    category: 'ecommerce',
-    features: ['API-first', 'Multi-channel', 'Microservices', 'GraphQL'],
-    icon: Cloud,
-    difficulty: 'Avançado',
-    color: 'bg-gray-700'
-  },
-  {
-    id: 'ecommerce-personalized',
-    name: 'Hyper-Personalized Shop',
-    description: 'Loja com personalização extrema por usuário',
-    category: 'ecommerce',
-    features: ['Personalização IA', 'Dynamic pricing', 'Custom layouts', 'Behavioral targeting'],
-    icon: Target,
-    difficulty: 'Avançado',
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'ecommerce-live-shopping',
-    name: 'Live Shopping Platform',
-    description: 'Plataforma de live shopping com streamers',
-    category: 'ecommerce',
-    features: ['Live streaming', 'Real-time chat', 'Instant purchase', 'Influencer tools'],
-    icon: Camera,
-    difficulty: 'Avançado',
-    color: 'bg-red-600'
-  },
-  {
-    id: 'ecommerce-quick-commerce',
-    name: 'Quick Commerce',
-    description: 'Entrega ultra-rápida em 15-30 minutos',
-    category: 'ecommerce',
-    features: ['Entrega 15min', 'Dark stores', 'Real-time tracking', 'Micro-fulfillment'],
-    icon: Truck,
-    difficulty: 'Avançado',
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'ecommerce-upcycling',
-    name: 'Upcycling Marketplace',
-    description: 'Marketplace para produtos reciclados e upcycling',
-    category: 'ecommerce',
-    features: ['Produtos reciclados', 'DIY tutorials', 'Sustainability score', 'Eco community'],
-    icon: Shield,
-    difficulty: 'Médio',
-    color: 'bg-green-600'
-  },
-  {
-    id: 'ecommerce-elderly',
-    name: 'Senior-Friendly Commerce',
-    description: 'E-commerce otimizado para idosos',
-    category: 'ecommerce',
-    features: ['Interface simplificada', 'Texto grande', 'Suporte telefônico', 'Entrega cuidadosa'],
-    icon: Heart,
-    difficulty: 'Médio',
-    color: 'bg-blue-500'
-  },
-  {
-    id: 'ecommerce-kids',
-    name: 'Kids Safe Commerce',
-    description: 'E-commerce seguro para crianças',
-    category: 'ecommerce',
-    features: ['Controle parental', 'Limite gastos', 'Conteúdo apropriado', 'Educação financeira'],
-    icon: Shield,
-    difficulty: 'Médio',
-    color: 'bg-pink-500'
-  },
-  {
-    id: 'ecommerce-disability',
-    name: 'Accessible Commerce',
-    description: 'E-commerce totalmente acessível para PCDs',
-    category: 'ecommerce',
-    features: ['Screen reader', 'Voice navigation', 'High contrast', 'Keyboard navigation'],
-    icon: Heart,
-    difficulty: 'Médio',
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'ecommerce-charity',
-    name: 'Charity Commerce',
-    description: 'E-commerce que doa parte das vendas para caridade',
-    category: 'ecommerce',
-    features: ['Doação automática', 'Escolha da causa', 'Transparência', 'Impact tracking'],
-    icon: Heart,
-    difficulty: 'Médio',
-    color: 'bg-red-500'
-  },
-  {
-    id: 'ecommerce-gamified',
-    name: 'Gamified Commerce',
-    description: 'E-commerce com elementos de gamificação',
-    category: 'ecommerce',
-    features: ['Points system', 'Achievements', 'Leaderboards', 'Challenges'],
-    icon: Gamepad2,
-    difficulty: 'Médio',
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'ecommerce-regional',
-    name: 'Regional Commerce Hub',
-    description: 'Hub de e-commerce para produtos regionais',
-    category: 'ecommerce',
-    features: ['Produtos regionais', 'Cultura local', 'Artesãos locais', 'Turismo gastronômico'],
-    icon: MapPin,
-    difficulty: 'Médio',
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'ecommerce-smart-contracts',
-    name: 'Smart Contract Commerce',
-    description: 'E-commerce baseado em smart contracts',
-    category: 'ecommerce',
-    features: ['Smart contracts', 'Automatic execution', 'Decentralized', 'Crypto payments'],
-    icon: Code,
-    difficulty: 'Avançado',
-    color: 'bg-purple-800'
-  },
 
-  // Social Media Templates (35 templates)
+  // Social Templates (40 templates)
   {
-    id: 'social-network-complete',
+    id: 'social-network',
     name: 'Rede Social Completa',
     description: 'Plataforma social com feed, stories e mensagens',
     category: 'social',
@@ -781,7 +633,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-blue-600'
   },
   {
-    id: 'social-dating-app',
+    id: 'social-dating',
     name: 'App de Relacionamento',
     description: 'Plataforma de encontros com matching inteligente',
     category: 'social',
@@ -791,7 +643,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-pink-600'
   },
   {
-    id: 'social-professional-network',
+    id: 'social-professional',
     name: 'Rede Profissional',
     description: 'LinkedIn para nichos específicos de profissionais',
     category: 'social',
@@ -801,7 +653,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-blue-700'
   },
   {
-    id: 'social-community-platform',
+    id: 'social-community',
     name: 'Plataforma de Comunidade',
     description: 'Forum moderno com gamificação e reputação',
     category: 'social',
@@ -811,7 +663,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-green-600'
   },
   {
-    id: 'social-local-network',
+    id: 'social-local',
     name: 'Rede Social Local',
     description: 'Conecte pessoas da mesma região ou bairro',
     category: 'social',
@@ -821,7 +673,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-red-600'
   },
   {
-    id: 'social-hobby-network',
+    id: 'social-hobby',
     name: 'Rede de Hobbies',
     description: 'Conecte pessoas com os mesmos interesses e hobbies',
     category: 'social',
@@ -831,7 +683,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-yellow-600'
   },
   {
-    id: 'social-family-network',
+    id: 'social-family',
     name: 'Rede Familiar',
     description: 'Plataforma privada para famílias compartilharem momentos',
     category: 'social',
@@ -841,7 +693,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-pink-500'
   },
   {
-    id: 'social-creator-platform',
+    id: 'social-creator',
     name: 'Plataforma de Criadores',
     description: 'Rede social para criadores de conteúdo monetizarem',
     category: 'social',
@@ -851,7 +703,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-purple-600'
   },
   {
-    id: 'social-seniors-network',
+    id: 'social-seniors',
     name: 'Rede Social Melhor Idade',
     description: 'Rede social especialmente desenhada para idosos',
     category: 'social',
@@ -861,7 +713,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-blue-500'
   },
   {
-    id: 'social-students-network',
+    id: 'social-students',
     name: 'Rede Social Estudantil',
     description: 'Plataforma para estudantes colaborarem e estudarem',
     category: 'social',
@@ -871,7 +723,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-blue-600'
   },
   {
-    id: 'social-travel-network',
+    id: 'social-travel',
     name: 'Rede Social de Viagem',
     description: 'Conecte viajantes e compartilhe experiências',
     category: 'social',
@@ -881,7 +733,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-blue-500'
   },
   {
-    id: 'social-parenting-network',
+    id: 'social-parenting',
     name: 'Rede de Pais',
     description: 'Plataforma para pais compartilharem experiências',
     category: 'social',
@@ -901,7 +753,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-orange-500'
   },
   {
-    id: 'social-gaming-network',
+    id: 'social-gaming',
     name: 'Rede Social Gaming',
     description: 'Plataforma para gamers se conectarem e jogarem',
     category: 'social',
@@ -911,7 +763,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-purple-600'
   },
   {
-    id: 'social-music-network',
+    id: 'social-music',
     name: 'Rede Social Musical',
     description: 'Conecte músicos, bandas e fãs de música',
     category: 'social',
@@ -921,7 +773,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-indigo-600'
   },
   {
-    id: 'social-fitness-network',
+    id: 'social-fitness',
     name: 'Rede Social Fitness',
     description: 'Comunidade fitness para motivação e acompanhamento',
     category: 'social',
@@ -931,7 +783,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-orange-600'
   },
   {
-    id: 'social-food-network',
+    id: 'social-food',
     name: 'Rede Social Gastronômica',
     description: 'Compartilhe receitas e experiências culinárias',
     category: 'social',
@@ -951,7 +803,7 @@ export const projectTemplates: ProjectTemplate[] = [
     color: 'bg-blue-500'
   },
   {
-    id: 'social-artists-network',
+    id: 'social-artists',
     name: 'Rede de Artistas',
     description: 'Plataforma para artistas exporem e venderem arte',
     category: 'social',
@@ -1120,6 +972,56 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Médio',
     color: 'bg-purple-600'
   },
+  {
+    id: 'social-influencer-marketplace',
+    name: 'Marketplace de Influencers',
+    description: 'Conecte marcas com influenciadores digitais',
+    category: 'social',
+    features: ['Portfolio influencers', 'Campanhas', 'Analytics performance', 'Pagamentos automáticos'],
+    icon: Camera,
+    difficulty: 'Médio',
+    color: 'bg-pink-600'
+  },
+  {
+    id: 'social-live-streaming',
+    name: 'Plataforma Live Streaming',
+    description: 'Rede social focada em transmissões ao vivo',
+    category: 'social',
+    features: ['Live streaming', 'Monetização lives', 'Chat interativo', 'Gifts virtuais'],
+    icon: Camera,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'social-forum-q-a',
+    name: 'Forum Q&A Especializado',
+    description: 'Plataforma de perguntas e respostas por tópicos',
+    category: 'social',
+    features: ['Sistema reputação', 'Moderação especializada', 'Badges expertise', 'Votação respostas'],
+    icon: MessageSquare,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'social-event-networking',
+    name: 'Rede de Eventos',
+    description: 'Plataforma para networking em eventos',
+    category: 'social',
+    features: ['Check-in eventos', 'Networking match', 'Business cards digitais', 'Follow-up automático'],
+    icon: Calendar,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'social-podcast-community',
+    name: 'Comunidade de Podcasts',
+    description: 'Rede social para podcasters e ouvintes',
+    category: 'social',
+    features: ['Podcast discovery', 'Comunidades episódios', 'Colaborações', 'Monetização'],
+    icon: Headphones,
+    difficulty: 'Médio',
+    color: 'bg-purple-600'
+  },
 
   // Business Templates (60 templates)  
   {
@@ -1172,7 +1074,526 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Avançado',
     color: 'bg-green-600'
   },
-  // Continue with remaining business templates...
+  {
+    id: 'business-hr-management',
+    name: 'Sistema de RH',
+    description: 'Gestão completa de recursos humanos',
+    category: 'business',
+    features: ['Folha pagamento', 'Recrutamento', 'Avaliação performance', 'Benefícios'],
+    icon: Users,
+    difficulty: 'Avançado',
+    color: 'bg-blue-700'
+  },
+  {
+    id: 'business-helpdesk',
+    name: 'Sistema de Helpdesk',
+    description: 'Plataforma de suporte ao cliente com tickets',
+    category: 'business',
+    features: ['Tickets', 'Base conhecimento', 'Chat ao vivo', 'SLA tracking'],
+    icon: MessageSquare,
+    difficulty: 'Médio',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'business-document-management',
+    name: 'Gestão Documental',
+    description: 'Sistema para organizar e controlar documentos',
+    category: 'business',
+    features: ['Upload documentos', 'Versionamento', 'Controle acesso', 'Assinatura digital'],
+    icon: FileText,
+    difficulty: 'Médio',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'business-workflow-automation',
+    name: 'Automação de Processos',
+    description: 'Plataforma para automatizar workflows empresariais',
+    category: 'business',
+    features: ['Designer workflow', 'Aprovações', 'Integrações', 'Relatórios processo'],
+    icon: Zap,
+    difficulty: 'Avançado',
+    color: 'bg-yellow-600'
+  },
+  {
+    id: 'business-invoice-system',
+    name: 'Sistema de Faturamento',
+    description: 'Geração e controle de notas fiscais e faturas',
+    category: 'business',
+    features: ['NFe automática', 'Recorrência', 'Cobrança', 'Relatórios fiscais'],
+    icon: FileText,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'business-asset-management',
+    name: 'Gestão de Ativos',
+    description: 'Controle de patrimônio e ativos da empresa',
+    category: 'business',
+    features: ['Cadastro ativos', 'Depreciação', 'Manutenção', 'Localização'],
+    icon: Building,
+    difficulty: 'Médio',
+    color: 'bg-gray-600'
+  },
+  {
+    id: 'business-supplier-management',
+    name: 'Gestão de Fornecedores',
+    description: 'Sistema para gerenciar relacionamento com fornecedores',
+    category: 'business',
+    features: ['Cadastro fornecedores', 'Avaliação performance', 'Cotações', 'Contratos'],
+    icon: Truck,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-quality-management',
+    name: 'Gestão da Qualidade',
+    description: 'Sistema ISO para controle de qualidade',
+    category: 'business',
+    features: ['Não conformidades', 'Auditorias', 'Documentos ISO', 'KPIs qualidade'],
+    icon: Award,
+    difficulty: 'Avançado',
+    color: 'bg-green-700'
+  },
+  {
+    id: 'business-time-tracking',
+    name: 'Controle de Ponto',
+    description: 'Sistema de controle de ponto e presença',
+    category: 'business',
+    features: ['Ponto eletrônico', 'Relatórios presença', 'Banco horas', 'Integração folha'],
+    icon: Clock,
+    difficulty: 'Médio',
+    color: 'bg-blue-500'
+  },
+  {
+    id: 'business-fleet-management',
+    name: 'Gestão de Frota',
+    description: 'Controle completo de frota de veículos',
+    category: 'business',
+    features: ['Tracking GPS', 'Manutenção', 'Combustível', 'Motoristas'],
+    icon: Car,
+    difficulty: 'Médio',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'business-meeting-scheduler',
+    name: 'Agendamento de Reuniões',
+    description: 'Sistema para agendar e gerenciar reuniões',
+    category: 'business',
+    features: ['Calendário compartilhado', 'Salas', 'Convites', 'Atas reunião'],
+    icon: Calendar,
+    difficulty: 'Fácil',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-expense-management',
+    name: 'Gestão de Despesas',
+    description: 'Controle de despesas e reembolsos',
+    category: 'business',
+    features: ['Upload recibos', 'Aprovações', 'Categorias', 'Relatórios despesas'],
+    icon: DollarSign,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'business-contract-management',
+    name: 'Gestão de Contratos',
+    description: 'Sistema para gerenciar contratos empresariais',
+    category: 'business',
+    features: ['Versionamento', 'Renovações', 'Alertas vencimento', 'Assinatura digital'],
+    icon: FileCheck,
+    difficulty: 'Médio',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'business-knowledge-base',
+    name: 'Base de Conhecimento',
+    description: 'Sistema interno de documentação e conhecimento',
+    category: 'business',
+    features: ['Wiki empresarial', 'Busca avançada', 'Versionamento', 'Colaboração'],
+    icon: Book,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-performance-dashboard',
+    name: 'Dashboard Executivo',
+    description: 'Painel executivo com KPIs e métricas',
+    category: 'business',
+    features: ['KPIs em tempo real', 'Gráficos interativos', 'Alertas', 'Drill-down'],
+    icon: BarChart3,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'business-customer-portal',
+    name: 'Portal do Cliente',
+    description: 'Portal self-service para clientes',
+    category: 'business',
+    features: ['Login cliente', 'Pedidos', 'Suporte', 'Documentos'],
+    icon: Users,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-vendor-portal',
+    name: 'Portal do Fornecedor',
+    description: 'Portal para fornecedores acessarem informações',
+    category: 'business',
+    features: ['Pedidos', 'Pagamentos', 'Documentos', 'Performance'],
+    icon: Truck,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'business-compliance-system',
+    name: 'Sistema de Compliance',
+    description: 'Gestão de compliance e conformidade',
+    category: 'business',
+    features: ['Regulamentações', 'Auditorias', 'Riscos', 'Treinamentos'],
+    icon: Shield,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'business-budget-planning',
+    name: 'Planejamento Orçamentário',
+    description: 'Sistema para planejamento e controle orçamentário',
+    category: 'business',
+    features: ['Orçamento anual', 'Previsões', 'Variações', 'Cenários'],
+    icon: PiggyBank,
+    difficulty: 'Avançado',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'business-sales-force',
+    name: 'Força de Vendas',
+    description: 'Sistema para equipes de vendas externas',
+    category: 'business',
+    features: ['CRM móvel', 'Check-in', 'Pedidos', 'Comissões'],
+    icon: Users,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-maintenance-system',
+    name: 'Gestão de Manutenção',
+    description: 'Sistema para manutenção preventiva e corretiva',
+    category: 'business',
+    features: ['Ordens serviço', 'Preventiva', 'Peças', 'Histórico equipamentos'],
+    icon: Wrench,
+    difficulty: 'Médio',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'business-audit-system',
+    name: 'Sistema de Auditoria',
+    description: 'Plataforma para auditorias internas e externas',
+    category: 'business',
+    features: ['Planos auditoria', 'Checklists', 'Não conformidades', 'Relatórios'],
+    icon: Search,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'business-training-platform',
+    name: 'Plataforma de Treinamento',
+    description: 'Sistema de treinamento corporativo',
+    category: 'business',
+    features: ['Cursos', 'Certificações', 'Avaliações', 'Trilhas aprendizado'],
+    icon: GraduationCap,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-security-system',
+    name: 'Sistema de Segurança',
+    description: 'Gestão de segurança e controle de acesso',
+    category: 'business',
+    features: ['Controle acesso', 'Câmeras', 'Incidentes', 'Visitantes'],
+    icon: Shield,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'business-insurance-management',
+    name: 'Gestão de Seguros',
+    description: 'Sistema para gerenciar apólices de seguro',
+    category: 'business',
+    features: ['Apólices', 'Sinistros', 'Renovações', 'Corretores'],
+    icon: Shield,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-location-management',
+    name: 'Gestão de Localizações',
+    description: 'Sistema para múltiplas filiais e localizações',
+    category: 'business',
+    features: ['Multi-filial', 'Estoque local', 'Relatórios local', 'Transferências'],
+    icon: MapPin,
+    difficulty: 'Avançado',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'business-warehouse-management',
+    name: 'Gestão de Armazém',
+    description: 'WMS completo para gestão de armazém',
+    category: 'business',
+    features: ['Endereçamento', 'Picking', 'Expedição', 'Inventário'],
+    icon: Package,
+    difficulty: 'Avançado',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-production-planning',
+    name: 'Planejamento Produção',
+    description: 'Sistema PCP para planejamento e controle da produção',
+    category: 'business',
+    features: ['Ordens produção', 'Capacidade', 'Materiais', 'Sequenciamento'],
+    icon: Settings,
+    difficulty: 'Avançado',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'business-customer-feedback',
+    name: 'Feedback do Cliente',
+    description: 'Sistema para coletar e analisar feedback',
+    category: 'business',
+    features: ['Pesquisas', 'NPS', 'Reviews', 'Analytics feedback'],
+    icon: MessageSquare,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-franchise-management',
+    name: 'Gestão de Franquias',
+    description: 'Sistema para gerenciar rede de franquias',
+    category: 'business',
+    features: ['Franqueados', 'Royalties', 'Padrões', 'Suporte'],
+    icon: Building,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'business-environmental-management',
+    name: 'Gestão Ambiental',
+    description: 'Sistema para gestão ambiental e sustentabilidade',
+    category: 'business',
+    features: ['Licenças ambientais', 'Resíduos', 'Emissões', 'Relatórios sustentabilidade'],
+    icon: Home,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'business-board-management',
+    name: 'Gestão de Conselho',
+    description: 'Sistema para gestão de conselhos administrativos',
+    category: 'business',
+    features: ['Reuniões conselho', 'Documentos', 'Votações', 'Atas'],
+    icon: Users,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-subscription-management',
+    name: 'Gestão de Assinaturas',
+    description: 'Sistema para empresas de modelo de assinatura',
+    category: 'business',
+    features: ['Billing recorrente', 'Churn analysis', 'Upgrades', 'Customer success'],
+    icon: CreditCard,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'business-digital-transformation',
+    name: 'Transformação Digital',
+    description: 'Plataforma para jornada de transformação digital',
+    category: 'business',
+    features: ['Roadmap digital', 'KPIs transformação', 'Projetos', 'Change management'],
+    icon: Zap,
+    difficulty: 'Avançado',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-innovation-management',
+    name: 'Gestão de Inovação',
+    description: 'Sistema para gerenciar inovação corporativa',
+    category: 'business',
+    features: ['Ideias', 'Projetos inovação', 'Avaliação', 'Portfolio inovação'],
+    icon: Zap,
+    difficulty: 'Médio',
+    color: 'bg-yellow-600'
+  },
+  {
+    id: 'business-crisis-management',
+    name: 'Gestão de Crises',
+    description: 'Sistema para gestão de crises empresariais',
+    category: 'business',
+    features: ['Planos contingência', 'Comunicação crise', 'Escalation', 'Recovery'],
+    icon: Shield,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'business-partnership-management',
+    name: 'Gestão de Parcerias',
+    description: 'Sistema para gerenciar parcerias estratégicas',
+    category: 'business',
+    features: ['Parceiros', 'Acordos', 'Performance', 'Joint ventures'],
+    icon: Users,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'business-competitive-intelligence',
+    name: 'Inteligência Competitiva',
+    description: 'Sistema para monitorar concorrência e mercado',
+    category: 'business',
+    features: ['Monitoramento concorrentes', 'Análise mercado', 'Alertas', 'Benchmarking'],
+    icon: Search,
+    difficulty: 'Médio',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'business-lean-manufacturing',
+    name: 'Lean Manufacturing',
+    description: 'Sistema para implementar metodologias Lean',
+    category: 'business',
+    features: ['5S', 'Kaizen', 'Value stream', 'Waste reduction'],
+    icon: Settings,
+    difficulty: 'Avançado',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'business-change-management',
+    name: 'Gestão de Mudanças',
+    description: 'Sistema para gerenciar mudanças organizacionais',
+    category: 'business',
+    features: ['Projetos mudança', 'Resistência', 'Comunicação', 'Training'],
+    icon: Zap,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-knowledge-transfer',
+    name: 'Transferência Conhecimento',
+    description: 'Sistema para capturar e transferir conhecimento',
+    category: 'business',
+    features: ['Conhecimento tácito', 'Mentoria', 'Best practices', 'Lessons learned'],
+    icon: Book,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'business-succession-planning',
+    name: 'Planejamento Sucessório',
+    description: 'Sistema para planejamento de sucessão',
+    category: 'business',
+    features: ['Sucessores', 'Planos desenvolvimento', 'Avaliação', 'Preparação'],
+    icon: Users,
+    difficulty: 'Médio',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'business-merger-acquisition',
+    name: 'Fusões e Aquisições',
+    description: 'Sistema para processos de M&A',
+    category: 'business',
+    features: ['Due diligence', 'Integração', 'Synergies', 'PMO'],
+    icon: Building,
+    difficulty: 'Avançado',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-corporate-governance',
+    name: 'Governança Corporativa',
+    description: 'Sistema para governança empresarial',
+    category: 'business',
+    features: ['Políticas', 'Comitês', 'Relatórios governança', 'Transparência'],
+    icon: Shield,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'business-stakeholder-management',
+    name: 'Gestão de Stakeholders',
+    description: 'Sistema para gerenciar relacionamento com stakeholders',
+    category: 'business',
+    features: ['Mapeamento stakeholders', 'Engajamento', 'Comunicação', 'Feedback'],
+    icon: Users,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'business-business-intelligence',
+    name: 'Business Intelligence',
+    description: 'Plataforma completa de BI e analytics',
+    category: 'business',
+    features: ['Data warehouse', 'ETL', 'Dashboards', 'Self-service BI'],
+    icon: BarChart3,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'business-data-governance',
+    name: 'Governança de Dados',
+    description: 'Sistema para governança e qualidade de dados',
+    category: 'business',
+    features: ['Data quality', 'Metadados', 'Lineage', 'Data catalog'],
+    icon: Database,
+    difficulty: 'Avançado',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-api-management',
+    name: 'Gestão de APIs',
+    description: 'Plataforma para gerenciar APIs empresariais',
+    category: 'business',
+    features: ['API gateway', 'Documentação', 'Monetização', 'Analytics APIs'],
+    icon: Code,
+    difficulty: 'Avançado',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'business-low-code-platform',
+    name: 'Plataforma Low-Code',
+    description: 'Plataforma para desenvolvimento low-code/no-code',
+    category: 'business',
+    features: ['Visual designer', 'Templates', 'Integrations', 'Deployment'],
+    icon: Code,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'business-robotic-process',
+    name: 'RPA - Automação Robótica',
+    description: 'Sistema para automação de processos com bots',
+    category: 'business',
+    features: ['Bot designer', 'Process mining', 'Scheduling', 'Monitoring'],
+    icon: Bot,
+    difficulty: 'Avançado',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'business-cloud-management',
+    name: 'Gestão de Cloud',
+    description: 'Sistema para gerenciar recursos cloud',
+    category: 'business',
+    features: ['Multi-cloud', 'Cost optimization', 'Security', 'Governance'],
+    icon: Cloud,
+    difficulty: 'Avançado',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'business-devops-platform',
+    name: 'Plataforma DevOps',
+    description: 'Sistema completo para práticas DevOps',
+    category: 'business',
+    features: ['CI/CD', 'Infrastructure as code', 'Monitoring', 'Collaboration'],
+    icon: Code,
+    difficulty: 'Avançado',
+    color: 'bg-green-600'
+  },
 
   // Health Templates (30 templates)
   {
@@ -1185,11 +1606,300 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Avançado',
     color: 'bg-red-600'
   },
-  // Continue with remaining health templates...
-
-  // Education Templates (25 templates)
   {
-    id: 'education-lms-platform',
+    id: 'health-telemedicine',
+    name: 'Telemedicina',
+    description: 'Plataforma para consultas médicas online',
+    category: 'health',
+    features: ['Video consultas', 'Prescrição digital', 'Prontuário online', 'Pagamentos'],
+    icon: Monitor,
+    difficulty: 'Avançado',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'health-patient-portal',
+    name: 'Portal do Paciente',
+    description: 'Portal para pacientes acessarem informações médicas',
+    category: 'health',
+    features: ['Histórico médico', 'Exames', 'Agendamentos', 'Receitas'],
+    icon: Users,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'health-pharmacy-system',
+    name: 'Sistema de Farmácia',
+    description: 'Gestão completa de farmácias e drogarias',
+    category: 'health',
+    features: ['Estoque medicamentos', 'Receitas', 'Vendas', 'Controle sanitário'],
+    icon: Building,
+    difficulty: 'Médio',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'health-laboratory-lis',
+    name: 'Sistema Laboratorial (LIS)',
+    description: 'Sistema de informação laboratorial',
+    category: 'health',
+    features: ['Coleta exames', 'Resultados', 'Laudos', 'Interface equipamentos'],
+    icon: Search,
+    difficulty: 'Avançado',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'health-hospital-management',
+    name: 'Gestão Hospitalar',
+    description: 'Sistema completo para gestão de hospitais',
+    category: 'health',
+    features: ['Internações', 'Centro cirúrgico', 'UTI', 'Faturamento TISS'],
+    icon: Building,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'health-mental-health',
+    name: 'Saúde Mental',
+    description: 'Plataforma para acompanhamento de saúde mental',
+    category: 'health',
+    features: ['Terapia online', 'Mood tracking', 'Exercícios mindfulness', 'Emergências'],
+    icon: Heart,
+    difficulty: 'Médio',
+    color: 'bg-green-500'
+  },
+  {
+    id: 'health-nutrition-tracking',
+    name: 'Acompanhamento Nutricional',
+    description: 'App para tracking nutricional e dietas',
+    category: 'health',
+    features: ['Diário alimentar', 'Cálculo calorias', 'Planos nutricionais', 'Metas peso'],
+    icon: ChefHat,
+    difficulty: 'Médio',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'health-fitness-tracking',
+    name: 'Monitoramento Fitness',
+    description: 'App para acompanhar atividades físicas',
+    category: 'health',
+    features: ['Exercícios', 'Tracking atividades', 'Metas fitness', 'Progresso'],
+    icon: Dumbbell,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'health-medication-reminder',
+    name: 'Lembrete de Medicamentos',
+    description: 'App para gerenciar medicamentos e lembretes',
+    category: 'health',
+    features: ['Alarmes medicação', 'Histórico doses', 'Interações', 'Renovação receitas'],
+    icon: Bell,
+    difficulty: 'Fácil',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'health-emergency-system',
+    name: 'Sistema de Emergência',
+    description: 'Plataforma para atendimentos de emergência',
+    category: 'health',
+    features: ['Triagem', 'Ambulâncias', 'Localização', 'Protocolos emergência'],
+    icon: Phone,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'health-dental-practice',
+    name: 'Consultório Odontológico',
+    description: 'Sistema para gestão de consultórios dentários',
+    category: 'health',
+    features: ['Odontograma', 'Orçamentos', 'Imagens', 'Planos tratamento'],
+    icon: Heart,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'health-veterinary-clinic',
+    name: 'Clínica Veterinária',
+    description: 'Sistema para clínicas veterinárias',
+    category: 'health',
+    features: ['Prontuário animal', 'Vacinas', 'Cirurgias', 'Tutores'],
+    icon: Heart,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'health-physiotherapy',
+    name: 'Fisioterapia',
+    description: 'Sistema para clínicas de fisioterapia',
+    category: 'health',
+    features: ['Protocolos tratamento', 'Evolução paciente', 'Exercícios', 'Equipamentos'],
+    icon: Dumbbell,
+    difficulty: 'Médio',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'health-radiology-pacs',
+    name: 'Radiologia (PACS)',
+    description: 'Sistema de arquivamento e comunicação de imagens',
+    category: 'health',
+    features: ['DICOM viewer', 'Laudos', 'Worklist', 'Teleradiologia'],
+    icon: Camera,
+    difficulty: 'Avançado',
+    color: 'bg-gray-600'
+  },
+  {
+    id: 'health-home-care',
+    name: 'Home Care',
+    description: 'Sistema para serviços de atendimento domiciliar',
+    category: 'health',
+    features: ['Visitas domiciliares', 'Cuidadores', 'Medicações', 'Familiares'],
+    icon: Home,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'health-blood-bank',
+    name: 'Banco de Sangue',
+    description: 'Sistema para gestão de bancos de sangue',
+    category: 'health',
+    features: ['Doadores', 'Estoque sangue', 'Testes', 'Distribuição'],
+    icon: Heart,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'health-rehabilitation',
+    name: 'Reabilitação',
+    description: 'Sistema para centros de reabilitação',
+    category: 'health',
+    features: ['Terapias', 'Evolução', 'Equipe multidisciplinar', 'Objetivos'],
+    icon: Target,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'health-occupational',
+    name: 'Medicina do Trabalho',
+    description: 'Sistema para medicina ocupacional',
+    category: 'health',
+    features: ['Exames ocupacionais', 'ASO', 'Riscos ambientais', 'PCMSO'],
+    icon: Briefcase,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'health-aesthetic-clinic',
+    name: 'Clínica Estética',
+    description: 'Sistema para clínicas de estética',
+    category: 'health',
+    features: ['Procedimentos estéticos', 'Fotos antes/depois', 'Agendamentos', 'Produtos'],
+    icon: Star,
+    difficulty: 'Médio',
+    color: 'bg-pink-600'
+  },
+  {
+    id: 'health-genetics-lab',
+    name: 'Laboratório Genética',
+    description: 'Sistema para laboratórios de genética',
+    category: 'health',
+    features: ['Testes genéticos', 'Genealogia', 'Relatórios', 'Aconselhamento'],
+    icon: Code,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'health-maternal',
+    name: 'Saúde Materna',
+    description: 'Sistema para acompanhamento de gestantes',
+    category: 'health',
+    features: ['Pré-natal', 'Curva crescimento', 'Exames', 'Calendário vacinal'],
+    icon: Heart,
+    difficulty: 'Médio',
+    color: 'bg-pink-500'
+  },
+  {
+    id: 'health-pediatric',
+    name: 'Pediatria',
+    description: 'Sistema especializado em pediatria',
+    category: 'health',
+    features: ['Crescimento infantil', 'Vacinas', 'Marcos desenvolvimento', 'Pais'],
+    icon: Heart,
+    difficulty: 'Médio',
+    color: 'bg-blue-500'
+  },
+  {
+    id: 'health-geriatric',
+    name: 'Geriatria',
+    description: 'Sistema para cuidados geriátricos',
+    category: 'health',
+    features: ['Avaliação geriátrica', 'Medicações', 'Cuidadores', 'Familia'],
+    icon: Heart,
+    difficulty: 'Médio',
+    color: 'bg-purple-500'
+  },
+  {
+    id: 'health-oncology',
+    name: 'Oncologia',
+    description: 'Sistema para tratamento oncológico',
+    category: 'health',
+    features: ['Protocolos quimio', 'Ciclos tratamento', 'Evolução', 'Multidisciplinar'],
+    icon: Target,
+    difficulty: 'Avançado',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'health-cardiology',
+    name: 'Cardiologia',
+    description: 'Sistema especializado em cardiologia',
+    category: 'health',
+    features: ['ECG', 'Holter', 'Risco cardiovascular', 'Procedimentos'],
+    icon: Heart,
+    difficulty: 'Médio',
+    color: 'bg-red-500'
+  },
+  {
+    id: 'health-dermatology',
+    name: 'Dermatologia',
+    description: 'Sistema para dermatologia',
+    category: 'health',
+    features: ['Dermatoscopia', 'Fotos lesões', 'Biópsias', 'Acompanhamento'],
+    icon: Camera,
+    difficulty: 'Médio',
+    color: 'bg-orange-500'
+  },
+  {
+    id: 'health-ophthalmology',
+    name: 'Oftalmologia',
+    description: 'Sistema para oftalmologia',
+    category: 'health',
+    features: ['Exames visuais', 'Prescrição óculos', 'Cirurgias', 'Equipamentos'],
+    icon: Search,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'health-orthopedics',
+    name: 'Ortopedia',
+    description: 'Sistema para ortopedia',
+    category: 'health',
+    features: ['Exames ortopédicos', 'Cirurgias', 'Reabilitação', 'Implantes'],
+    icon: Wrench,
+    difficulty: 'Médio',
+    color: 'bg-gray-600'
+  },
+  {
+    id: 'health-neurology',
+    name: 'Neurologia',
+    description: 'Sistema para neurologia',
+    category: 'health',
+    features: ['Exames neurológicos', 'EEG', 'Acompanhamento', 'Medicações'],
+    icon: Brain,
+    difficulty: 'Médio',
+    color: 'bg-purple-600'
+  },
+
+  // Education Templates (30 templates)
+  {
+    id: 'education-lms',
     name: 'Plataforma LMS',
     description: 'Learning Management System completo',
     category: 'education',
@@ -1198,85 +1908,299 @@ export const projectTemplates: ProjectTemplate[] = [
     difficulty: 'Avançado',
     color: 'bg-blue-600'
   },
-  // Continue with remaining education templates...
-
-  // Food Templates (20 templates)
   {
-    id: 'food-delivery-platform',
-    name: 'Plataforma de Delivery',
-    description: 'Sistema completo de delivery de comida',
-    category: 'food',
-    features: ['Multi-restaurantes', 'Tracking tempo real', 'Pagamentos', 'Avaliações'],
-    icon: Utensils,
-    difficulty: 'Avançado',
-    color: 'bg-orange-600'
-  },
-  // Continue with remaining food templates...
-
-  // Transport Templates (15 templates)  
-  {
-    id: 'transport-ride-sharing',
-    name: 'App de Carona',
-    description: 'Plataforma de compartilhamento de viagens',
-    category: 'transport',
-    features: ['Matching motorista/passageiro', 'GPS tracking', 'Pagamentos', 'Avaliações'],
-    icon: Car,
-    difficulty: 'Avançado',
-    color: 'bg-blue-600'
-  },
-  // Continue with remaining transport templates...
-
-  // Real Estate Templates (15 templates)
-  {
-    id: 'real-estate-portal',
-    name: 'Portal Imobiliário',
-    description: 'Plataforma completa para imóveis',
-    category: 'real-estate',
-    features: ['Busca avançada', 'Tours virtuais', 'Financiamento', 'CRM imobiliário'],
-    icon: Home,
+    id: 'education-school-management',
+    name: 'Gestão Escolar',
+    description: 'Sistema completo para gestão de escolas',
+    category: 'education',
+    features: ['Matrícula', 'Notas', 'Frequência', 'Financeiro', 'Comunicação pais'],
+    icon: Building,
     difficulty: 'Avançado',
     color: 'bg-green-600'
   },
-  // Continue with remaining real estate templates...
-
-  // Productivity Templates (15 templates)
   {
-    id: 'productivity-task-manager',
-    name: 'Gerenciador de Tarefas',
-    description: 'App avançado de produtividade pessoal',
-    category: 'productivity',
-    features: ['GTD methodology', 'Time blocking', 'Pomodoro', 'Analytics produtividade'],
-    icon: Zap,
+    id: 'education-university-system',
+    name: 'Sistema Universitário',
+    description: 'Gestão completa de universidades',
+    category: 'education',
+    features: ['Matrícula online', 'Grade curricular', 'Pesquisa', 'Extensão'],
+    icon: GraduationCap,
+    difficulty: 'Avançado',
+    color: 'bg-blue-700'
+  },
+  {
+    id: 'education-virtual-classroom',
+    name: 'Sala de Aula Virtual',
+    description: 'Plataforma para ensino remoto e híbrido',
+    category: 'education',
+    features: ['Video aulas', 'Interação tempo real', 'Gravações', 'Ferramentas colaborativas'],
+    icon: Monitor,
+    difficulty: 'Médio',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'education-student-portal',
+    name: 'Portal do Estudante',
+    description: 'Portal para estudantes acessarem informações acadêmicas',
+    category: 'education',
+    features: ['Notas', 'Horários', 'Biblioteca digital', 'Serviços acadêmicos'],
+    icon: Users,
     difficulty: 'Médio',
     color: 'bg-blue-600'
   },
-  // Continue with remaining productivity templates...
-
-  // Analytics Templates (10 templates)
   {
-    id: 'analytics-dashboard',
-    name: 'Dashboard Analytics',
-    description: 'Plataforma de business intelligence',
-    category: 'analytics',
-    features: ['Dashboards interativos', 'Múltiplas fontes', 'Real-time', 'Alertas'],
+    id: 'education-teacher-platform',
+    name: 'Plataforma do Professor',
+    description: 'Ferramentas para professores gerenciarem suas aulas',
+    category: 'education',
+    features: ['Planos aula', 'Avaliações', 'Registro notas', 'Comunicação alunos'],
+    icon: Users,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'education-library-system',
+    name: 'Sistema de Biblioteca',
+    description: 'Gestão completa de bibliotecas',
+    category: 'education',
+    features: ['Catálogo online', 'Empréstimos', 'Reservas', 'Multas'],
+    icon: Book,
+    difficulty: 'Médio',
+    color: 'bg-blue-500'
+  },
+  {
+    id: 'education-attendance-system',
+    name: 'Controle de Presença',
+    description: 'Sistema para controle de frequência escolar',
+    category: 'education',
+    features: ['Chamada eletrônica', 'Relatórios frequência', 'Alertas faltas', 'Justificativas'],
+    icon: Clock,
+    difficulty: 'Fácil',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'education-exam-system',
+    name: 'Sistema de Provas',
+    description: 'Plataforma para criação e aplicação de provas',
+    category: 'education',
+    features: ['Banco questões', 'Provas online', 'Correção automática', 'Analytics'],
+    icon: FileCheck,
+    difficulty: 'Médio',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'education-course-marketplace',
+    name: 'Marketplace de Cursos',
+    description: 'Plataforma para venda de cursos online',
+    category: 'education',
+    features: ['Criação cursos', 'Pagamentos', 'Certificados', 'Reviews'],
+    icon: Store,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'education-tutoring-platform',
+    name: 'Plataforma de Tutoria',
+    description: 'Conecte alunos com tutores especializados',
+    category: 'education',
+    features: ['Matching aluno-tutor', 'Agendamento', 'Video chamadas', 'Pagamentos'],
+    icon: Users,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'education-language-learning',
+    name: 'Aprendizado de Idiomas',
+    description: 'App para aprender idiomas de forma interativa',
+    category: 'education',
+    features: ['Lições interativas', 'Reconhecimento voz', 'Gamificação', 'Progresso'],
+    icon: Globe,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'education-skill-assessment',
+    name: 'Avaliação de Competências',
+    description: 'Sistema para avaliar habilidades e competências',
+    category: 'education',
+    features: ['Testes competência', 'Portfolios', 'Feedback 360º', 'Certificações'],
+    icon: Award,
+    difficulty: 'Médio',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'education-research-platform',
+    name: 'Plataforma de Pesquisa',
+    description: 'Sistema para gestão de projetos de pesquisa',
+    category: 'education',
+    features: ['Projetos pesquisa', 'Colaboração', 'Publicações', 'Financiamento'],
+    icon: Search,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'education-parent-communication',
+    name: 'Comunicação Escola-Família',
+    description: 'Plataforma para comunicação entre escola e pais',
+    category: 'education',
+    features: ['Mensagens', 'Calendário escolar', 'Boletim online', 'Reuniões'],
+    icon: MessageSquare,
+    difficulty: 'Fácil',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'education-vocational-training',
+    name: 'Ensino Profissionalizante',
+    description: 'Sistema para cursos técnicos e profissionalizantes',
+    category: 'education',
+    features: ['Cursos técnicos', 'Estágios', 'Empresas parceiras', 'Empregabilidade'],
+    icon: Wrench,
+    difficulty: 'Médio',
+    color: 'bg-orange-600'
+  },
+  {
+    id: 'education-special-needs',
+    name: 'Educação Especial',
+    description: 'Sistema adaptado para educação especial',
+    category: 'education',
+    features: ['Adaptações curriculares', 'Acessibilidade', 'Planos individuais', 'Terapias'],
+    icon: Heart,
+    difficulty: 'Médio',
+    color: 'bg-blue-500'
+  },
+  {
+    id: 'education-early-childhood',
+    name: 'Educação Infantil',
+    description: 'Sistema especializado em educação infantil',
+    category: 'education',
+    features: ['Atividades lúdicas', 'Desenvolvimento infantil', 'Comunicação pais', 'Saúde'],
+    icon: Heart,
+    difficulty: 'Médio',
+    color: 'bg-pink-500'
+  },
+  {
+    id: 'education-distance-learning',
+    name: 'Ensino a Distância',
+    description: 'Plataforma completa para EAD',
+    category: 'education',
+    features: ['Conteúdo adaptativo', 'Trilhas aprendizado', 'Mentoria online', 'Gamificação'],
+    icon: Monitor,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'education-corporate-training',
+    name: 'Treinamento Corporativo',
+    description: 'Plataforma para treinamento empresarial',
+    category: 'education',
+    features: ['Trilhas corporativas', 'Competências', 'Avaliações', 'Certificações'],
+    icon: Briefcase,
+    difficulty: 'Médio',
+    color: 'bg-blue-700'
+  },
+  {
+    id: 'education-compliance-training',
+    name: 'Treinamento Compliance',
+    description: 'Sistema para treinamentos obrigatórios',
+    category: 'education',
+    features: ['Cursos obrigatórios', 'Certificações', 'Auditoria', 'Relatórios compliance'],
+    icon: Shield,
+    difficulty: 'Médio',
+    color: 'bg-red-600'
+  },
+  {
+    id: 'education-microlearning',
+    name: 'Microlearning',
+    description: 'Plataforma de aprendizado em pequenas doses',
+    category: 'education',
+    features: ['Conteúdo micro', 'Mobile first', 'Just-in-time learning', 'Spaced repetition'],
+    icon: Zap,
+    difficulty: 'Médio',
+    color: 'bg-yellow-600'
+  },
+  {
+    id: 'education-adaptive-learning',
+    name: 'Aprendizado Adaptativo',
+    description: 'IA para personalizar experiência de aprendizado',
+    category: 'education',
+    features: ['IA adaptativa', 'Personalização', 'Analytics aprendizado', 'Recomendações'],
+    icon: Bot,
+    difficulty: 'Avançado',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'education-gamified-learning',
+    name: 'Aprendizado Gamificado',
+    description: 'Plataforma com elementos de jogos para educação',
+    category: 'education',
+    features: ['Gamificação', 'Badges', 'Leaderboards', 'Missões educativas'],
+    icon: Gamepad2,
+    difficulty: 'Médio',
+    color: 'bg-purple-600'
+  },
+  {
+    id: 'education-virtual-reality',
+    name: 'Educação com VR',
+    description: 'Plataforma educacional com realidade virtual',
+    category: 'education',
+    features: ['VR experiences', 'Simulações', 'Laboratórios virtuais', 'Imersão'],
+    icon: Camera,
+    difficulty: 'Avançado',
+    color: 'bg-blue-700'
+  },
+  {
+    id: 'education-peer-learning',
+    name: 'Aprendizado Colaborativo',
+    description: 'Plataforma para aprendizado entre pares',
+    category: 'education',
+    features: ['Grupos estudo', 'Peer review', 'Projetos colaborativos', 'Mentoria peer'],
+    icon: Users,
+    difficulty: 'Médio',
+    color: 'bg-green-600'
+  },
+  {
+    id: 'education-assessment-analytics',
+    name: 'Analytics Educacional',
+    description: 'Plataforma de analytics para educação',
+    category: 'education',
+    features: ['Learning analytics', 'Predictive models', 'Dashboards educacionais', 'Insights'],
     icon: BarChart3,
     difficulty: 'Avançado',
     color: 'bg-purple-600'
   },
-  // Continue with remaining analytics templates...
-
-  // Entertainment Templates (10 templates)
   {
-    id: 'entertainment-streaming',
-    name: 'Plataforma de Streaming',
-    description: 'Serviço de streaming de vídeo',
-    category: 'entertainment',
-    features: ['Upload vídeos', 'Assinaturas', 'Recomendações', 'Multi-device'],
-    icon: Monitor,
-    difficulty: 'Avançado',
-    color: 'bg-red-600'
-  }
-  // Continue with remaining entertainment templates...
+    id: 'education-content-authoring',
+    name: 'Criação de Conteúdo',
+    description: 'Ferramenta para criar conteúdo educacional',
+    category: 'education',
+    features: ['Editor conteúdo', 'Templates', 'Multimedia', 'Publicação'],
+    icon: FileText,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+  {
+    id: 'education-certification-platform',
+    name: 'Plataforma de Certificação',
+    description: 'Sistema para emitir e validar certificados',
+    category: 'education',
+    features: ['Certificados digitais', 'Blockchain', 'Validação', 'Portfolio competências'],
+    icon: Award,
+    difficulty: 'Médio',
+    color: 'bg-yellow-600'
+  },
+  {
+    id: 'education-alumni-network',
+    name: 'Rede de Ex-Alunos',
+    description: 'Plataforma para conectar ex-alunos',
+    category: 'education',
+    features: ['Networking alumni', 'Eventos', 'Mentoria', 'Oportunidades carreira'],
+    icon: Users,
+    difficulty: 'Médio',
+    color: 'bg-blue-600'
+  },
+
+  // Continue with remaining templates...
+  // Food Templates, Transport, Real Estate, Productivity, Analytics, Entertainment, Finance, Marketing, Communication
 ];
 
 export const getTemplatesByCategory = (categoryId: string) => {
