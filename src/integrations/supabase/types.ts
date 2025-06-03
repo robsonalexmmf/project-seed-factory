@@ -163,7 +163,7 @@ export type Database = {
     }
     Functions: {
       can_generate_project: {
-        Args: { user_email: string }
+        Args: Record<PropertyKey, never> | { user_email: string }
         Returns: boolean
       }
       increment_user_projects: {
