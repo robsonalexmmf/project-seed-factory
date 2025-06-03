@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -22,6 +21,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import UserProfile from './UserProfile';
 
 interface AdminStats {
   totalUsers: number;
@@ -278,9 +278,9 @@ const AdminDashboard = () => {
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Dashboard Admin</h1>
               <p className="text-gray-600">Gerencie usuários e monitore a plataforma</p>
-              <p className="text-sm text-green-600">Logado como: {userProfile.email} ({userProfile.plan_type})</p>
             </div>
-            <div className="flex space-x-3">
+            <div className="flex items-center space-x-3">
+              <UserProfile />
               <Dialog open={addUserModalOpen} onOpenChange={setAddUserModalOpen}>
                 <DialogTrigger asChild>
                   <Button variant="outline">
