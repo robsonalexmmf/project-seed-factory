@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, Crown, Star, Zap, RefreshCw, Settings } from 'lucide-react';
+import { Check, Crown, Star, Zap, RefreshCw, Settings, Rocket } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -121,6 +120,10 @@ const Subscription = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 flex items-center justify-center">
         <div className="text-center">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <Rocket className="h-8 w-8 text-blue-600" />
+            <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
+          </div>
           <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
           <p className="text-gray-600">Carregando informações...</p>
         </div>
@@ -133,6 +136,10 @@ const Subscription = () => {
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
+          <div className="flex items-center justify-center space-x-2 mb-6">
+            <Rocket className="h-10 w-10 text-white" />
+            <h1 className="text-3xl font-bold text-white">Idealyze</h1>
+          </div>
           <h1 className="text-5xl font-black text-white mb-6">
             Escolha Seu Plano
           </h1>

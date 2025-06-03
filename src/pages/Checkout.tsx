@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, CreditCard, ArrowLeft } from 'lucide-react';
+import { Check, CreditCard, ArrowLeft, Rocket } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -17,13 +16,11 @@ const Checkout = () => {
   const planType = new URLSearchParams(location.search).get('plan');
 
   useEffect(() => {
-    // Verificar se o usuário está logado via Supabase
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         setUser(user);
       } else {
-        // Se não há usuário logado via Supabase, verificar localStorage
         const userData = localStorage.getItem('user');
         if (userData) {
           const parsedUser = JSON.parse(userData);
@@ -73,7 +70,6 @@ const Checkout = () => {
       console.log('Iniciando processo de checkout para plano:', planType);
       console.log('Usuário:', user);
 
-      // Verificar se temos sessão ativa do Supabase
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
@@ -121,6 +117,10 @@ const Checkout = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <Rocket className="h-8 w-8 text-blue-600" />
+            <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
+          </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Plano não encontrado</h2>
           <Button onClick={() => navigate('/subscription')}>
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -135,12 +135,15 @@ const Checkout = () => {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-8">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <Rocket className="h-8 w-8 text-blue-600" />
+            <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
+          </div>
           <h1 className="text-3xl font-bold text-gray-900">Finalizar Assinatura</h1>
           <p className="text-gray-600">Complete seu pagamento para ativar o plano {currentPlan.name}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Resumo do Plano */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
@@ -171,7 +174,6 @@ const Checkout = () => {
             </CardContent>
           </Card>
 
-          {/* Pagamento */}
           <Card>
             <CardHeader>
               <CardTitle>Método de Pagamento</CardTitle>
