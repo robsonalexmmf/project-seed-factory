@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { 
   Users, 
   TrendingUp, 
@@ -11,11 +13,15 @@ import {
   Settings,
   Download,
   BarChart,
-  Shield
+  Shield,
+  UserPlus
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { toast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface AdminStats {
   totalUsers: number;
@@ -43,6 +49,14 @@ const AdminDashboard = () => {
     projectsGenerated: 0
   });
   const [loading, setLoading] = useState(true);
+  const [addUserModalOpen, setAddUserModalOpen] = useState(false);
+  const [newUserData, setNewUserData] = useState({
+    email: '',
+    fullName: '',
+    password: '',
+    planType: 'freemium'
+  });
+  const [addingUser, setAddingUser] = useState(false);
 
   useEffect(() => {
     if (authLoading) return;
@@ -87,6 +101,87 @@ const AdminDashboard = () => {
       console.error('Error loading admin data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const addNewUser = async () => {
+    setAddingUser(true);
+    
+    try {
+      // Criar usuário no Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: newUserData.email,
+        password: newUserData.password,
+        options: {
+          data: {
+            full_name: newUserData.fullName,
+            plan_type: newUserData.planType
+          }
+        }
+      });
+
+      if (authError) throw authError;
+
+      if (authData.user) {
+        // Criar entrada na tabela users
+        const monthlyLimit = newUserData.planType === 'freemium' ? 2 : 
+                           newUserData.planType === 'pro' ? 10 : -1;
+
+        const { error: userError } = await supabase
+          .from('users')
+          .insert({
+            id: authData.user.id,
+            email: newUserData.email,
+            full_name: newUserData.fullName,
+            plan_type: newUserData.planType,
+            projects_generated: 0,
+            monthly_limit: monthlyLimit
+          });
+
+        if (userError) throw userError;
+
+        // Se for plano pago, criar entrada na tabela sales
+        if (newUserData.planType === 'pro' || newUserData.planType === 'business') {
+          const amount = newUserData.planType === 'pro' ? 29.90 : 79.90;
+          
+          const { error: salesError } = await supabase
+            .from('sales')
+            .insert({
+              user_id: authData.user.id,
+              amount: amount,
+              plan_type: newUserData.planType,
+              status: 'completed'
+            });
+
+          if (salesError) throw salesError;
+        }
+
+        toast({
+          title: "Usuário criado com sucesso",
+          description: `${newUserData.email} foi adicionado com plano ${newUserData.planType}`,
+        });
+
+        // Limpar formulário e fechar modal
+        setNewUserData({
+          email: '',
+          fullName: '',
+          password: '',
+          planType: 'freemium'
+        });
+        setAddUserModalOpen(false);
+
+        // Recarregar dados
+        await loadAdminData();
+      }
+    } catch (error) {
+      console.error('Error creating user:', error);
+      toast({
+        title: "Erro ao criar usuário",
+        description: error instanceof Error ? error.message : "Erro desconhecido",
+        variant: "destructive"
+      });
+    } finally {
+      setAddingUser(false);
     }
   };
 
@@ -138,6 +233,81 @@ const AdminDashboard = () => {
               <p className="text-gray-600">Gerencie usuários e monitore a plataforma</p>
             </div>
             <div className="flex space-x-3">
+              <Dialog open={addUserModalOpen} onOpenChange={setAddUserModalOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline">
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Adicionar Usuário
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Adicionar Novo Usuário</DialogTitle>
+                    <DialogDescription>
+                      Crie uma nova conta de usuário diretamente pelo painel admin.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={newUserData.email}
+                        onChange={(e) => setNewUserData(prev => ({ ...prev, email: e.target.value }))}
+                        placeholder="usuario@exemplo.com"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="fullName">Nome Completo</Label>
+                      <Input
+                        id="fullName"
+                        value={newUserData.fullName}
+                        onChange={(e) => setNewUserData(prev => ({ ...prev, fullName: e.target.value }))}
+                        placeholder="Nome do usuário"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="password">Senha</Label>
+                      <Input
+                        id="password"
+                        type="password"
+                        value={newUserData.password}
+                        onChange={(e) => setNewUserData(prev => ({ ...prev, password: e.target.value }))}
+                        placeholder="Mínimo 6 caracteres"
+                        minLength={6}
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="planType">Tipo de Plano</Label>
+                      <Select 
+                        value={newUserData.planType} 
+                        onValueChange={(value) => setNewUserData(prev => ({ ...prev, planType: value }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o plano" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="freemium">Freemium</SelectItem>
+                          <SelectItem value="pro">Pro (R$ 29,90)</SelectItem>
+                          <SelectItem value="business">Business (R$ 79,90)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <Button variant="outline" onClick={() => setAddUserModalOpen(false)}>
+                      Cancelar
+                    </Button>
+                    <Button 
+                      onClick={addNewUser} 
+                      disabled={addingUser || !newUserData.email || !newUserData.password}
+                    >
+                      {addingUser ? 'Criando...' : 'Criar Usuário'}
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <Button variant="outline" onClick={() => navigate('/generator')}>
                 <Activity className="w-4 h-4 mr-2" />
                 Gerar Projeto SaaS
