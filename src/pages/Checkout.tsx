@@ -12,13 +12,11 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
-  const [session, setSession] = useState<any>(null);
 
   const planType = new URLSearchParams(location.search).get('plan');
 
   useEffect(() => {
     const checkAuth = async () => {
-      // Primeiro verificar se há sessão ativa
       const { data: { session }, error } = await supabase.auth.getSession();
       
       if (error) {
@@ -26,31 +24,17 @@ const Checkout = () => {
       }
 
       if (session && session.user) {
-        setSession(session);
         setUser(session.user);
-        console.log('Usuário autenticado via Supabase:', session.user);
+        console.log('Usuário autenticado:', session.user);
       } else {
-        // Se não há sessão do Supabase, verificar localStorage
-        const userData = localStorage.getItem('user');
-        if (userData) {
-          const parsedUser = JSON.parse(userData);
-          setUser(parsedUser);
-          console.log('Usuário encontrado no localStorage:', parsedUser);
-          
-          // Se é um usuário do localStorage, redirecionar para login para criar sessão Supabase
-          if (parsedUser.email !== 'admin@admin.com') {
-            toast({
-              title: "Sessão expirada",
-              description: "Por favor, faça login novamente para continuar.",
-              variant: "destructive"
-            });
-            navigate('/login');
-            return;
-          }
-        } else {
-          navigate('/register');
-          return;
-        }
+        // Se não há sessão ativa, redirecionar para login
+        toast({
+          title: "Login necessário",
+          description: "Por favor, faça login para continuar com a assinatura.",
+          variant: "destructive"
+        });
+        navigate('/login');
+        return;
       }
     };
 
@@ -93,7 +77,6 @@ const Checkout = () => {
       console.log('Iniciando processo de checkout para plano:', planType);
       console.log('Usuário:', user);
 
-      // Verificar se temos sessão ativa do Supabase
       const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError) {
@@ -176,23 +159,23 @@ const Checkout = () => {
             <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Finalizar Assinatura</h1>
-          <p className="text-gray-600">Complete seu pagamento para ativar o plano {currentPlan.name}</p>
+          <p className="text-gray-600">Complete seu pagamento para ativar o plano {currentPlan?.name}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                Plano {currentPlan.name}
+                Plano {currentPlan?.name}
                 <Badge variant="default">Escolhido</Badge>
               </CardTitle>
               <CardDescription>
-                R$ {currentPlan.price.toFixed(2)}/mês
+                R$ {currentPlan?.price.toFixed(2)}/mês
               </CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
-                {currentPlan.features.map((feature, index) => (
+                {currentPlan?.features.map((feature, index) => (
                   <li key={index} className="flex items-center">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
                     <span>{feature}</span>
@@ -203,7 +186,7 @@ const Checkout = () => {
                 <div className="flex justify-between items-center">
                   <span className="font-medium">Total mensal:</span>
                   <span className="text-2xl font-bold text-blue-600">
-                    R$ {currentPlan.price.toFixed(2)}
+                    R$ {currentPlan?.price.toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -232,7 +215,7 @@ const Checkout = () => {
                 size="lg"
                 disabled={loading}
               >
-                {loading ? 'Processando...' : `Pagar R$ ${currentPlan.price.toFixed(2)}`}
+                {loading ? 'Processando...' : `Pagar R$ ${currentPlan?.price.toFixed(2)}`}
               </Button>
 
               <div className="text-xs text-gray-500 text-center">
