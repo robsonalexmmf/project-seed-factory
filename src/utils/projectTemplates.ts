@@ -1,4 +1,3 @@
-
 import {
   Code, Database, Globe, Smartphone, Users, ShoppingCart, Calendar, 
   CreditCard, BarChart, MessageSquare, Mail, Lock, Settings, Search,
@@ -36,50 +35,103 @@ export interface ProjectTemplate {
   name: string;
   description: string;
   category: string;
-  subcategory: string;
-  icon: any;
-  color: string;
-  features: string[];
-  techStack: string[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  subcategory?: string;
+  difficulty: 'Fácil' | 'Médio' | 'Avançado';
   estimatedTime: string;
-  popular?: boolean;
+  icon: any;
+  features: string[];
+  tags: string[];
+  tier: 'freemium' | 'pro' | 'business';
 }
 
 export const templateCategories = [
-  { id: 'all', name: 'Todos', icon: Grid },
-  { id: 'ecommerce', name: 'E-commerce', icon: ShoppingCart },
-  { id: 'social', name: 'Redes Sociais', icon: Users },
-  { id: 'productivity', name: 'Produtividade', icon: Check },
-  { id: 'education', name: 'Educação', icon: BookOpen },
-  { id: 'health', name: 'Saúde', icon: Heart },
-  { id: 'finance', name: 'Finanças', icon: Coins },
-  { id: 'entertainment', name: 'Entretenimento', icon: Gamepad2 },
-  { id: 'travel', name: 'Viagens', icon: MapPin },
-  { id: 'business', name: 'Negócios', icon: Building },
-  { id: 'delivery', name: 'Delivery', icon: Truck },
-  { id: 'marketing', name: 'Marketing', icon: TrendingUp },
-  { id: 'technology', name: 'Tecnologia', icon: Code },
-  { id: 'whatsapp', name: 'WhatsApp Bots', icon: Bot },
-  { id: 'pdv-sales', name: 'PDV & Vendas', icon: CreditCard },
-  { id: 'stock', name: 'Estoque', icon: Package },
-  { id: 'financial', name: 'Financeiro', icon: BarChart },
-  { id: 'restaurant', name: 'Restaurantes', icon: Utensils },
-  { id: 'crm', name: 'CRM', icon: Users },
-  { id: 'employees', name: 'Funcionários', icon: UserCheck },
-  { id: 'fiscal', name: 'Fiscal', icon: FileText },
-  { id: 'service', name: 'Serviços', icon: Wrench },
-  { id: 'beauty', name: 'Beleza & Saúde', icon: Sparkles },
-  { id: 'real-estate', name: 'Imóveis', icon: Home },
-  { id: 'gym', name: 'Academias', icon: Dumbbell },
-  { id: 'marketplace', name: 'Marketplaces', icon: Store },
-  { id: 'ai', name: 'Inteligência Artificial', icon: Brain },
-  { id: 'specific', name: 'Setores Específicos', icon: Target },
-  { id: 'innovative', name: 'Ideias Inovadoras', icon: Zap },
-  { id: 'other', name: 'Outros', icon: Star }
+  {
+    id: 'all',
+    name: 'Todos',
+    icon: Grid,
+    description: 'Todos os templates disponíveis'
+  },
+  {
+    id: 'ecommerce',
+    name: 'E-commerce',
+    icon: ShoppingCart,
+    description: 'Lojas virtuais e marketplaces'
+  },
+  {
+    id: 'social',
+    name: 'Social & Comunicação',
+    icon: Users,
+    description: 'Redes sociais e comunicação'
+  },
+  {
+    id: 'business',
+    name: 'Negócios & Gestão',
+    icon: Building,
+    description: 'Ferramentas de gestão empresarial'
+  },
+  {
+    id: 'health',
+    name: 'Saúde & Bem-estar',
+    icon: Heart,
+    description: 'Saúde, fitness e bem-estar'
+  },
+  {
+    id: 'education',
+    name: 'Educação',
+    icon: GraduationCap,
+    description: 'Ensino e aprendizagem'
+  },
+  {
+    id: 'food',
+    name: 'Alimentação',
+    icon: Utensils,
+    description: 'Restaurantes e delivery'
+  },
+  {
+    id: 'transport',
+    name: 'Transporte',
+    icon: Car,
+    description: 'Logística e transporte'
+  },
+  {
+    id: 'realestate',
+    name: 'Imóveis',
+    icon: Home,
+    description: 'Imobiliárias e propriedades'
+  },
+  {
+    id: 'productivity',
+    name: 'Produtividade',
+    icon: Zap,
+    description: 'Ferramentas de produtividade'
+  },
+  {
+    id: 'entertainment',
+    name: 'Entretenimento',
+    icon: Gamepad2,
+    description: 'Jogos e entretenimento'
+  },
+  {
+    id: 'marketing',
+    name: 'Marketing Digital',
+    icon: TrendingUp,
+    description: 'Marketing e publicidade'
+  },
+  {
+    id: 'finance',
+    name: 'Finanças',
+    icon: DollarSign,
+    description: 'Gestão financeira'
+  },
+  {
+    id: 'technology',
+    name: 'Tecnologia',
+    icon: Monitor,
+    description: 'Ferramentas técnicas'
+  }
 ];
 
-export const templates: ProjectTemplate[] = [
+export const projectTemplates: ProjectTemplate[] = [
   // E-commerce & Vendas
   {
     id: 'ecommerce-basic',
@@ -558,7 +610,7 @@ export const templates: ProjectTemplate[] = [
     id: 'fleet-management',
     name: 'Gestão de Frota',
     description: 'Sistema completo para gerenciamento de frotas com telemetria e manutenção preditiva',
-    category: 'business',
+    category: 'transport',
     subcategory: 'Logística',
     icon: Truck,
     color: 'from-blue-600 to-cyan-600',
@@ -571,7 +623,7 @@ export const templates: ProjectTemplate[] = [
     id: 'cargo-sharing',
     name: 'Compartilhamento de Carga',
     description: 'Plataforma para compartilhamento de espaço em cargas e otimização logística',
-    category: 'business',
+    category: 'transport',
     subcategory: 'Logística',
     icon: Package,
     color: 'from-orange-500 to-red-600',
@@ -597,8 +649,8 @@ export const templates: ProjectTemplate[] = [
     id: 'property-management',
     name: 'Gestão de Propriedades',
     description: 'Sistema completo para gestão de imóveis, inquilinos e manutenção',
-    category: 'business',
-    subcategory: 'Imóveis',
+    category: 'realestate',
+    subcategory: 'Gestão',
     icon: Home,
     color: 'from-green-600 to-emerald-600',
     features: ['Portal do inquilino', 'Gestão de manutenção', 'Relatórios financeiros', 'Contratos'],
@@ -715,7 +767,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-ecommerce-bot',
     name: 'Bot E-commerce WhatsApp',
     description: 'Bot inteligente para vendas via WhatsApp com catálogo integrado e pagamentos',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'E-commerce',
     icon: ShoppingBag,
     color: 'from-green-500 to-emerald-600',
@@ -729,7 +781,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-restaurant-bot',
     name: 'Bot Restaurante WhatsApp',
     description: 'Assistente virtual para restaurantes com cardápio digital e pedidos automatizados',
-    category: 'whatsapp',
+    category: 'food',
     subcategory: 'Alimentação',
     icon: Utensils,
     color: 'from-orange-500 to-red-600',
@@ -742,7 +794,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-appointment-bot',
     name: 'Bot Agendamento WhatsApp',
     description: 'Bot para agendamento de consultas e serviços com calendário integrado',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Agendamento',
     icon: Calendar,
     color: 'from-blue-500 to-cyan-600',
@@ -755,7 +807,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-support-bot',
     name: 'Bot Suporte WhatsApp',
     description: 'Bot de atendimento ao cliente com IA para respostas inteligentes e escalação',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Suporte',
     icon: MessageCircle,
     color: 'from-purple-500 to-indigo-600',
@@ -768,7 +820,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-education-bot',
     name: 'Bot Educacional WhatsApp',
     description: 'Assistente educacional para cursos online com quizzes e acompanhamento de progresso',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Educação',
     icon: BookOpen,
     color: 'from-green-500 to-blue-600',
@@ -781,7 +833,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-health-bot',
     name: 'Bot Saúde WhatsApp',
     description: 'Assistente de saúde para lembretes de medicamentos e triagem inicial',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Saúde',
     icon: Heart,
     color: 'from-red-500 to-pink-600',
@@ -794,7 +846,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-realestate-bot',
     name: 'Bot Imóveis WhatsApp',
     description: 'Bot para imobiliárias com busca inteligente de imóveis e agendamento de visitas',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Imóveis',
     icon: Home,
     color: 'from-blue-600 to-indigo-600',
@@ -807,7 +859,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-finance-bot',
     name: 'Bot Financeiro WhatsApp',
     description: 'Assistente financeiro para controle de gastos e investimentos via WhatsApp',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Finanças',
     icon: Wallet,
     color: 'from-yellow-500 to-orange-600',
@@ -820,7 +872,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-hr-bot',
     name: 'Bot RH WhatsApp',
     description: 'Bot para recursos humanos com gestão de colaboradores e processos internos',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'RH',
     icon: Users,
     color: 'from-purple-600 to-blue-600',
@@ -833,7 +885,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-delivery-bot',
     name: 'Bot Delivery WhatsApp',
     description: 'Bot para serviços de delivery com tracking em tempo real e otimização de rotas',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Delivery',
     icon: Truck,
     color: 'from-green-600 to-cyan-600',
@@ -846,7 +898,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-pharmacy-bot',
     name: 'Bot Farmácia WhatsApp',
     description: 'Assistente para farmácias com consulta de medicamentos e delivery',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Farmácia',
     icon: Pill,
     color: 'from-blue-500 to-green-600',
@@ -859,7 +911,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-automotive-bot',
     name: 'Bot Automotivo WhatsApp',
     description: 'Bot para concessionárias e oficinas com agendamento e orçamentos',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Automotivo',
     icon: Car,
     color: 'from-gray-600 to-blue-600',
@@ -872,7 +924,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-beauty-bot',
     name: 'Bot Beleza WhatsApp',
     description: 'Assistente para salões de beleza com agendamento e consultas de tratamentos',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Beleza',
     icon: Sparkles,
     color: 'from-pink-500 to-purple-600',
@@ -885,7 +937,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-travel-bot',
     name: 'Bot Viagem WhatsApp',
     description: 'Assistente de viagens com pesquisa de destinos e reservas automatizadas',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Viagens',
     icon: Plane,
     color: 'from-cyan-500 to-blue-600',
@@ -898,7 +950,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-petcare-bot',
     name: 'Bot Pet Care WhatsApp',
     description: 'Assistente para pet shops e veterinárias com agendamento e cuidados',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Pet Care',
     icon: Dog,
     color: 'from-orange-500 to-yellow-600',
@@ -911,7 +963,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-legal-bot',
     name: 'Bot Jurídico WhatsApp',
     description: 'Assistente jurídico com consultas automatizadas e agendamento de advogados',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Jurídico',
     icon: Shield,
     color: 'from-gray-700 to-blue-700',
@@ -924,7 +976,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-fitness-bot',
     name: 'Bot Fitness WhatsApp',
     description: 'Personal trainer virtual com treinos personalizados e acompanhamento nutricional',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Fitness',
     icon: Dumbbell,
     color: 'from-red-500 to-orange-600',
@@ -937,7 +989,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-insurance-bot',
     name: 'Bot Seguros WhatsApp',
     description: 'Assistente para seguradoras com cotações automáticas e sinistros',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Seguros',
     icon: Shield,
     color: 'from-blue-700 to-indigo-700',
@@ -950,7 +1002,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-banking-bot',
     name: 'Bot Bancário WhatsApp',
     description: 'Assistente bancário com consultas de saldo, transferências e investimentos',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Bancário',
     icon: CreditCard,
     color: 'from-green-700 to-blue-700',
@@ -963,7 +1015,7 @@ export const templates: ProjectTemplate[] = [
     id: 'whatsapp-agriculture-bot',
     name: 'Bot Agricultura WhatsApp',
     description: 'Assistente para produtores rurais com monitoramento de cultivos e clima',
-    category: 'whatsapp',
+    category: 'social',
     subcategory: 'Agricultura',
     icon: Sprout,
     color: 'from-green-600 to-emerald-600',
@@ -2016,20 +2068,24 @@ export const templates: ProjectTemplate[] = [
 
 // Funções de busca e filtro
 export const getTemplatesByCategory = (categoryId: string): ProjectTemplate[] => {
-  if (categoryId === 'all') return templates;
-  return templates.filter(template => template.category === categoryId);
+  if (categoryId === 'all') return projectTemplates;
+  return projectTemplates.filter(template => template.category === categoryId);
 };
 
 export const searchTemplates = (searchTerm: string): ProjectTemplate[] => {
   const term = searchTerm.toLowerCase();
-  return templates.filter(template =>
+  return projectTemplates.filter(template => 
     template.name.toLowerCase().includes(term) ||
     template.description.toLowerCase().includes(term) ||
-    template.features.some(feature => feature.toLowerCase().includes(term)) ||
-    template.techStack.some(tech => tech.toLowerCase().includes(term))
+    template.tags.some(tag => tag.toLowerCase().includes(term)) ||
+    template.features.some(feature => feature.toLowerCase().includes(term))
   );
+};
+
+export const getTemplateById = (id: string): ProjectTemplate | undefined => {
+  return projectTemplates.find(template => template.id === id);
 };
 
 // Exportar aliases para compatibilidade
 export const categories = templateCategories;
-export { templates as projectTemplates };
+export { projectTemplates as templates };

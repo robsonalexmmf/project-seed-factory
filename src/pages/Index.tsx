@@ -20,7 +20,8 @@ import {
   Code,
   Layers,
   Crown,
-  Lock
+  Lock,
+  LogOut
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { projectTemplates, templateCategories, getTemplatesByCategory, searchTemplates } from '@/utils/projectTemplates';
@@ -28,8 +29,10 @@ import { generateAndDownloadProject } from '@/utils/projectGenerator';
 import TemplateCard from '@/components/TemplateCard';
 import ProjectGeneratorModal from '@/components/ProjectGeneratorModal';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
+  const { user, userProfile, signOut } = useAuth();
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [projectName, setProjectName] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
@@ -38,18 +41,10 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
-  }, []);
 
   // Verificar limite de projetos
   const checkProjectLimit = () => {
-    if (!user) {
+    if (!userProfile) {
       toast({
         title: "Login necessário",
         description: "Faça login para gerar projetos",
@@ -59,17 +54,17 @@ const Index = () => {
     }
 
     // Admin tem acesso ilimitado
-    if (user.plan_type === 'admin') {
+    if (userProfile.plan_type === 'admin') {
       return true;
     }
 
     // Usuários freemium têm limite de 2 projetos por mês
-    if (user.plan_type === 'freemium' && user.projects_generated >= 2) {
+    if (userProfile.plan_type === 'freemium' && userProfile.projects_generated >= 2) {
       return false;
     }
 
     // Usuários pro têm limite de 10 projetos por mês
-    if (user.plan_type === 'pro' && user.projects_generated >= 10) {
+    if (userProfile.plan_type === 'pro' && userProfile.projects_generated >= 10) {
       return false;
     }
 
@@ -78,7 +73,7 @@ const Index = () => {
   };
 
   const showUpgradeModal = () => {
-    const limitMessage = user?.plan_type === 'freemium' 
+    const limitMessage = userProfile?.plan_type === 'freemium' 
       ? "Você atingiu o limite de 2 projetos gratuitos. Faça upgrade para continuar gerando!"
       : "Você atingiu o limite de 10 projetos do plano Pro. Faça upgrade para Business para projetos ilimitados!";
     
@@ -144,27 +139,6 @@ const Index = () => {
         features: customFeatures
       });
 
-      // Incrementar contador de projetos gerados
-      if (user) {
-        const updatedUser = {
-          ...user,
-          projects_generated: user.projects_generated + 1
-        };
-
-        // Atualizar no localStorage
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        
-        // Atualizar lista de usuários
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const userIndex = users.findIndex((u: any) => u.id === user.id);
-        if (userIndex !== -1) {
-          users[userIndex] = updatedUser;
-          localStorage.setItem('users', JSON.stringify(users));
-        }
-
-        setUser(updatedUser);
-      }
-
       toast({
         title: "🎉 Projeto Gerado com Sucesso!",
         description: `${projectName} foi gerado com frontend + backend Supabase completo! Execute 'npm install' e configure as variáveis de ambiente.`
@@ -196,13 +170,29 @@ const Index = () => {
 
   // Calcular projetos restantes
   const getProjectsRemaining = () => {
-    if (!user) return 0;
-    if (user.plan_type === 'admin' || user.plan_type === 'business') return -1; // Ilimitado
-    if (user.plan_type === 'pro') return Math.max(0, 10 - user.projects_generated);
-    return Math.max(0, 2 - user.projects_generated); // Freemium
+    if (!userProfile) return 0;
+    if (userProfile.plan_type === 'admin' || userProfile.plan_type === 'business') return -1; // Ilimitado
+    if (userProfile.plan_type === 'pro') return Math.max(0, 10 - userProfile.projects_generated);
+    return Math.max(0, 2 - userProfile.projects_generated); // Freemium
   };
 
   const projectsRemaining = getProjectsRemaining();
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Logout realizado",
+        description: "Você foi desconectado com sucesso."
+      });
+    } catch (error) {
+      toast({
+        title: "Erro no logout",
+        description: "Erro ao fazer logout. Tente novamente.",
+        variant: "destructive"
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
@@ -216,6 +206,37 @@ const Index = () => {
       <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 shadow-2xl">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          {/* User Status and Logout */}
+          {userProfile && (
+            <div className="absolute top-4 right-4">
+              <div className="flex items-center space-x-4">
+                <div className="bg-white/10 backdrop-blur-lg rounded-lg px-4 py-2 border border-white/20">
+                  <div className="flex items-center space-x-2 text-white text-sm">
+                    {userProfile.plan_type === 'admin' ? (
+                      <Crown className="w-4 h-4 text-yellow-300" />
+                    ) : userProfile.plan_type === 'business' ? (
+                      <Star className="w-4 h-4 text-purple-300" />
+                    ) : userProfile.plan_type === 'pro' ? (
+                      <Zap className="w-4 h-4 text-blue-300" />
+                    ) : (
+                      <Timer className="w-4 h-4 text-green-300" />
+                    )}
+                    <span className="font-semibold capitalize">{userProfile.plan_type}</span>
+                  </div>
+                </div>
+                <Button
+                  onClick={handleLogout}
+                  variant="outline"
+                  size="sm"
+                  className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sair
+                </Button>
+              </div>
+            </div>
+          )}
+
           <div className="text-center">
             <div className="flex justify-center mb-8">
               <div className="bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-lg p-6 rounded-3xl shadow-2xl border border-white/20">
@@ -235,21 +256,21 @@ const Index = () => {
             </p>
 
             {/* Status do usuário e limite de projetos */}
-            {user && (
+            {userProfile && (
               <div className="flex justify-center mb-8">
                 <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
                   <div className="flex items-center space-x-4 text-white">
                     <div className="flex items-center space-x-2">
-                      {user.plan_type === 'admin' ? (
+                      {userProfile.plan_type === 'admin' ? (
                         <Crown className="w-6 h-6 text-yellow-300" />
-                      ) : user.plan_type === 'business' ? (
+                      ) : userProfile.plan_type === 'business' ? (
                         <Star className="w-6 h-6 text-purple-300" />
-                      ) : user.plan_type === 'pro' ? (
+                      ) : userProfile.plan_type === 'pro' ? (
                         <Zap className="w-6 h-6 text-blue-300" />
                       ) : (
                         <Timer className="w-6 h-6 text-green-300" />
                       )}
-                      <span className="font-bold text-lg capitalize">{user.plan_type}</span>
+                      <span className="font-bold text-lg capitalize">{userProfile.plan_type}</span>
                     </div>
                     <div className="h-6 w-px bg-white/30"></div>
                     <div className="text-lg">
@@ -261,7 +282,7 @@ const Index = () => {
                         </span>
                       )}
                     </div>
-                    {(user.plan_type === 'freemium' && projectsRemaining === 0) && (
+                    {(userProfile.plan_type === 'freemium' && projectsRemaining === 0) && (
                       <Link to="/subscription">
                         <Button variant="outline" className="bg-white/20 border-white/30 text-white hover:bg-white/30">
                           <Crown className="w-4 h-4 mr-2" />
@@ -367,7 +388,7 @@ const Index = () => {
                   categoryName={templateCategories.find(c => c.id === template.category)?.name || ''}
                 />
                 {/* Overlay para usuários sem limite */}
-                {user && ((user.plan_type === 'freemium' && projectsRemaining === 0) || (user.plan_type === 'pro' && projectsRemaining === 0)) && (
+                {userProfile && ((userProfile.plan_type === 'freemium' && projectsRemaining === 0) || (userProfile.plan_type === 'pro' && projectsRemaining === 0)) && (
                   <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center backdrop-blur-sm">
                     <div className="text-center text-white">
                       <Lock className="w-12 h-12 mx-auto mb-4" />
