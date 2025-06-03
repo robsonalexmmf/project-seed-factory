@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LandingPage from "./components/LandingPage";
 import AdminDashboard from "./components/AdminDashboard";
+import NewAdmin from "./pages/NewAdmin";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Checkout from "./pages/Checkout";
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/generator" element={<Index />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/new-admin" element={<NewAdmin />} />
           <Route path="/user-management" element={<UserManagement />} />
           <Route path="/reports" element={<Reports />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
