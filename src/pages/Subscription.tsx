@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,14 +16,29 @@ const Subscription = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      const parsedUser = JSON.parse(userData);
-      setUser(parsedUser);
-      checkSubscription(parsedUser);
-    } else {
-      setLoading(false);
-    }
+    const checkAuth = async () => {
+      // Verificar sessão do Supabase primeiro
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (session && session.user) {
+        setUser(session.user);
+        checkSubscription(session.user);
+      } else {
+        // Verificar localStorage para usuários freemium
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          const parsedUser = JSON.parse(userData);
+          setUser(parsedUser);
+          // Para usuários freemium do localStorage, não verificar assinatura Stripe
+          if (parsedUser.plan_type === 'freemium') {
+            setSubscriptionData({ subscribed: false, subscription_tier: null });
+          }
+        }
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
   const checkSubscription = async (userData?: any) => {
@@ -105,11 +121,20 @@ const Subscription = () => {
   ];
 
   const handlePlanSelect = (planId: string) => {
-    if (!user?.id) {
+    // Se o usuário não está logado de forma alguma, redirecionar para registro
+    if (!user) {
       navigate(`/register?plan=${planId}`);
-    } else {
-      navigate(`/checkout?plan=${planId}`);
+      return;
     }
+
+    // Se é usuário freemium do localStorage, redirecionar para checkout
+    if (user.plan_type === 'freemium' || user.email === 'admin@admin.com') {
+      navigate(`/checkout?plan=${planId}`);
+      return;
+    }
+
+    // Se tem sessão Supabase ativa, ir para checkout
+    navigate(`/checkout?plan=${planId}`);
   };
 
   const isCurrentPlan = (planId: string) => {
@@ -159,7 +184,9 @@ const Subscription = () => {
                         Plano {subscriptionData.subscription_tier === 'pro' ? 'Pro' : 'Business'} Ativo
                       </span>
                     ) : (
-                      <span className="text-yellow-300">Sem assinatura ativa</span>
+                      <span className="text-yellow-300">
+                        {user.plan_type === 'freemium' ? 'Plano Freemium' : 'Sem assinatura ativa'}
+                      </span>
                     )}
                   </div>
                   {subscriptionData.subscription_end && (
@@ -169,15 +196,18 @@ const Subscription = () => {
                   )}
                 </div>
                 <div className="flex gap-2">
-                  <Button
-                    onClick={() => checkSubscription()}
-                    disabled={refreshing}
-                    variant="outline"
-                    className="bg-white/20 border-white/30 text-white hover:bg-white/30"
-                  >
-                    <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-                    Atualizar
-                  </Button>
+                  {/* Só mostrar botão de atualizar para usuários com sessão Supabase */}
+                  {user.email !== 'admin@admin.com' && user.plan_type !== 'freemium' && (
+                    <Button
+                      onClick={() => checkSubscription()}
+                      disabled={refreshing}
+                      variant="outline"
+                      className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+                    >
+                      <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+                      Atualizar
+                    </Button>
+                  )}
                   {subscriptionData.subscribed && (
                     <Button
                       onClick={handleManageSubscription}

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,6 +18,7 @@ const Checkout = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
+      // Verificar sessão do Supabase primeiro
       const { data: { session }, error } = await supabase.auth.getSession();
       
       if (error) {
@@ -25,16 +27,35 @@ const Checkout = () => {
 
       if (session && session.user) {
         setUser(session.user);
-        console.log('Usuário autenticado:', session.user);
+        console.log('Usuário autenticado via Supabase:', session.user);
       } else {
-        // Se não há sessão ativa, redirecionar para login
-        toast({
-          title: "Login necessário",
-          description: "Por favor, faça login para continuar com a assinatura.",
-          variant: "destructive"
-        });
-        navigate('/login');
-        return;
+        // Verificar localStorage para usuários freemium
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          const parsedUser = JSON.parse(userData);
+          setUser(parsedUser);
+          console.log('Usuário encontrado no localStorage:', parsedUser);
+          
+          // Se não é freemium e não é admin, precisa fazer login no Supabase
+          if (parsedUser.plan_type !== 'freemium' && parsedUser.email !== 'admin@admin.com') {
+            toast({
+              title: "Sessão expirada",
+              description: "Por favor, faça login novamente para continuar.",
+              variant: "destructive"
+            });
+            navigate('/login');
+            return;
+          }
+        } else {
+          // Nenhum usuário encontrado, redirecionar para registro
+          toast({
+            title: "Login necessário",
+            description: "Por favor, faça login para continuar com a assinatura.",
+            variant: "destructive"
+          });
+          navigate('/register');
+          return;
+        }
       }
     };
 
@@ -77,6 +98,17 @@ const Checkout = () => {
       console.log('Iniciando processo de checkout para plano:', planType);
       console.log('Usuário:', user);
 
+      // Para usuários freemium do localStorage, criar conta no Supabase primeiro
+      if (user.plan_type === 'freemium' && user.email !== 'admin@admin.com') {
+        toast({
+          title: "Criando conta",
+          description: "Redirecionando para criar sua conta...",
+        });
+        navigate(`/register?plan=${planType}&email=${user.email}`);
+        return;
+      }
+
+      // Verificar sessão do Supabase para usuários autenticados
       const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError) {
