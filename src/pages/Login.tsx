@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,28 +14,6 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Verificar se já está logado
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        // Verificar se é admin
-        const { data: userProfile } = await supabase
-          .from('users')
-          .select('plan_type')
-          .eq('id', session.user.id)
-          .single();
-        
-        if (userProfile?.plan_type === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/generator');
-        }
-      }
-    };
-    checkAuth();
-  }, [navigate]);
 
   const createAdminUser = async () => {
     try {
