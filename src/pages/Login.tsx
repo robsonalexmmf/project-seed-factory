@@ -50,9 +50,19 @@ const Login = () => {
       });
 
       if (error) {
+        // Mensagens de erro mais amigáveis
+        let errorMessage = "Erro ao fazer login";
+        if (error.message.includes("Invalid login credentials")) {
+          errorMessage = "Email ou senha incorretos";
+        } else if (error.message.includes("Email not confirmed")) {
+          errorMessage = "Email não confirmado";
+        } else {
+          errorMessage = error.message;
+        }
+        
         toast({
           title: "Erro no login",
-          description: error.message,
+          description: errorMessage,
           variant: "destructive"
         });
         return;

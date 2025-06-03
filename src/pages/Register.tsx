@@ -61,6 +61,19 @@ const Register = () => {
           description: "Sua conta foi criada com sucesso.",
         });
 
+        // Fazer login automático após o cadastro bem-sucedido
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (signInError) {
+          console.error('Auto-login error:', signInError);
+          // Se falhar o login automático, redireciona para login
+          navigate(`/login?plan=${planType}`);
+          return;
+        }
+
         // Se não é freemium, redireciona para assinatura
         if (planType !== 'freemium') {
           console.log('Redirecting to subscription page for plan:', planType);
