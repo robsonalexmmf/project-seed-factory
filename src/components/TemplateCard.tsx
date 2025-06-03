@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { LucideIcon, Rocket, ArrowRight } from 'lucide-react';
+import { LucideIcon, Rocket, ArrowRight, Lock, Crown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface TemplateCardProps {
   template: {
@@ -18,13 +18,15 @@ interface TemplateCardProps {
   isSelected: boolean;
   onSelect: () => void;
   categoryName: string;
+  isBlocked?: boolean;
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({ 
   template, 
   isSelected, 
   onSelect, 
-  categoryName 
+  categoryName,
+  isBlocked = false
 }) => {
   // Default color if not provided
   const templateColor = template.color || 'bg-blue-600';
@@ -103,63 +105,85 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   };
 
   return (
-    <Card className="group cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105 bg-white/80 backdrop-blur-sm border-2 border-gray-100 hover:border-gray-200 overflow-hidden">
-      <div className={`h-2 bg-gradient-to-r ${getGradientClass(templateColor)}`}></div>
-      
-      <CardHeader className="pb-4">
-        <div className="flex items-center justify-between mb-4">
-          <div className={`p-4 rounded-2xl ${getIconBgClass(templateColor)} shadow-lg group-hover:scale-110 transition-transform`}>
-            <template.icon className={`w-8 h-8 ${getTextColorClass(templateColor)}`} />
+    <div className="relative">
+      <Card className={`group cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105 bg-white/80 backdrop-blur-sm border-2 border-gray-100 hover:border-gray-200 overflow-hidden ${isBlocked ? 'opacity-50' : ''}`}>
+        <div className={`h-2 bg-gradient-to-r ${getGradientClass(templateColor)}`}></div>
+        
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className={`p-4 rounded-2xl ${getIconBgClass(templateColor)} shadow-lg group-hover:scale-110 transition-transform`}>
+              <template.icon className={`w-8 h-8 ${getTextColorClass(templateColor)}`} />
+            </div>
+            <Badge variant="secondary" className="text-sm font-semibold px-3 py-1 bg-gradient-to-r from-gray-100 to-gray-200">
+              {categoryName}
+            </Badge>
           </div>
-          <Badge variant="secondary" className="text-sm font-semibold px-3 py-1 bg-gradient-to-r from-gray-100 to-gray-200">
-            {categoryName}
-          </Badge>
-        </div>
-        <CardTitle className="text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors">
-          {template.name}
-        </CardTitle>
-        <CardDescription className="text-gray-600 text-base leading-relaxed">
-          {template.description}
-        </CardDescription>
-      </CardHeader>
-      
-      <CardContent className="space-y-6">
-        <div>
-          <p className="text-sm font-bold text-gray-700 mb-3 flex items-center">
-            <div className="w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mr-2"></div>
-            Funcionalidades:
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {template.features.slice(0, 3).map((feature, index) => (
-              <Badge 
-                key={index} 
-                variant="outline" 
-                className="text-xs font-medium px-3 py-1 border-gray-300 text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
-              >
-                {feature}
-              </Badge>
-            ))}
-            {template.features.length > 3 && (
-              <Badge 
-                variant="outline" 
-                className="text-xs font-bold px-3 py-1 border-purple-300 text-purple-700 bg-purple-50"
-              >
-                +{template.features.length - 3} mais
-              </Badge>
-            )}
+          <CardTitle className="text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors">
+            {template.name}
+          </CardTitle>
+          <CardDescription className="text-gray-600 text-base leading-relaxed">
+            {template.description}
+          </CardDescription>
+        </CardHeader>
+        
+        <CardContent className="space-y-6">
+          <div>
+            <p className="text-sm font-bold text-gray-700 mb-3 flex items-center">
+              <div className="w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mr-2"></div>
+              Funcionalidades:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {template.features.slice(0, 3).map((feature, index) => (
+                <Badge 
+                  key={index} 
+                  variant="outline" 
+                  className="text-xs font-medium px-3 py-1 border-gray-300 text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
+                >
+                  {feature}
+                </Badge>
+              ))}
+              {template.features.length > 3 && (
+                <Badge 
+                  variant="outline" 
+                  className="text-xs font-bold px-3 py-1 border-purple-300 text-purple-700 bg-purple-50"
+                >
+                  +{template.features.length - 3} mais
+                </Badge>
+              )}
+            </div>
           </div>
-        </div>
 
-        <Button 
-          onClick={onSelect}
-          className={`w-full bg-gradient-to-r ${getGradientClass(templateColor)} hover:shadow-lg transition-all duration-300 text-white font-bold py-3 px-6 rounded-xl group-hover:scale-105`}
-        >
-          <Rocket className="w-5 h-5 mr-2" />
-          Usar Template
-          <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-        </Button>
-      </CardContent>
-    </Card>
+          <Button 
+            onClick={onSelect}
+            disabled={isBlocked}
+            className={`w-full bg-gradient-to-r ${getGradientClass(templateColor)} hover:shadow-lg transition-all duration-300 text-white font-bold py-3 px-6 rounded-xl group-hover:scale-105 ${isBlocked ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            <Rocket className="w-5 h-5 mr-2" />
+            Usar Template
+            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Overlay para projetos bloqueados */}
+      {isBlocked && (
+        <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center backdrop-blur-sm z-10">
+          <div className="text-center text-white p-6">
+            <Lock className="w-16 h-16 mx-auto mb-4 text-white" />
+            <h3 className="font-bold text-xl mb-2">Limite Atingido</h3>
+            <p className="text-sm mb-4 opacity-90">
+              Você atingiu seu limite mensal de projetos
+            </p>
+            <Link to="/subscription">
+              <Button variant="outline" className="bg-white/20 border-white/30 text-white hover:bg-white/30 font-bold">
+                <Crown className="w-4 h-4 mr-2" />
+                Fazer Upgrade
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

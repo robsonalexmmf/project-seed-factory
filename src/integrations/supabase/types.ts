@@ -121,9 +121,11 @@ export type Database = {
       users: {
         Row: {
           created_at: string
+          current_month_projects: number | null
           email: string
           full_name: string | null
           id: string
+          last_reset_date: string | null
           monthly_limit: number
           plan_type: string
           projects_generated: number
@@ -131,9 +133,11 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          current_month_projects?: number | null
           email: string
           full_name?: string | null
           id?: string
+          last_reset_date?: string | null
           monthly_limit?: number
           plan_type?: string
           projects_generated?: number
@@ -141,9 +145,11 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          current_month_projects?: number | null
           email?: string
           full_name?: string | null
           id?: string
+          last_reset_date?: string | null
           monthly_limit?: number
           plan_type?: string
           projects_generated?: number
@@ -156,6 +162,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_generate_project: {
+        Args: { user_email: string }
+        Returns: boolean
+      }
       increment_user_projects: {
         Args: { user_email: string }
         Returns: undefined
@@ -163,6 +173,10 @@ export type Database = {
       is_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      reset_monthly_projects: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
     }
     Enums: {

@@ -9,7 +9,9 @@ export interface UserProfile {
   full_name?: string;
   plan_type: 'freemium' | 'pro' | 'business' | 'admin';
   projects_generated: number;
+  current_month_projects: number;
   monthly_limit: number;
+  last_reset_date: string;
   created_at: string;
   updated_at: string;
 }
@@ -88,11 +90,59 @@ export const useAuth = () => {
     }
   };
 
+  const checkCanGenerate = async (): Promise<boolean> => {
+    if (!userProfile) return false;
+    
+    try {
+      const { data, error } = await supabase.rpc('can_generate_project', {
+        user_email: userProfile.email
+      });
+      
+      if (error) {
+        console.error('Error checking generation limit:', error);
+        return false;
+      }
+      
+      return data;
+    } catch (error) {
+      console.error('Error checking generation limit:', error);
+      return false;
+    }
+  };
+
+  const incrementProjectCount = async () => {
+    if (!userProfile) return;
+    
+    try {
+      await supabase.rpc('increment_user_projects', {
+        user_email: userProfile.email
+      });
+      
+      // Refresh user profile
+      await fetchUserProfile(userProfile.id);
+    } catch (error) {
+      console.error('Error incrementing project count:', error);
+    }
+  };
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error('Error signing out:', error);
     }
+  };
+
+  // Calcular projetos restantes
+  const getProjectsRemaining = () => {
+    if (!userProfile) return 0;
+    if (userProfile.plan_type === 'admin' || userProfile.plan_type === 'business') return -1; // Ilimitado
+    return Math.max(0, userProfile.monthly_limit - userProfile.current_month_projects);
+  };
+
+  const canGenerate = () => {
+    if (!userProfile) return false;
+    if (userProfile.plan_type === 'admin' || userProfile.plan_type === 'business') return true;
+    return userProfile.current_month_projects < userProfile.monthly_limit;
   };
 
   return {
@@ -101,6 +151,10 @@ export const useAuth = () => {
     userProfile,
     loading,
     signOut,
-    fetchUserProfile
+    fetchUserProfile,
+    checkCanGenerate,
+    incrementProjectCount,
+    getProjectsRemaining,
+    canGenerate
   };
 };
