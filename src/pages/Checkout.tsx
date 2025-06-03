@@ -19,6 +19,7 @@ const Checkout = () => {
 
   useEffect(() => {
     if (!planType) {
+      console.log('No plan specified, redirecting to subscription');
       navigate('/subscription');
     }
   }, [planType, navigate]);
@@ -26,10 +27,10 @@ const Checkout = () => {
   // Redirect to login if not authenticated after loading is complete
   useEffect(() => {
     if (!authLoading && !user) {
-      console.log('User not authenticated, redirecting to login');
-      navigate('/login');
+      console.log('User not authenticated, redirecting to login with plan:', planType);
+      navigate(`/login?plan=${planType}`);
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, navigate, planType]);
 
   const planDetails = {
     pro: {
@@ -53,7 +54,7 @@ const Checkout = () => {
         description: "Você precisa estar logado para fazer o checkout.",
         variant: "destructive"
       });
-      navigate('/login');
+      navigate(`/login?plan=${planType}`);
       return;
     }
 
@@ -77,7 +78,7 @@ const Checkout = () => {
           description: "Por favor, faça login novamente para continuar.",
           variant: "destructive"
         });
-        navigate('/login');
+        navigate(`/login?plan=${planType}`);
         return;
       }
 
@@ -97,12 +98,19 @@ const Checkout = () => {
 
       if (data?.url) {
         console.log('Redirecionando para Stripe checkout:', data.url);
-        window.open(data.url, '_blank');
         
         toast({
           title: "Redirecionando para pagamento",
           description: "Você será redirecionado para o Stripe para completar o pagamento.",
         });
+        
+        // Abrir Stripe checkout em nova aba
+        window.open(data.url, '_blank');
+        
+        // Opcional: redirecionar de volta para subscription após alguns segundos
+        setTimeout(() => {
+          navigate('/subscription');
+        }, 2000);
       } else {
         throw new Error('URL de checkout não foi retornada');
       }
@@ -113,9 +121,9 @@ const Checkout = () => {
         description: error instanceof Error ? error.message : "Tente novamente ou entre em contato com o suporte.",
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   // Show loading while authentication is being checked

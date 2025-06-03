@@ -126,6 +126,7 @@ const Subscription = () => {
       return;
     }
 
+    console.log('Plan selected:', planId, 'User authenticated:', !!user);
     navigate(`/checkout?plan=${planId}`);
   };
 
@@ -214,6 +215,20 @@ const Subscription = () => {
             </div>
           )}
 
+          {/* Mostrar plano selecionado da URL */}
+          {preselectedPlan && (
+            <div className="bg-orange-500/20 backdrop-blur-lg rounded-2xl p-4 border border-orange-300/30 mb-6">
+              <div className="text-white text-center">
+                <div className="text-lg font-bold">
+                  ✨ Plano {preselectedPlan === 'pro' ? 'Pro' : 'Business'} Selecionado!
+                </div>
+                <div className="text-sm text-orange-100 mt-1">
+                  {user ? 'Clique no plano abaixo para finalizar a assinatura' : 'Faça login ou cadastre-se para continuar'}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Mostrar benefícios do plano gratuito */}
           {userProfile?.plan_type === 'freemium' && (
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 border border-white/20 mb-6">
@@ -246,7 +261,7 @@ const Subscription = () => {
                   isCurrentUserPlan 
                     ? 'ring-4 ring-green-500 shadow-2xl' 
                     : isPreselected
-                      ? 'ring-4 ring-orange-500 shadow-2xl'
+                      ? 'ring-4 ring-orange-500 shadow-2xl scale-105'
                       : plan.popular 
                         ? 'ring-4 ring-blue-500 shadow-2xl' 
                         : 'shadow-xl'
@@ -262,8 +277,8 @@ const Subscription = () => {
                 
                 {!isCurrentUserPlan && isPreselected && (
                   <div className="absolute top-0 left-0 right-0">
-                    <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-center py-2 font-bold">
-                      PLANO SELECIONADO
+                    <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-center py-2 font-bold animate-pulse">
+                      ⭐ PLANO SELECIONADO ⭐
                     </div>
                   </div>
                 )}
@@ -305,11 +320,15 @@ const Subscription = () => {
 
                   <Button 
                     onClick={() => handlePlanSelect(plan.id)}
-                    className={`w-full py-4 text-lg font-bold bg-gradient-to-r ${plan.color} hover:opacity-90 transition-all duration-300`}
+                    className={`w-full py-4 text-lg font-bold transition-all duration-300 ${
+                      isPreselected 
+                        ? 'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 animate-pulse' 
+                        : `bg-gradient-to-r ${plan.color} hover:opacity-90`
+                    }`}
                     size="lg"
                     disabled={isCurrentUserPlan}
                   >
-                    {isCurrentUserPlan ? 'Plano Atual' : `Escolher ${plan.name}`}
+                    {isCurrentUserPlan ? 'Plano Atual' : isPreselected ? `🚀 Assinar ${plan.name} Agora!` : `Escolher ${plan.name}`}
                   </Button>
                 </CardContent>
               </Card>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,11 +18,7 @@ const LandingPage = () => {
   };
 
   const handlePlanSelect = (planId: string) => {
-    if (planId === 'freemium') {
-      navigate('/register?plan=freemium');
-    } else {
-      navigate(`/register?plan=${planId}`);
-    }
+    navigate(`/register?plan=${planId}`);
   };
 
   return (

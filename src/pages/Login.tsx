@@ -31,9 +31,13 @@ const Login = () => {
   // Redirecionar usuários já logados
   useEffect(() => {
     if (!authLoading && user) {
-      navigate(redirectTo);
+      if (planType) {
+        navigate(`/subscription?plan=${planType}`);
+      } else {
+        navigate(redirectTo);
+      }
     }
-  }, [user, authLoading, navigate, redirectTo]);
+  }, [user, authLoading, navigate, redirectTo, planType]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,12 +64,16 @@ const Login = () => {
           description: "Bem-vindo de volta!",
         });
         
-        // Redirecionar baseado no plano se especificado
-        if (planType) {
-          navigate(`/subscription?plan=${planType}`);
-        } else {
-          navigate(redirectTo);
-        }
+        // Aguardar um pouco para o perfil ser carregado e depois redirecionar
+        setTimeout(() => {
+          if (planType) {
+            console.log('Redirecting to subscription after login with plan:', planType);
+            navigate(`/subscription?plan=${planType}`);
+          } else {
+            console.log('Redirecting to:', redirectTo);
+            navigate(redirectTo);
+          }
+        }, 1000);
       }
     } catch (error) {
       console.error('Login error:', error);

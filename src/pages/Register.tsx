@@ -24,7 +24,7 @@ const Register = () => {
   // Redirecionar usuários já logados
   useEffect(() => {
     if (!authLoading && user) {
-      if (planType && planType !== 'freemium') {
+      if (planType !== 'freemium') {
         navigate(`/subscription?plan=${planType}`);
       } else {
         navigate('/generator');
@@ -37,6 +37,8 @@ const Register = () => {
     setLoading(true);
 
     try {
+      console.log('Registering user with plan:', planType);
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -58,10 +60,12 @@ const Register = () => {
           description: "Sua conta foi criada com sucesso.",
         });
 
-        // Redirecionar baseado no plano
-        if (planType && planType !== 'freemium') {
+        // Se não é freemium, redireciona para assinatura
+        if (planType !== 'freemium') {
+          console.log('Redirecting to subscription page for plan:', planType);
           navigate(`/subscription?plan=${planType}`);
         } else {
+          console.log('Redirecting to generator for freemium user');
           navigate('/generator');
         }
       }
@@ -88,6 +92,24 @@ const Register = () => {
     );
   }
 
+  const getPlanDisplayName = (plan: string) => {
+    switch (plan) {
+      case 'freemium': return 'Freemium';
+      case 'pro': return 'Pro';
+      case 'business': return 'Business';
+      default: return 'Freemium';
+    }
+  };
+
+  const getPlanDescription = (plan: string) => {
+    switch (plan) {
+      case 'freemium': return '2 projetos por mês - Gratuito';
+      case 'pro': return '10 projetos por mês - R$ 29,90/mês';
+      case 'business': return 'Projetos ilimitados - R$ 79,90/mês';
+      default: return '2 projetos por mês - Gratuito';
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <Card className="w-full max-w-md">
@@ -97,13 +119,10 @@ const Register = () => {
             <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
           </div>
           <CardTitle>
-            Cadastro {planType !== 'freemium' ? `- Plano ${planType}` : 'Gratuito'}
+            Cadastro - Plano {getPlanDisplayName(planType)}
           </CardTitle>
           <CardDescription>
-            {planType === 'freemium' ? 
-              'Crie sua conta gratuita (2 projetos/mês)' : 
-              `Cadastre-se para o plano ${planType}`
-            }
+            {getPlanDescription(planType)}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -143,7 +162,7 @@ const Register = () => {
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Cadastrando...' : 'Criar Conta'}
+              {loading ? 'Cadastrando...' : 'Criar Conta e Continuar'}
             </Button>
           </form>
           <div className="mt-4 text-center">
