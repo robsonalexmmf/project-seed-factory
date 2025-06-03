@@ -18,21 +18,43 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabaseClient = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? ""
-  );
-
   try {
     logStep("Function started");
 
+    // Verificar se a chave do Stripe existe
+    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
+    if (!stripeKey) {
+      throw new Error("STRIPE_SECRET_KEY is not set");
+    }
+    logStep("Stripe key verified");
+
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    );
+
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) throw new Error("No authorization header provided");
+    if (!authHeader) {
+      throw new Error("No authorization header provided");
+    }
 
     const token = authHeader.replace("Bearer ", "");
-    const { data } = await supabaseClient.auth.getUser(token);
+    logStep("Token extracted", { tokenLength: token.length });
+
+    const { data, error: authError } = await supabaseClient.auth.getUser(token);
+    if (authError) {
+      logStep("Auth error", { error: authError.message });
+      throw new Error(`Authentication error: ${authError.message}`);
+    }
+
     const user = data.user;
-    if (!user?.email) throw new Error("User not authenticated or email not available");
+    if (!user) {
+      throw new Error("No user data returned");
+    }
+    if (!user.email) {
+      throw new Error("User email not available");
+    }
+
     logStep("User authenticated", { userId: user.id, email: user.email });
 
     const { planType } = await req.json();
@@ -41,7 +63,7 @@ serve(async (req) => {
     }
     logStep("Plan type received", { planType });
 
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { 
+    const stripe = new Stripe(stripeKey, { 
       apiVersion: "2023-10-16" 
     });
 
@@ -52,7 +74,7 @@ serve(async (req) => {
       customerId = customers.data[0].id;
       logStep("Existing customer found", { customerId });
     } else {
-      logStep("No existing customer found");
+      logStep("No existing customer found, will create new one");
     }
 
     // Plan configuration

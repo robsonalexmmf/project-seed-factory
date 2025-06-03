@@ -12,16 +12,34 @@ const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('stripe');
+  const [user, setUser] = useState<any>(null);
 
   const planType = new URLSearchParams(location.search).get('plan');
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   useEffect(() => {
-    if (!user.id || !planType) {
-      navigate('/register');
+    // Verificar se o usuário está logado via Supabase
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUser(user);
+      } else {
+        // Se não há usuário logado via Supabase, verificar localStorage
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          const parsedUser = JSON.parse(userData);
+          setUser(parsedUser);
+        } else {
+          navigate('/register');
+        }
+      }
+    };
+
+    if (!planType) {
+      navigate('/subscription');
+    } else {
+      checkUser();
     }
-  }, [user, planType, navigate]);
+  }, [planType, navigate]);
 
   const planDetails = {
     pro: {
@@ -39,23 +57,45 @@ const Checkout = () => {
   const currentPlan = planDetails[planType as keyof typeof planDetails];
 
   const handlePayment = async () => {
+    if (!user) {
+      toast({
+        title: "Erro de autenticação",
+        description: "Você precisa estar logado para fazer o checkout.",
+        variant: "destructive"
+      });
+      navigate('/login');
+      return;
+    }
+
     setLoading(true);
 
     try {
       console.log('Iniciando processo de checkout para plano:', planType);
+      console.log('Usuário:', user);
+
+      // Verificar se temos sessão ativa do Supabase
+      const { data: { session } } = await supabase.auth.getSession();
       
+      if (!session) {
+        throw new Error('Nenhuma sessão ativa encontrada. Faça login novamente.');
+      }
+
+      console.log('Sessão encontrada, chamando edge function...');
+
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { planType }
+        body: { planType },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
       });
 
       if (error) {
         console.error('Erro no checkout:', error);
-        throw new Error(error.message);
+        throw new Error(error.message || 'Erro desconhecido no checkout');
       }
 
       if (data?.url) {
         console.log('Redirecionando para Stripe checkout:', data.url);
-        // Abre o checkout do Stripe em uma nova aba
         window.open(data.url, '_blank');
         
         toast({
@@ -69,7 +109,7 @@ const Checkout = () => {
       console.error('Erro no processo de checkout:', error);
       toast({
         title: "Erro no checkout",
-        description: "Tente novamente ou entre em contato com o suporte.",
+        description: error instanceof Error ? error.message : "Tente novamente ou entre em contato com o suporte.",
         variant: "destructive"
       });
     }
