@@ -39,6 +39,7 @@ export const useAuth = () => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -57,7 +58,8 @@ export const useAuth = () => {
 
   const fetchUserProfile = async (userId: string) => {
     try {
-      // Usar maybeSingle() em vez de single() para evitar erros se não encontrar
+      console.log('Fetching profile for user:', userId);
+      
       const { data, error } = await supabase
         .from('users')
         .select('*')
@@ -70,12 +72,12 @@ export const useAuth = () => {
       }
 
       if (data) {
-        // Cast the plan_type to the correct union type
         const userProfile: UserProfile = {
           ...data,
           plan_type: data.plan_type as 'freemium' | 'pro' | 'business' | 'admin'
         };
 
+        console.log('User profile loaded:', userProfile);
         setUserProfile(userProfile);
       } else {
         console.log('No user profile found for user:', userId);

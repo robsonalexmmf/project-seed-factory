@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -60,7 +61,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (authLoading) return;
 
-    console.log('UserProfile:', userProfile);
+    console.log('AdminDashboard - UserProfile:', userProfile);
 
     if (!userProfile) {
       console.log('No user profile, redirecting to login');
@@ -69,8 +70,8 @@ const AdminDashboard = () => {
     }
 
     if (userProfile.plan_type !== 'admin') {
-      console.log('User is not admin, redirecting to login');
-      navigate('/login');
+      console.log('User is not admin, redirecting to generator');
+      navigate('/generator');
       return;
     }
 
