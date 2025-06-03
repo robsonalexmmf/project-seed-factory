@@ -1,4 +1,4 @@
-import { LucideIcon, CheckCircle, Crown, Database, Edit, Flag, Flask, GitBranch, Hash, MessageSquare, Network, Rocket, Share, Shirt, Smartphone, Sofa, TestTube, Wine } from 'lucide-react';
+import { LucideIcon, CheckCircle, Crown, Database, Edit, Flag, FlaskConical, GitBranch, Hash, MessageSquare, Network, Rocket, Share, Shirt, Smartphone, Sofa, TestTube, Wine } from 'lucide-react';
 
 export interface ProjectTemplate {
   id: string;
@@ -44,7 +44,7 @@ const healthTemplates: ProjectTemplate[] = [
     description: 'Entrega de medicamentos em domicílio',
     category: 'health',
     features: ['Catálogo', 'Receita Digital', 'Entrega Rápida', 'Pagamento Online'],
-    icon: Flask,
+    icon: FlaskConical,
     color: 'bg-purple-600'
   },
   {
@@ -125,7 +125,7 @@ const healthTemplates: ProjectTemplate[] = [
     description: 'Controle de vacinas e imunizações',
     category: 'health',
     features: ['Histórico de Vacinas', 'Lembretes', 'Certificados', 'Família'],
-    icon: Flask,
+    icon: FlaskConical,
     color: 'bg-green-600'
   },
   {
@@ -410,7 +410,7 @@ const deliveryTemplates: ProjectTemplate[] = [
     description: 'Entrega de medicamentos',
     category: 'delivery',
     features: ['Receita Digital', 'Estoque', 'Entrega Expressa', 'Lembretes'],
-    icon: Flask,
+    icon: FlaskConical,
     color: 'bg-blue-600'
   },
   {
@@ -536,7 +536,7 @@ const deliveryTemplates: ProjectTemplate[] = [
     description: 'Entrega urgente de medicamentos',
     category: 'delivery',
     features: ['24 Horas', 'Receita Digital', 'Estoque Verificado', 'Entrega Expressa'],
-    icon: Flask,
+    icon: FlaskConical,
     color: 'bg-red-600'
   },
   {
@@ -710,7 +710,7 @@ const educationTemplates: ProjectTemplate[] = [
     description: 'Experimentos científicos online',
     category: 'education',
     features: ['Simulações', 'Experimentos', 'Relatórios', 'Segurança'],
-    icon: Flask,
+    icon: FlaskConical,
     color: 'bg-green-600'
   },
   {
@@ -1067,7 +1067,7 @@ const ecommerceTemplates: ProjectTemplate[] = [
     description: 'Venda de produtos de saúde',
     category: 'ecommerce',
     features: ['Prescrições', 'Informações Nutricionais', 'Consultoria', 'Assinatura'],
-    icon: Flask,
+    icon: FlaskConical,
     color: 'bg-green-600'
   },
   {
@@ -1760,4 +1760,20 @@ export const getCategoryById = (id: string): TemplateCategory | undefined => {
 
 export const getTotalTemplatesCount = (): number => {
   return getAllTemplates().length;
+};
+
+export const projectTemplates = getAllTemplates();
+
+export const categories = [
+  { id: 'all', name: 'Todos', icon: Database },
+  ...templateCategories
+];
+
+export const searchTemplates = (searchTerm: string): ProjectTemplate[] => {
+  const allTemplates = getAllTemplates();
+  return allTemplates.filter(template => 
+    template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    template.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    template.features.some(feature => feature.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 };
