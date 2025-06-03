@@ -1,21 +1,16 @@
 
-import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
 import LandingPage from "./components/LandingPage";
-import AdminDashboard from "./components/AdminDashboard";
-import NewAdmin from "./pages/NewAdmin";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Checkout from "./pages/Checkout";
+import Index from "./pages/Index";
 import Subscription from "./pages/Subscription";
-import UserManagement from "./pages/UserManagement";
-import Reports from "./pages/Reports";
+import Checkout from "./pages/Checkout";
+import NewAdmin from "./pages/NewAdmin";
 
 const queryClient = new QueryClient();
 
@@ -29,15 +24,10 @@ const App = () => (
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/generator" element={<Index />} />
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/generator" element={<Index />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/new-admin" element={<NewAdmin />} />
-          <Route path="/user-management" element={<UserManagement />} />
-          <Route path="/reports" element={<Reports />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
+          <Route path="/admin" element={<NewAdmin />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

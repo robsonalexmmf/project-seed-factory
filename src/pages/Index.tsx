@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -173,7 +172,7 @@ const Index = () => {
         title: "Logout realizado",
         description: "Você foi desconectado com sucesso."
       });
-      navigate('/login');
+      navigate('/');
     } catch (error) {
       toast({
         title: "Erro no logout",
@@ -454,7 +453,7 @@ const Index = () => {
             </Button>
           </div>
         )}
-
+        
         {/* Feature Highlights */}
         <div className="mt-24 py-20 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-3xl text-white shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent"></div>

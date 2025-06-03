@@ -46,7 +46,8 @@ const Register = () => {
           data: {
             full_name: fullName,
             plan_type: planType
-          }
+          },
+          emailRedirectTo: `${window.location.origin}/`
         }
       });
 

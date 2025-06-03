@@ -1,334 +1,190 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Check, Crown, Star, Zap, RefreshCw, Settings, Rocket } from 'lucide-react';
+import { Check, Crown, Star, Zap, ArrowLeft, Loader2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { userPlans } from '@/types/user';
 
 const Subscription = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, userProfile, loading: authLoading } = useAuth();
-  const [subscriptionData, setSubscriptionData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-
-  // Pegar parâmetro de plano da URL
+  const [loading, setLoading] = useState(false);
+  
   const searchParams = new URLSearchParams(location.search);
-  const preselectedPlan = searchParams.get('plan');
-
+  const selectedPlanFromUrl = searchParams.get('plan') || 'pro';
+  
   useEffect(() => {
-    const initializeSubscription = async () => {
-      if (authLoading) return;
-
-      if (user) {
-        await checkSubscription();
-      } else {
-        // Redirecionar para login com o plano selecionado
-        if (preselectedPlan) {
-          navigate(`/login?plan=${preselectedPlan}`);
-        } else {
-          navigate('/login');
-        }
-        return;
-      }
-    };
-
-    initializeSubscription();
-  }, [user, authLoading, navigate, preselectedPlan]);
-
-  const checkSubscription = async () => {
-    if (!user) return;
-    
-    setRefreshing(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('check-subscription');
-      
-      if (error) {
-        console.error('Erro ao verificar assinatura:', error);
-        return;
-      }
-
-      setSubscriptionData(data);
-      console.log('Status da assinatura:', data);
-    } catch (error) {
-      console.error('Erro ao verificar assinatura:', error);
-    } finally {
-      setRefreshing(false);
-      setLoading(false);
+    if (!authLoading && !user) {
+      navigate(`/login?plan=${selectedPlanFromUrl}`);
     }
-  };
+  }, [user, authLoading, navigate, selectedPlanFromUrl]);
 
-  const handleManageSubscription = async () => {
+  const handleSubscribe = async (planType: string) => {
+    if (!user) {
+      toast({
+        title: "Login necessário",
+        description: "Faça login para continuar com a assinatura",
+        variant: "destructive"
+      });
+      navigate(`/login?plan=${planType}`);
+      return;
+    }
+
+    if (planType === 'freemium') {
+      navigate('/generator');
+      return;
+    }
+
+    setLoading(true);
+    
     try {
-      const { data, error } = await supabase.functions.invoke('customer-portal');
-      
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { planType }
+      });
+
       if (error) {
-        throw new Error(error.message);
+        console.error('Checkout error:', error);
+        toast({
+          title: "Erro ao criar checkout",
+          description: "Tente novamente em alguns instantes",
+          variant: "destructive"
+        });
+        return;
       }
 
       if (data?.url) {
         window.open(data.url, '_blank');
       }
     } catch (error) {
-      console.error('Erro ao abrir portal:', error);
+      console.error('Subscription error:', error);
       toast({
-        title: "Erro",
-        description: "Não foi possível abrir o portal de gerenciamento.",
+        title: "Erro na assinatura",
+        description: "Tente novamente mais tarde",
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
   };
 
-  const plans = [
-    {
-      id: 'pro',
-      name: 'Pro',
-      price: 29.90,
-      icon: Zap,
-      color: 'from-blue-500 to-cyan-500',
-      features: [
-        '10 projetos por mês',
-        'Todos os templates',
-        'Suporte prioritário',
-        'Customização avançada',
-        'Frontend + Backend completo',
-        'Supabase incluído'
-      ],
-      popular: true
-    },
-    {
-      id: 'business',
-      name: 'Business',
-      price: 79.90,
-      icon: Crown,
-      color: 'from-purple-500 to-pink-500',
-      features: [
-        'Projetos ilimitados',
-        'Templates exclusivos',
-        'Suporte 24/7',
-        'White label',
-        'API access',
-        'Consultoria técnica',
-        'Deploy automático'
-      ],
-      popular: false
-    }
-  ];
-
-  const handlePlanSelect = (planId: string) => {
-    if (!user) {
-      navigate(`/register?plan=${planId}`);
-      return;
-    }
-
-    console.log('Plan selected:', planId, 'User authenticated:', !!user);
-    navigate(`/checkout?plan=${planId}`);
-  };
-
-  const isCurrentPlan = (planId: string) => {
-    return subscriptionData?.subscribed && subscriptionData?.subscription_tier === planId;
-  };
-
-  if (authLoading || loading) {
+  if (authLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Rocket className="h-8 w-8 text-blue-600" />
-            <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
-          </div>
-          <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
-          <p className="text-gray-600">Carregando informações...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 py-20">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <div className="flex items-center justify-center space-x-2 mb-6">
-            <Rocket className="h-10 w-10 text-white" />
-            <h1 className="text-3xl font-bold text-white">Idealyze</h1>
-          </div>
-          <h1 className="text-5xl font-black text-white mb-6">
-            Escolha Seu Plano
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <Link to="/" className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar para home
+          </Link>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Escolha seu plano
           </h1>
-          <p className="text-xl text-blue-100 mb-8">
-            Desbloqueie todo o potencial do gerador de SaaS
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Comece grátis e evolua conforme sua necessidade. Todos os planos incluem 
+            frontend + backend Supabase completo.
           </p>
-
-          {/* Status da Assinatura */}
-          {user && userProfile && subscriptionData && (
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 mb-6">
-              <div className="flex items-center justify-center space-x-4 text-white">
-                <div className="text-center">
-                  <div className="text-sm text-blue-100">Status atual:</div>
-                  <div className="font-bold text-lg">
-                    {subscriptionData.subscribed ? (
-                      <span className="text-green-300">
-                        Plano {subscriptionData.subscription_tier === 'pro' ? 'Pro' : 'Business'} Ativo
-                      </span>
-                    ) : (
-                      <span className="text-yellow-300">
-                        {userProfile.plan_type === 'freemium' ? 'Plano Freemium (2 projetos/mês)' : 'Sem assinatura ativa'}
-                      </span>
-                    )}
-                  </div>
-                  {subscriptionData.subscription_end && (
-                    <div className="text-sm text-blue-100 mt-1">
-                      Renova em: {new Date(subscriptionData.subscription_end).toLocaleDateString('pt-BR')}
-                    </div>
-                  )}
-                </div>
-                <div className="flex gap-2">
-                  {user && (
-                    <Button
-                      onClick={() => checkSubscription()}
-                      disabled={refreshing}
-                      variant="outline"
-                      className="bg-white/20 border-white/30 text-white hover:bg-white/30"
-                    >
-                      <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-                      Atualizar
-                    </Button>
-                  )}
-                  {subscriptionData.subscribed && (
-                    <Button
-                      onClick={handleManageSubscription}
-                      variant="outline"
-                      className="bg-white/20 border-white/30 text-white hover:bg-white/30"
-                    >
-                      <Settings className="w-4 h-4 mr-2" />
-                      Gerenciar
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Mostrar plano selecionado da URL */}
-          {preselectedPlan && (
-            <div className="bg-orange-500/20 backdrop-blur-lg rounded-2xl p-4 border border-orange-300/30 mb-6">
-              <div className="text-white text-center">
-                <div className="text-lg font-bold">
-                  ✨ Plano {preselectedPlan === 'pro' ? 'Pro' : 'Business'} Selecionado!
-                </div>
-                <div className="text-sm text-orange-100 mt-1">
-                  {user ? 'Clique no plano abaixo para finalizar a assinatura' : 'Faça login ou cadastre-se para continuar'}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Mostrar benefícios do plano gratuito */}
-          {userProfile?.plan_type === 'freemium' && (
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 border border-white/20 mb-6">
-              <div className="text-white text-center">
-                <div className="text-sm text-blue-100 mb-2">Plano Atual: Freemium</div>
-                <div className="text-lg font-bold">
-                  {userProfile.current_month_projects} / 2 projetos usados este mês
-                </div>
-                <div className="text-sm text-blue-100 mt-1">
-                  Faça upgrade para gerar mais projetos!
-                </div>
-              </div>
-            </div>
-          )}
         </div>
-      </div>
 
-      {/* Plans */}
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 gap-8">
-          {plans.map((plan) => {
-            const IconComponent = plan.icon;
-            const isCurrentUserPlan = isCurrentPlan(plan.id);
-            const isPreselected = preselectedPlan === plan.id;
+        {/* Plans Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {userPlans.map((plan) => {
+            const isSelected = plan.id === selectedPlanFromUrl;
+            const isPopular = plan.id === 'pro';
             
             return (
               <Card 
-                key={plan.id}
-                className={`relative overflow-hidden transition-all duration-300 hover:scale-105 ${
-                  isCurrentUserPlan 
-                    ? 'ring-4 ring-green-500 shadow-2xl' 
-                    : isPreselected
-                      ? 'ring-4 ring-orange-500 shadow-2xl scale-105'
-                      : plan.popular 
-                        ? 'ring-4 ring-blue-500 shadow-2xl' 
-                        : 'shadow-xl'
+                key={plan.id} 
+                className={`relative transition-all duration-300 ${
+                  isSelected 
+                    ? 'border-2 border-blue-500 scale-105 shadow-xl' 
+                    : isPopular 
+                      ? 'border-2 border-purple-300 shadow-lg' 
+                      : 'border border-gray-200 hover:shadow-lg'
                 }`}
               >
-                {isCurrentUserPlan && (
-                  <div className="absolute top-0 left-0 right-0">
-                    <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-center py-2 font-bold">
-                      SEU PLANO ATUAL
-                    </div>
-                  </div>
+                {isPopular && !isSelected && (
+                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-purple-500">
+                    Mais Popular
+                  </Badge>
+                )}
+                {isSelected && (
+                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-500">
+                    Plano Selecionado
+                  </Badge>
                 )}
                 
-                {!isCurrentUserPlan && isPreselected && (
-                  <div className="absolute top-0 left-0 right-0">
-                    <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-center py-2 font-bold animate-pulse">
-                      ⭐ PLANO SELECIONADO ⭐
-                    </div>
+                <CardHeader className="text-center pb-6">
+                  <div className="flex items-center justify-center mb-4">
+                    {plan.id === 'freemium' && <Zap className="w-8 h-8 text-green-500" />}
+                    {plan.id === 'pro' && <Star className="w-8 h-8 text-blue-500" />}
+                    {plan.id === 'business' && <Crown className="w-8 h-8 text-purple-500" />}
                   </div>
-                )}
-                
-                {!isCurrentUserPlan && !isPreselected && plan.popular && (
-                  <div className="absolute top-0 left-0 right-0">
-                    <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-center py-2 font-bold">
-                      MAIS POPULAR
-                    </div>
+                  <CardTitle className="text-2xl mb-2">{plan.name}</CardTitle>
+                  <div className="text-4xl font-bold mb-2">
+                    {plan.price === 0 ? (
+                      <span className="text-green-600">Grátis</span>
+                    ) : (
+                      <>
+                        <span className="text-gray-900">R$ {plan.price.toFixed(2)}</span>
+                        <span className="text-lg font-normal text-gray-500">/mês</span>
+                      </>
+                    )}
                   </div>
-                )}
-
-                <CardHeader className={`${isCurrentUserPlan || isPreselected || plan.popular ? 'pt-16' : 'pt-8'} text-center`}>
-                  <div className={`bg-gradient-to-r ${plan.color} rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6`}>
-                    <IconComponent className="w-10 h-10 text-white" />
-                  </div>
-                  
-                  <CardTitle className="text-3xl font-black">
-                    {plan.name}
-                  </CardTitle>
-                  
-                  <CardDescription className="text-lg">
-                    <span className="text-4xl font-black text-gray-900">
-                      R$ {plan.price.toFixed(2)}
-                    </span>
-                    <span className="text-gray-600">/mês</span>
+                  <CardDescription className="text-base">
+                    {plan.monthlyLimit === -1 ? 'Projetos ilimitados' : `${plan.monthlyLimit} projetos por mês`}
                   </CardDescription>
                 </CardHeader>
-
-                <CardContent className="px-8 pb-8">
+                
+                <CardContent className="pt-0">
                   <ul className="space-y-4 mb-8">
                     {plan.features.map((feature, index) => (
-                      <li key={index} className="flex items-center">
-                        <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                      <li key={index} className="flex items-start">
+                        <Check className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
                         <span className="text-gray-700">{feature}</span>
                       </li>
                     ))}
                   </ul>
-
+                  
                   <Button 
-                    onClick={() => handlePlanSelect(plan.id)}
-                    className={`w-full py-4 text-lg font-bold transition-all duration-300 ${
-                      isPreselected 
-                        ? 'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 animate-pulse' 
-                        : `bg-gradient-to-r ${plan.color} hover:opacity-90`
+                    className={`w-full py-3 text-lg font-semibold ${
+                      isSelected
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : plan.id === 'pro'
+                          ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                          : plan.id === 'business'
+                            ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white'
+                            : 'bg-green-600 hover:bg-green-700 text-white'
                     }`}
-                    size="lg"
-                    disabled={isCurrentUserPlan}
+                    onClick={() => handleSubscribe(plan.id)}
+                    disabled={loading}
                   >
-                    {isCurrentUserPlan ? 'Plano Atual' : isPreselected ? `🚀 Assinar ${plan.name} Agora!` : `Escolher ${plan.name}`}
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Processando...
+                      </>
+                    ) : (
+                      <>
+                        {plan.price === 0 ? 'Começar Grátis' : 'Assinar Agora'}
+                      </>
+                    )}
                   </Button>
                 </CardContent>
               </Card>
@@ -336,49 +192,34 @@ const Subscription = () => {
           })}
         </div>
 
-        {/* Comparison */}
-        <div className="mt-20 text-center">
-          <h3 className="text-3xl font-bold text-gray-900 mb-8">
-            Por que fazer upgrade?
+        {/* Benefits Section */}
+        <div className="mt-16 text-center">
+          <h3 className="text-2xl font-bold text-gray-900 mb-8">
+            Todos os planos incluem
           </h3>
-          
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-white" />
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Star className="w-8 h-8 text-blue-600" />
               </div>
-              <h4 className="text-xl font-bold mb-2">Mais Projetos</h4>
-              <p className="text-gray-600">
-                Gere até 10 projetos por mês no Pro ou ilimitados no Business
-              </p>
+              <h4 className="font-semibold text-lg mb-2">Frontend + Backend</h4>
+              <p className="text-gray-600">React + TypeScript + Supabase completo</p>
             </div>
-            
             <div className="text-center">
-              <div className="bg-gradient-to-r from-blue-400 to-cyan-500 rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Star className="w-8 h-8 text-white" />
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Check className="w-8 h-8 text-green-600" />
               </div>
-              <h4 className="text-xl font-bold mb-2">Templates Premium</h4>
-              <p className="text-gray-600">
-                Acesso a todos os templates profissionais e exclusivos
-              </p>
+              <h4 className="font-semibold text-lg mb-2">400+ Templates</h4>
+              <p className="text-gray-600">Soluções prontas para todas as áreas</p>
             </div>
-            
             <div className="text-center">
-              <div className="bg-gradient-to-r from-purple-400 to-pink-500 rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Crown className="w-8 h-8 text-white" />
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Crown className="w-8 h-8 text-purple-600" />
               </div>
-              <h4 className="text-xl font-bold mb-2">Suporte Prioritário</h4>
-              <p className="text-gray-600">
-                Suporte técnico especializado e resposta prioritária
-              </p>
+              <h4 className="font-semibold text-lg mb-2">Suporte 24/7</h4>
+              <p className="text-gray-600">Ajuda sempre que precisar</p>
             </div>
           </div>
-        </div>
-
-        <div className="mt-12 text-center">
-          <Link to="/generator" className="text-blue-600 hover:underline text-lg">
-            ← Voltar ao Gerador
-          </Link>
         </div>
       </div>
     </div>
