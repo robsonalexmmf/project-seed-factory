@@ -57,24 +57,30 @@ export const useAuth = () => {
 
   const fetchUserProfile = async (userId: string) => {
     try {
+      // Usar maybeSingle() em vez de single() para evitar erros se não encontrar
       const { data, error } = await supabase
         .from('users')
         .select('*')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('Error fetching user profile:', error);
         return;
       }
 
-      // Cast the plan_type to the correct union type
-      const userProfile: UserProfile = {
-        ...data,
-        plan_type: data.plan_type as 'freemium' | 'pro' | 'business' | 'admin'
-      };
+      if (data) {
+        // Cast the plan_type to the correct union type
+        const userProfile: UserProfile = {
+          ...data,
+          plan_type: data.plan_type as 'freemium' | 'pro' | 'business' | 'admin'
+        };
 
-      setUserProfile(userProfile);
+        setUserProfile(userProfile);
+      } else {
+        console.log('No user profile found for user:', userId);
+        setUserProfile(null);
+      }
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -61,7 +60,16 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (authLoading) return;
 
-    if (!userProfile || userProfile.plan_type !== 'admin') {
+    console.log('UserProfile:', userProfile);
+
+    if (!userProfile) {
+      console.log('No user profile, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
+    if (userProfile.plan_type !== 'admin') {
+      console.log('User is not admin, redirecting to login');
       navigate('/login');
       return;
     }
@@ -71,13 +79,25 @@ const AdminDashboard = () => {
 
   const loadAdminData = async () => {
     try {
+      console.log('Loading admin data...');
+      
       // Carregar todos os usuários
       const { data: allUsers, error: usersError } = await supabase
         .from('users')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (usersError) throw usersError;
+      console.log('Users query result:', { allUsers, usersError });
+
+      if (usersError) {
+        console.error('Error loading users:', usersError);
+        toast({
+          title: "Erro ao carregar usuários",
+          description: usersError.message,
+          variant: "destructive"
+        });
+        return;
+      }
 
       setUsers(allUsers || []);
 
@@ -97,8 +117,20 @@ const AdminDashboard = () => {
         monthlyRevenue,
         projectsGenerated
       });
+
+      console.log('Stats calculated:', {
+        totalUsers,
+        activeSubscriptions,
+        monthlyRevenue,
+        projectsGenerated
+      });
     } catch (error) {
       console.error('Error loading admin data:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao carregar dados administrativos",
+        variant: "destructive"
+      });
     } finally {
       setLoading(false);
     }
@@ -217,7 +249,21 @@ const AdminDashboard = () => {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">Carregando...</div>
+        <div className="text-center">
+          <div className="text-lg">Carregando dashboard admin...</div>
+          <div className="text-sm text-gray-500 mt-2">Verificando permissões...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!userProfile) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-lg">Acesso negado</div>
+          <div className="text-sm text-gray-500 mt-2">Redirecionando para login...</div>
+        </div>
       </div>
     );
   }
@@ -231,6 +277,7 @@ const AdminDashboard = () => {
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Dashboard Admin</h1>
               <p className="text-gray-600">Gerencie usuários e monitore a plataforma</p>
+              <p className="text-sm text-green-600">Logado como: {userProfile.email} ({userProfile.plan_type})</p>
             </div>
             <div className="flex space-x-3">
               <Dialog open={addUserModalOpen} onOpenChange={setAddUserModalOpen}>
@@ -441,7 +488,22 @@ const AdminDashboard = () => {
               <Button 
                 className="w-full justify-start" 
                 variant="outline"
-                onClick={exportData}
+                onClick={() => {
+                  const csvContent = [
+                    'Email,Nome,Plano,Projetos Gerados,Data de Cadastro',
+                    ...users.map((user: any) => 
+                      `${user.email},${user.full_name || ''},${user.plan_type},${user.projects_generated || 0},${user.created_at}`
+                    )
+                  ].join('\n');
+                  
+                  const blob = new Blob([csvContent], { type: 'text/csv' });
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `usuarios_${new Date().toISOString().split('T')[0]}.csv`;
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                }}
               >
                 <Download className="w-4 h-4 mr-2" />
                 Exportar Dados
