@@ -68,7 +68,7 @@ export const useAuth = () => {
         .eq('id', userId)
         .maybeSingle();
 
-      if (error) {
+      if (error && error.code !== 'PGRST116') {
         console.error('Error fetching user profile:', error);
         return;
       }

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -7,17 +8,32 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { promoteSpecificEmailToAdmin } from '@/utils/promoteToAdmin';
+import { useAuth } from '@/hooks/useAuth';
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user, loading: authLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Pegar parâmetros da URL para redirecionamento
+  const searchParams = new URLSearchParams(location.search);
+  const redirectTo = searchParams.get('redirect') || '/generator';
+  const planType = searchParams.get('plan');
+
   // Executar promoção para admin quando a página carregar
-  React.useEffect(() => {
+  useEffect(() => {
     promoteSpecificEmailToAdmin();
   }, []);
+
+  // Redirecionar usuários já logados
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate(redirectTo);
+    }
+  }, [user, authLoading, navigate, redirectTo]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +59,13 @@ const Login = () => {
           title: "Login realizado com sucesso!",
           description: "Bem-vindo de volta!",
         });
-        navigate('/generator');
+        
+        // Redirecionar baseado no plano se especificado
+        if (planType) {
+          navigate(`/subscription?plan=${planType}`);
+        } else {
+          navigate(redirectTo);
+        }
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -57,6 +79,17 @@ const Login = () => {
     }
   };
 
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
@@ -64,6 +97,11 @@ const Login = () => {
           <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
           <CardDescription className="text-center">
             Entre com suas credenciais para acessar sua conta
+            {planType && (
+              <span className="block mt-2 text-blue-600 font-medium">
+                Continue para assinar o plano {planType}
+              </span>
+            )}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -101,7 +139,10 @@ const Login = () => {
           <div className="mt-4 text-center">
             <p className="text-sm text-gray-600">
               Não tem uma conta?{' '}
-              <Link to="/register" className="text-blue-600 hover:underline">
+              <Link 
+                to={`/register${planType ? `?plan=${planType}` : ''}`} 
+                className="text-blue-600 hover:underline"
+              >
                 Cadastre-se
               </Link>
             </p>

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -11,10 +11,15 @@ import { useAuth } from '@/hooks/useAuth';
 
 const Subscription = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, userProfile, loading: authLoading } = useAuth();
   const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  // Pegar parâmetro de plano da URL
+  const searchParams = new URLSearchParams(location.search);
+  const preselectedPlan = searchParams.get('plan');
 
   useEffect(() => {
     const initializeSubscription = async () => {
@@ -23,13 +28,18 @@ const Subscription = () => {
       if (user) {
         await checkSubscription();
       } else {
-        setSubscriptionData({ subscribed: false, subscription_tier: null });
-        setLoading(false);
+        // Redirecionar para login com o plano selecionado
+        if (preselectedPlan) {
+          navigate(`/login?plan=${preselectedPlan}`);
+        } else {
+          navigate('/login');
+        }
+        return;
       }
     };
 
     initializeSubscription();
-  }, [user, authLoading]);
+  }, [user, authLoading, navigate, preselectedPlan]);
 
   const checkSubscription = async () => {
     if (!user) return;
@@ -167,7 +177,7 @@ const Subscription = () => {
                       </span>
                     ) : (
                       <span className="text-yellow-300">
-                        {userProfile.plan_type === 'freemium' ? 'Plano Freemium' : 'Sem assinatura ativa'}
+                        {userProfile.plan_type === 'freemium' ? 'Plano Freemium (2 projetos/mês)' : 'Sem assinatura ativa'}
                       </span>
                     )}
                   </div>
@@ -203,6 +213,21 @@ const Subscription = () => {
               </div>
             </div>
           )}
+
+          {/* Mostrar benefícios do plano gratuito */}
+          {userProfile?.plan_type === 'freemium' && (
+            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 border border-white/20 mb-6">
+              <div className="text-white text-center">
+                <div className="text-sm text-blue-100 mb-2">Plano Atual: Freemium</div>
+                <div className="text-lg font-bold">
+                  {userProfile.current_month_projects} / 2 projetos usados este mês
+                </div>
+                <div className="text-sm text-blue-100 mt-1">
+                  Faça upgrade para gerar mais projetos!
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -212,6 +237,7 @@ const Subscription = () => {
           {plans.map((plan) => {
             const IconComponent = plan.icon;
             const isCurrentUserPlan = isCurrentPlan(plan.id);
+            const isPreselected = preselectedPlan === plan.id;
             
             return (
               <Card 
@@ -219,9 +245,11 @@ const Subscription = () => {
                 className={`relative overflow-hidden transition-all duration-300 hover:scale-105 ${
                   isCurrentUserPlan 
                     ? 'ring-4 ring-green-500 shadow-2xl' 
-                    : plan.popular 
-                      ? 'ring-4 ring-blue-500 shadow-2xl' 
-                      : 'shadow-xl'
+                    : isPreselected
+                      ? 'ring-4 ring-orange-500 shadow-2xl'
+                      : plan.popular 
+                        ? 'ring-4 ring-blue-500 shadow-2xl' 
+                        : 'shadow-xl'
                 }`}
               >
                 {isCurrentUserPlan && (
@@ -232,7 +260,15 @@ const Subscription = () => {
                   </div>
                 )}
                 
-                {!isCurrentUserPlan && plan.popular && (
+                {!isCurrentUserPlan && isPreselected && (
+                  <div className="absolute top-0 left-0 right-0">
+                    <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-center py-2 font-bold">
+                      PLANO SELECIONADO
+                    </div>
+                  </div>
+                )}
+                
+                {!isCurrentUserPlan && !isPreselected && plan.popular && (
                   <div className="absolute top-0 left-0 right-0">
                     <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-center py-2 font-bold">
                       MAIS POPULAR
@@ -240,7 +276,7 @@ const Subscription = () => {
                   </div>
                 )}
 
-                <CardHeader className={`${isCurrentUserPlan || plan.popular ? 'pt-16' : 'pt-8'} text-center`}>
+                <CardHeader className={`${isCurrentUserPlan || isPreselected || plan.popular ? 'pt-16' : 'pt-8'} text-center`}>
                   <div className={`bg-gradient-to-r ${plan.color} rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6`}>
                     <IconComponent className="w-10 h-10 text-white" />
                   </div>

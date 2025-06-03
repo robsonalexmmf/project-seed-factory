@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,14 +17,9 @@ import {
   Sparkles,
   Timer,
   Shield,
-  Globe,
-  Code,
-  Layers,
   Crown,
-  Lock,
   LogOut,
-  Settings,
-  Users
+  Settings
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { projectTemplates, templateCategories, getTemplatesByCategory, searchTemplates } from '@/utils/projectTemplates';
@@ -31,11 +27,12 @@ import { generateAndDownloadProject } from '@/utils/projectGenerator';
 import TemplateCard from '@/components/TemplateCard';
 import ProjectGeneratorModal from '@/components/ProjectGeneratorModal';
 import UserTooltip from '@/components/UserTooltip';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
-  const { user, userProfile, signOut, canGenerate, incrementProjectCount } = useAuth();
+  const { user, userProfile, signOut, canGenerate, incrementProjectCount, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [projectName, setProjectName] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
@@ -45,6 +42,13 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Redirecionar usuários não logados
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/login?redirect=/generator');
+    }
+  }, [user, authLoading, navigate]);
+
   const handleTemplateSelect = (template: any) => {
     if (!userProfile) {
       toast({
@@ -52,13 +56,16 @@ const Index = () => {
         description: "Faça login para gerar projetos",
         variant: "destructive"
       });
+      navigate('/login?redirect=/generator');
       return;
     }
 
     if (!canGenerate()) {
       toast({
         title: "Limite de projetos atingido! 🚀",
-        description: "Você atingiu seu limite mensal. Faça upgrade para continuar gerando!",
+        description: userProfile.plan_type === 'freemium' ? 
+          "Você atingiu seu limite de 2 projetos mensais. Faça upgrade para continuar gerando!" :
+          "Você atingiu seu limite mensal. Faça upgrade para continuar gerando!",
         variant: "destructive"
       });
       return;
@@ -81,7 +88,9 @@ const Index = () => {
     if (!canGenerate()) {
       toast({
         title: "Limite de projetos atingido! 🚀",
-        description: "Você atingiu seu limite mensal. Faça upgrade para continuar gerando!",
+        description: userProfile?.plan_type === 'freemium' ? 
+          "Você atingiu seu limite de 2 projetos mensais. Faça upgrade para continuar gerando!" :
+          "Você atingiu seu limite mensal. Faça upgrade para continuar gerando!",
         variant: "destructive"
       });
       return;
@@ -164,6 +173,7 @@ const Index = () => {
         title: "Logout realizado",
         description: "Você foi desconectado com sucesso."
       });
+      navigate('/login');
     } catch (error) {
       toast({
         title: "Erro no logout",
@@ -172,6 +182,21 @@ const Index = () => {
       });
     }
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null; // Vai redirecionar via useEffect
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">

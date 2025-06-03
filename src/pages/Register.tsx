@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { Rocket } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -16,15 +17,27 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, loading: authLoading } = useAuth();
 
   const planType = new URLSearchParams(location.search).get('plan') || 'freemium';
+
+  // Redirecionar usuários já logados
+  useEffect(() => {
+    if (!authLoading && user) {
+      if (planType && planType !== 'freemium') {
+        navigate(`/subscription?plan=${planType}`);
+      } else {
+        navigate('/generator');
+      }
+    }
+  }, [user, authLoading, navigate, planType]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -39,22 +52,41 @@ const Register = () => {
         throw error;
       }
 
-      toast({
-        title: "Cadastro realizado!",
-        description: "Sua conta foi criada com sucesso.",
-      });
+      if (data.user) {
+        toast({
+          title: "Cadastro realizado!",
+          description: "Sua conta foi criada com sucesso.",
+        });
 
-      navigate('/generator');
+        // Redirecionar baseado no plano
+        if (planType && planType !== 'freemium') {
+          navigate(`/subscription?plan=${planType}`);
+        } else {
+          navigate('/generator');
+        }
+      }
     } catch (error: any) {
+      console.error('Registration error:', error);
       toast({
         title: "Erro no cadastro",
         description: error.message || "Erro ao criar conta.",
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -64,9 +96,14 @@ const Register = () => {
             <Rocket className="h-8 w-8 text-blue-600" />
             <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
           </div>
-          <CardTitle>Cadastro {planType !== 'freemium' ? `- Plano ${planType}` : 'Gratuito'}</CardTitle>
+          <CardTitle>
+            Cadastro {planType !== 'freemium' ? `- Plano ${planType}` : 'Gratuito'}
+          </CardTitle>
           <CardDescription>
-            {planType === 'freemium' ? 'Crie sua conta gratuita' : `Cadastre-se para o plano ${planType}`}
+            {planType === 'freemium' ? 
+              'Crie sua conta gratuita (2 projetos/mês)' : 
+              `Cadastre-se para o plano ${planType}`
+            }
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -110,7 +147,10 @@ const Register = () => {
             </Button>
           </form>
           <div className="mt-4 text-center">
-            <Link to="/login" className="text-sm text-blue-600 hover:underline">
+            <Link 
+              to={`/login${planType ? `?plan=${planType}` : ''}`} 
+              className="text-sm text-blue-600 hover:underline"
+            >
               Já tem conta? Faça login
             </Link>
           </div>
