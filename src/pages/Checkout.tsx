@@ -29,7 +29,7 @@ const Checkout = () => {
     },
     business: {
       name: 'Business',
-      price: 80.00,
+      price: 79.90,
       features: ['Projetos ilimitados', 'Templates exclusivos', 'Suporte 24/7', 'White label', 'API access']
     }
   };

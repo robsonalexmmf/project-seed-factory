@@ -35,7 +35,7 @@ export const userPlans: UserPlan[] = [
   {
     id: 'business',
     name: 'Business',
-    price: 80.00,
+    price: 79.90,
     monthlyLimit: -1, // unlimited
     features: ['Projetos ilimitados', 'Templates exclusivos', 'Suporte 24/7', 'White label', 'API access']
   }

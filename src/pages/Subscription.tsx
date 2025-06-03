@@ -29,7 +29,7 @@ const Subscription = () => {
     {
       id: 'business',
       name: 'Business',
-      price: 80.00,
+      price: 79.90,
       icon: Crown,
       color: 'from-purple-500 to-pink-500',
       features: [
