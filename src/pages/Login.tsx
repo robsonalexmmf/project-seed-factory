@@ -1,95 +1,110 @@
-
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { toast } from '@/hooks/use-toast';
-import { Rocket } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
+import { promoteSpecificEmailToAdmin } from '@/utils/promoteToAdmin';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+
+  // Executar promoção para admin quando a página carregar
+  React.useEffect(() => {
+    promoteSpecificEmailToAdmin();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        password
+        password,
       });
 
       if (error) {
-        throw error;
+        toast({
+          title: "Erro no login",
+          description: error.message,
+          variant: "destructive"
+        });
+        return;
       }
 
+      if (data.user) {
+        toast({
+          title: "Login realizado com sucesso!",
+          description: "Bem-vindo de volta!",
+        });
+        navigate('/generator');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
       toast({
-        title: "Login realizado com sucesso!",
-        description: "Bem-vindo de volta!",
-      });
-
-      navigate('/generator');
-    } catch (error: any) {
-      console.error('Erro no login:', error);
-      toast({
-        title: "Erro no login",
-        description: error.message || "Email ou senha incorretos.",
+        title: "Erro",
+        description: "Erro inesperado durante o login",
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Rocket className="h-8 w-8 text-blue-600" />
-            <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
-          </div>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Entre na sua conta</CardDescription>
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
+          <CardDescription className="text-center">
+            Entre com suas credenciais para acessar sua conta
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+            <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
+                placeholder="seu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                placeholder="seu@email.com"
               />
             </div>
-            <div>
+            <div className="space-y-2">
               <Label htmlFor="password">Senha</Label>
               <Input
                 id="password"
                 type="password"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                placeholder="Sua senha"
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button 
+              type="submit" 
+              className="w-full"
+              disabled={loading}
+            >
               {loading ? 'Entrando...' : 'Entrar'}
             </Button>
           </form>
           <div className="mt-4 text-center">
-            <Link to="/register" className="text-sm text-blue-600 hover:underline">
-              Não tem conta? Cadastre-se grátis
-            </Link>
+            <p className="text-sm text-gray-600">
+              Não tem uma conta?{' '}
+              <Link to="/register" className="text-blue-600 hover:underline">
+                Cadastre-se
+              </Link>
+            </p>
           </div>
         </CardContent>
       </Card>
