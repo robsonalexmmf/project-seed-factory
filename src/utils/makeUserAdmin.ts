@@ -32,23 +32,7 @@ export const makeUserAdmin = async (email: string) => {
 
       if (error) {
         console.error('Erro ao atualizar usuário para admin:', error);
-        
-        // Se falhar devido a RLS, tentar via função do banco
-        const { error: rpcError } = await supabase.rpc('promote_user_to_admin', {
-          user_email: email
-        });
-        
-        if (rpcError) {
-          console.error('Erro na função RPC:', rpcError);
-          throw rpcError;
-        }
-        
-        console.log('Usuário promovido via RPC');
-        toast({
-          title: "Usuário promovido a admin",
-          description: `${email} agora é um administrador do sistema.`,
-        });
-        return;
+        throw error;
       }
 
       console.log('Usuário atualizado para admin:', data[0]);
