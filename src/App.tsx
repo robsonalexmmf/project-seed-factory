@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import Subscription from "./pages/Subscription";
 import Checkout from "./pages/Checkout";
 import NewAdmin from "./pages/NewAdmin";
+import CreateAdmin from "./pages/CreateAdmin";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/admin" element={<NewAdmin />} />
+          <Route path="/create-admin" element={<CreateAdmin />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

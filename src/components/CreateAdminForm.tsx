@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { createNewAdmin } from '@/utils/createNewAdmin';
 import { toast } from '@/hooks/use-toast';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const CreateAdminForm = () => {
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ const CreateAdminForm = () => {
   const createQuickAdmin = async () => {
     setLoading(true);
     try {
-      const adminEmail = 'admin@example.com';
+      const adminEmail = 'admin@admin.com';
       await createNewAdmin(adminEmail, '320809eu', 'Admin Principal');
       toast({
         title: "Admin criado",
@@ -65,8 +66,28 @@ const CreateAdminForm = () => {
         <CardDescription>
           Crie um novo usuário com privilégios de administrador
         </CardDescription>
+        <Alert className="bg-blue-50 border-blue-200">
+          <AlertDescription className="text-sm">
+            <strong>Login Admin Padrão:</strong><br />
+            Email: admin@admin.com<br />
+            Senha: 320809eu
+          </AlertDescription>
+        </Alert>
       </CardHeader>
       <CardContent>
+        <div className="mb-4">
+          <Button 
+            onClick={createQuickAdmin} 
+            variant="default" 
+            className="w-full"
+            disabled={loading}
+          >
+            {loading ? 'Criando...' : 'Criar Admin Rápido (admin@admin.com)'}
+          </Button>
+        </div>
+        
+        <div className="mb-4 text-center text-sm text-gray-500">ou</div>
+        
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="fullName">Nome Completo</Label>
@@ -105,20 +126,9 @@ const CreateAdminForm = () => {
             />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Criando...' : 'Criar Admin'}
+            {loading ? 'Criando...' : 'Criar Admin Personalizado'}
           </Button>
         </form>
-        
-        <div className="mt-4 pt-4 border-t">
-          <Button 
-            onClick={createQuickAdmin} 
-            variant="outline" 
-            className="w-full"
-            disabled={loading}
-          >
-            {loading ? 'Criando...' : 'Criar Admin Rápido (admin@example.com)'}
-          </Button>
-        </div>
       </CardContent>
     </Card>
   );
