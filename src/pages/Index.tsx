@@ -424,7 +424,6 @@ const Index = () => {
               <TemplateCard
                 key={template.id}
                 template={template}
-                isSelected={false}
                 onSelect={() => handleTemplateSelect(template)}
                 categoryName={templateCategories.find(c => c.id === template.category)?.name || ''}
                 isBlocked={userProfile ? !canGenerate() : false}

@@ -8,16 +8,19 @@ import { ProjectTemplate } from '@/utils/projectTemplates';
 interface TemplateCardProps {
   template: ProjectTemplate;
   onSelect: (template: ProjectTemplate) => void;
+  categoryName?: string;
+  isBlocked?: boolean;
 }
 
-const TemplateCard = ({ template, onSelect }: TemplateCardProps) => {
+const TemplateCard = ({ template, onSelect, categoryName, isBlocked }: TemplateCardProps) => {
   return (
     <Card className="h-full flex flex-col hover:shadow-lg transition-shadow">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">{template.name}</CardTitle>
-          <Badge variant={template.complexity === 'básico' ? 'secondary' : 'default'}>
-            {template.complexity}
+          <Badge variant={template.complexity === 'easy' ? 'secondary' : 'default'}>
+            {template.complexity === 'easy' ? 'Básico' : 
+             template.complexity === 'medium' ? 'Intermediário' : 'Avançado'}
           </Badge>
         </div>
         <CardDescription>{template.description}</CardDescription>
@@ -36,23 +39,33 @@ const TemplateCard = ({ template, onSelect }: TemplateCardProps) => {
             </ul>
           </div>
           
-          <div>
-            <h4 className="font-semibold mb-2">Tecnologias:</h4>
-            <div className="flex flex-wrap gap-1">
-              {template.technologies.map((tech, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
-                  {tech}
-                </Badge>
-              ))}
+          {template.stack && template.stack.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-2">Tecnologias:</h4>
+              <div className="flex flex-wrap gap-1">
+                {template.stack.map((tech, index) => (
+                  <Badge key={index} variant="outline" className="text-xs">
+                    {tech}
+                  </Badge>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
+          {categoryName && (
+            <div>
+              <h4 className="font-semibold mb-2">Categoria:</h4>
+              <Badge variant="outline">{categoryName}</Badge>
+            </div>
+          )}
         </div>
         
         <Button 
           onClick={() => onSelect(template)} 
           className="w-full mt-4"
+          disabled={isBlocked}
         >
-          Gerar Projeto
+          {isBlocked ? 'Limite Atingido' : 'Gerar Projeto'}
         </Button>
       </CardContent>
     </Card>
