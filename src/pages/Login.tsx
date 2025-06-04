@@ -23,9 +23,9 @@ const Login = () => {
   const redirectTo = searchParams.get('redirect') || '/generator';
   const planType = searchParams.get('plan');
 
-  // Executar promoção para admin quando a página carregar
+  // Executar promoção para admin quando a página carregar (apenas uma vez)
   useEffect(() => {
-    promoteSpecificEmailToAdmin();
+    promoteSpecificEmailToAdmin().catch(console.error);
   }, []);
 
   // Redirecionar usuários já logados
@@ -41,21 +41,35 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!email || !password) {
+      toast({
+        title: "Campos obrigatórios",
+        description: "Por favor, preencha email e senha",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
+        email: email.trim(),
         password,
       });
 
       if (error) {
+        console.error('Login error:', error);
+        
         // Mensagens de erro mais amigáveis
         let errorMessage = "Erro ao fazer login";
         if (error.message.includes("Invalid login credentials")) {
           errorMessage = "Email ou senha incorretos";
         } else if (error.message.includes("Email not confirmed")) {
           errorMessage = "Email não confirmado";
+        } else if (error.message.includes("Too many requests")) {
+          errorMessage = "Muitas tentativas. Tente novamente em alguns minutos";
         } else {
           errorMessage = error.message;
         }
@@ -86,10 +100,10 @@ const Login = () => {
         }, 1000);
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Unexpected login error:', error);
       toast({
         title: "Erro",
-        description: "Erro inesperado durante o login",
+        description: "Erro inesperado durante o login. Tente novamente.",
         variant: "destructive"
       });
     } finally {
@@ -133,6 +147,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
             <div className="space-y-2">
@@ -144,6 +159,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
             <Button 

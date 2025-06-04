@@ -21,7 +21,6 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    // Verificar se a chave do Stripe existe
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeKey) {
       throw new Error("STRIPE_SECRET_KEY is not set");
@@ -30,7 +29,7 @@ serve(async (req) => {
 
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
     const authHeader = req.headers.get("Authorization");
@@ -41,16 +40,14 @@ serve(async (req) => {
     const token = authHeader.replace("Bearer ", "");
     logStep("Token extracted", { tokenLength: token.length });
 
-    const { data, error: authError } = await supabaseClient.auth.getUser(token);
-    if (authError) {
-      logStep("Auth error", { error: authError.message });
-      throw new Error(`Authentication error: ${authError.message}`);
+    // Usar o service role key para verificar o usuário
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
+    
+    if (authError || !user) {
+      logStep("Auth error", { error: authError?.message || "No user found" });
+      throw new Error(`Authentication error: ${authError?.message || "No user found"}`);
     }
 
-    const user = data.user;
-    if (!user) {
-      throw new Error("No user data returned");
-    }
     if (!user.email) {
       throw new Error("User email not available");
     }

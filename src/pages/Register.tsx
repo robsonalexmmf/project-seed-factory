@@ -34,25 +34,61 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!email || !password || !fullName) {
+      toast({
+        title: "Campos obrigatórios",
+        description: "Por favor, preencha todos os campos",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (password.length < 6) {
+      toast({
+        title: "Senha muito curta",
+        description: "A senha deve ter pelo menos 6 caracteres",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
       console.log('Registering user with plan:', planType);
       
       const { data, error } = await supabase.auth.signUp({
-        email,
+        email: email.trim(),
         password,
         options: {
           data: {
-            full_name: fullName,
+            full_name: fullName.trim(),
             plan_type: planType
-          },
-          emailRedirectTo: `${window.location.origin}/`
+          }
         }
       });
 
       if (error) {
-        throw error;
+        console.error('Registration error:', error);
+        
+        let errorMessage = "Erro ao criar conta";
+        if (error.message.includes("already registered")) {
+          errorMessage = "Este email já está cadastrado";
+        } else if (error.message.includes("Password should be")) {
+          errorMessage = "Senha deve ter pelo menos 6 caracteres";
+        } else if (error.message.includes("Invalid email")) {
+          errorMessage = "Email inválido";
+        } else {
+          errorMessage = error.message;
+        }
+        
+        toast({
+          title: "Erro no cadastro",
+          description: errorMessage,
+          variant: "destructive"
+        });
+        return;
       }
 
       if (data.user) {
@@ -62,32 +98,39 @@ const Register = () => {
         });
 
         // Fazer login automático após o cadastro bem-sucedido
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+        try {
+          const { error: signInError } = await supabase.auth.signInWithPassword({
+            email: email.trim(),
+            password,
+          });
 
-        if (signInError) {
-          console.error('Auto-login error:', signInError);
-          // Se falhar o login automático, redireciona para login
+          if (signInError) {
+            console.error('Auto-login error:', signInError);
+            // Se falhar o login automático, redireciona para login
+            navigate(`/login?plan=${planType}`);
+            return;
+          }
+
+          // Se não é freemium, redireciona para assinatura
+          setTimeout(() => {
+            if (planType !== 'freemium') {
+              console.log('Redirecting to subscription page for plan:', planType);
+              navigate(`/subscription?plan=${planType}`);
+            } else {
+              console.log('Redirecting to generator for freemium user');
+              navigate('/generator');
+            }
+          }, 1000);
+        } catch (loginError) {
+          console.error('Auto-login error:', loginError);
           navigate(`/login?plan=${planType}`);
-          return;
-        }
-
-        // Se não é freemium, redireciona para assinatura
-        if (planType !== 'freemium') {
-          console.log('Redirecting to subscription page for plan:', planType);
-          navigate(`/subscription?plan=${planType}`);
-        } else {
-          console.log('Redirecting to generator for freemium user');
-          navigate('/generator');
         }
       }
     } catch (error: any) {
-      console.error('Registration error:', error);
+      console.error('Unexpected registration error:', error);
       toast({
         title: "Erro no cadastro",
-        description: error.message || "Erro ao criar conta.",
+        description: "Erro inesperado ao criar conta. Tente novamente.",
         variant: "destructive"
       });
     } finally {
@@ -150,6 +193,7 @@ const Register = () => {
                 onChange={(e) => setFullName(e.target.value)}
                 required
                 placeholder="Seu nome completo"
+                disabled={loading}
               />
             </div>
             <div>
@@ -161,6 +205,7 @@ const Register = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="seu@email.com"
+                disabled={loading}
               />
             </div>
             <div>
@@ -173,6 +218,7 @@ const Register = () => {
                 required
                 placeholder="Mínimo 6 caracteres"
                 minLength={6}
+                disabled={loading}
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>

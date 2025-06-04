@@ -93,7 +93,17 @@ const Checkout = () => {
 
       if (error) {
         console.error('Erro no checkout:', error);
-        throw new Error(error.message || 'Erro desconhecido no checkout');
+        
+        let errorMessage = "Erro desconhecido no checkout";
+        if (error.message?.includes("Authentication error")) {
+          errorMessage = "Erro de autenticação. Faça login novamente.";
+          navigate(`/login?plan=${planType}`);
+          return;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+        
+        throw new Error(errorMessage);
       }
 
       if (data?.url) {
@@ -135,6 +145,7 @@ const Checkout = () => {
             <Rocket className="h-8 w-8 text-blue-600" />
             <h1 className="text-2xl font-bold text-gray-900">Idealyze</h1>
           </div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <div className="text-center">Verificando autenticação...</div>
         </div>
       </div>
