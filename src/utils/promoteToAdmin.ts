@@ -2,7 +2,7 @@
 import { makeUserAdmin } from './makeUserAdmin';
 import { createAdminUser } from './createAdminUser';
 
-// Promover email específico para admin
+// Função para promover email específico para admin (removida execução automática)
 export const promoteSpecificEmailToAdmin = async () => {
   try {
     // Primeiro, tentar criar o usuário admin se não existir
@@ -15,6 +15,3 @@ export const promoteSpecificEmailToAdmin = async () => {
     console.error('Erro ao processar usuário admin:', error);
   }
 };
-
-// Não executar automaticamente quando o módulo for importado
-// A execução será feita apenas quando chamada explicitamente

@@ -31,6 +31,7 @@ export const useAuth = () => {
         const { data: { session }, error } = await supabase.auth.getSession();
         if (error) {
           console.error('Error getting session:', error);
+          if (mounted) setLoading(false);
           return;
         }
 
@@ -64,12 +65,7 @@ export const useAuth = () => {
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Use setTimeout to prevent potential recursion
-          setTimeout(() => {
-            if (mounted) {
-              fetchUserProfile(session.user.id);
-            }
-          }, 0);
+          await fetchUserProfile(session.user.id);
         } else {
           setUserProfile(null);
         }
@@ -94,7 +90,7 @@ export const useAuth = () => {
         .eq('id', userId)
         .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') {
+      if (error) {
         console.error('Error fetching user profile:', error);
         return;
       }
