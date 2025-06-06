@@ -1,2115 +1,429 @@
+
 import { 
-  Store, 
-  Users, 
-  Calendar, 
-  MessageSquare, 
-  FileText, 
-  BarChart3, 
   ShoppingCart, 
-  User, 
-  MapPin, 
-  Heart, 
-  Briefcase, 
-  GraduationCap, 
-  Car, 
-  Home, 
-  Gamepad2, 
-  Music, 
-  Camera, 
-  Utensils, 
-  Plane, 
-  Dumbbell, 
-  Stethoscope, 
-  PiggyBank, 
-  Wrench, 
-  Shirt, 
-  Coffee, 
-  BookOpen, 
-  Zap, 
-  Shield, 
-  Globe, 
-  Smartphone, 
-  Monitor, 
-  Database, 
-  Cloud, 
-  Lock, 
-  Bell, 
-  Search, 
-  Mail, 
-  Share2, 
-  TrendingUp, 
-  DollarSign, 
-  Clock, 
-  Target, 
-  Award, 
-  Star, 
-  ThumbsUp, 
-  MessageCircle, 
-  Video, 
-  Image, 
-  Download, 
-  Upload, 
-  Edit, 
-  Trash2, 
-  Plus, 
-  Settings, 
-  Filter, 
-  Grid, 
-  List, 
-  Eye, 
-  EyeOff, 
-  Check, 
-  X, 
-  ChevronRight, 
-  ChevronLeft, 
-  ChevronUp, 
-  ChevronDown,
-  Building,
-  Truck,
-  Pizza,
-  IceCream,
-  Sandwich,
-  CheckCircle,
-  Bot,
-  Phone,
-  Headphones,
-  CreditCard,
-  Laptop,
-  Mic,
-  Palette,
-  Play,
-  Megaphone,
-  Send
+  Users, 
+  FileText, 
+  Building, 
+  Calendar, 
+  MessageSquare,
+  BookOpen,
+  Heart,
+  Music,
+  Camera,
+  Car,
+  Home,
+  Utensils,
+  Gamepad2,
+  DollarSign,
+  Briefcase,
+  GraduationCap,
+  Code,
+  Zap
 } from 'lucide-react';
 
 export interface ProjectTemplate {
   id: string;
   name: string;
   description: string;
-  icon: any;
   category: string;
-  features: string[];
   complexity: 'easy' | 'medium' | 'hard';
-  estimatedTime: string;
-  tags: string[];
-  color?: string;
+  features: string[];
 }
 
+export interface TemplateCategory {
+  id: string;
+  name: string;
+  icon: any;
+}
+
+export const templateCategories: TemplateCategory[] = [
+  { id: 'all', name: 'Todos', icon: Zap },
+  { id: 'ecommerce', name: 'E-commerce', icon: ShoppingCart },
+  { id: 'social', name: 'Social', icon: Users },
+  { id: 'business', name: 'Negócios', icon: Building },
+  { id: 'content', name: 'Conteúdo', icon: FileText },
+  { id: 'health', name: 'Saúde', icon: Heart },
+  { id: 'education', name: 'Educação', icon: GraduationCap },
+  { id: 'entertainment', name: 'Entretenimento', icon: Gamepad2 },
+  { id: 'productivity', name: 'Produtividade', icon: Briefcase }
+];
+
 export const projectTemplates: ProjectTemplate[] = [
-  // E-commerce / Lojas Virtuais
+  // E-commerce
   {
-    id: 'ecommerce-complete',
+    id: 'ecommerce-store',
     name: 'Loja Virtual Completa',
-    description: 'E-commerce completo com carrinho, pagamentos e gestão de produtos',
-    icon: Store,
+    description: 'Plataforma de e-commerce com carrinho, pagamentos e gestão de produtos',
     category: 'ecommerce',
-    features: ['Catálogo produtos', 'Carrinho compras', 'Pagamentos online', 'Gestão estoque', 'Cupons desconto', 'Reviews produtos'],
-    complexity: 'hard',
-    estimatedTime: '7-10 dias',
-    tags: ['ecommerce', 'loja', 'pagamentos', 'produtos'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'ecommerce-fashion',
-    name: 'Loja Virtual Moda',
-    description: 'E-commerce especializado em roupas e acessórios de moda',
-    icon: Shirt,
-    category: 'ecommerce',
-    features: ['Filtros por tamanho/cor', 'Galeria fotos', 'Wishlist', 'Guia tamanhos', 'Looks completos', 'Tendências'],
     complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['moda', 'roupas', 'fashion', 'wishlist'],
-    color: 'bg-pink-600'
+    features: [
+      'Catálogo de produtos',
+      'Carrinho de compras',
+      'Sistema de pagamento',
+      'Painel administrativo',
+      'Gestão de estoque',
+      'Relatórios de vendas'
+    ]
   },
   {
-    id: 'ecommerce-electronics',
-    name: 'Loja Virtual Eletrônicos',
-    description: 'E-commerce de produtos eletrônicos e tecnologia',
-    icon: Smartphone,
+    id: 'marketplace',
+    name: 'Marketplace Multi-vendor',
+    description: 'Marketplace onde múltiplos vendedores podem vender seus produtos',
     category: 'ecommerce',
-    features: ['Comparar produtos', 'Especificações técnicas', 'Avaliações clientes', 'Garantia', 'Assistência técnica', 'Tutoriais'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['eletrônicos', 'tecnologia', 'comparação', 'specs'],
-    color: 'bg-indigo-600'
-  },
-  {
-    id: 'marketplace-multivendor',
-    name: 'Marketplace Multi-vendedores',
-    description: 'Plataforma para múltiplos vendedores estilo Mercado Livre',
-    icon: Store,
-    category: 'ecommerce',
-    features: ['Múltiplos vendedores', 'Comissões', 'Chat vendedor-comprador', 'Avaliações vendedores', 'Dashboard vendedor', 'Disputas'],
     complexity: 'hard',
-    estimatedTime: '12-15 dias',
-    tags: ['marketplace', 'multi-vendedor', 'comissões', 'chat'],
-    color: 'bg-purple-600'
+    features: [
+      'Sistema multi-vendor',
+      'Comissões automáticas',
+      'Chat entre compradores e vendedores',
+      'Sistema de avaliações',
+      'Dashboard para vendedores',
+      'Gestão de disputas'
+    ]
   },
   {
-    id: 'ecommerce-dropshipping',
-    name: 'Loja Dropshipping',
-    description: 'E-commerce otimizado para modelo de dropshipping',
-    icon: Truck,
+    id: 'delivery-app',
+    name: 'App de Delivery',
+    description: 'Aplicação completa para delivery de comida e produtos',
     category: 'ecommerce',
-    features: ['Integração fornecedores', 'Importação produtos', 'Automação pedidos', 'Gestão fornecedores', 'Sync estoque', 'Margens automáticas'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['dropshipping', 'automação', 'fornecedores', 'importação'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'ecommerce-digital',
-    name: 'Loja Produtos Digitais',
-    description: 'E-commerce para venda de produtos digitais e downloads',
-    icon: Download,
-    category: 'ecommerce',
-    features: ['Downloads protegidos', 'Licenças uso', 'Produtos digitais', 'Entrega automática', 'DRM proteção', 'Versionamento'],
     complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['digital', 'downloads', 'licenças', 'automático'],
-    color: 'bg-cyan-600'
+    features: [
+      'Catálogo de restaurantes',
+      'Rastreamento em tempo real',
+      'Sistema de pagamento',
+      'Avaliações e comentários',
+      'Programa de fidelidade',
+      'Dashboard para entregadores'
+    ]
   },
 
-  // Blogs e Conteúdo
+  // Social
   {
-    id: 'blog-personal',
-    name: 'Blog Pessoal',
-    description: 'Blog pessoal com sistema de posts e comentários',
-    icon: Edit,
-    category: 'blog',
-    features: ['Editor posts', 'Comentários', 'Categorias', 'Tags', 'SEO otimizado', 'Newsletter', 'Modo escuro'],
+    id: 'social-network',
+    name: 'Rede Social',
+    description: 'Plataforma de rede social com posts, amigos e chat',
+    category: 'social',
+    complexity: 'hard',
+    features: [
+      'Sistema de posts',
+      'Amizades e seguidores',
+      'Chat em tempo real',
+      'Stories temporários',
+      'Sistema de curtidas',
+      'Feed personalizado'
+    ]
+  },
+  {
+    id: 'dating-app',
+    name: 'App de Relacionamentos',
+    description: 'Aplicativo de encontros com sistema de matches',
+    category: 'social',
+    complexity: 'medium',
+    features: [
+      'Sistema de swipe',
+      'Algoritmo de matching',
+      'Chat privado',
+      'Verificação de perfil',
+      'Filtros de busca',
+      'Super likes'
+    ]
+  },
+  {
+    id: 'forum',
+    name: 'Fórum de Discussões',
+    description: 'Plataforma de fórum com categorias e moderação',
+    category: 'social',
     complexity: 'easy',
-    estimatedTime: '2-3 dias',
-    tags: ['blog', 'pessoal', 'posts', 'comentários'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'blog-corporate',
-    name: 'Blog Corporativo',
-    description: 'Blog profissional para empresas e negócios',
-    icon: Building,
-    category: 'blog',
-    features: ['Múltiplos autores', 'Moderação posts', 'SEO otimizado', 'Analytics', 'Lead capture', 'Integração CRM'],
-    complexity: 'medium',
-    estimatedTime: '4-5 dias',
-    tags: ['corporativo', 'empresa', 'autores', 'moderação'],
-    color: 'bg-slate-600'
-  },
-  {
-    id: 'blog-culinary',
-    name: 'Blog Culinário',
-    description: 'Blog especializado em receitas e gastronomia',
-    icon: Utensils,
-    category: 'blog',
-    features: ['Receitas detalhadas', 'Ingredientes', 'Tempo preparo', 'Dificuldade', 'Fotos passo-a-passo', 'Calculadora porções'],
-    complexity: 'medium',
-    estimatedTime: '3-5 dias',
-    tags: ['culinária', 'receitas', 'gastronomia', 'ingredientes'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'blog-travel',
-    name: 'Blog de Viagem',
-    description: 'Blog para compartilhar experiências de viagem',
-    icon: Plane,
-    category: 'blog',
-    features: ['Roteiros viagem', 'Mapas interativos', 'Galeria fotos', 'Custos viagem', 'Dicas locais', 'Reviews hotéis'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['viagem', 'roteiros', 'mapas', 'fotos'],
-    color: 'bg-sky-600'
-  },
-  {
-    id: 'blog-tech',
-    name: 'Blog Tecnologia',
-    description: 'Blog focado em tecnologia e inovação',
-    icon: Monitor,
-    category: 'blog',
-    features: ['Reviews produtos', 'Tutoriais', 'Notícias tech', 'Comparações', 'Código syntax highlight', 'Newsletter tech'],
-    complexity: 'medium',
-    estimatedTime: '3-4 dias',
-    tags: ['tecnologia', 'reviews', 'tutoriais', 'código'],
-    color: 'bg-indigo-600'
-  },
-  {
-    id: 'blog-fashion',
-    name: 'Blog Moda',
-    description: 'Blog de moda, tendências e estilo',
-    icon: Star,
-    category: 'blog',
-    features: ['Looks do dia', 'Tendências', 'Dicas estilo', 'Galeria looks', 'Shopping guide', 'Influencer collab'],
-    complexity: 'medium',
-    estimatedTime: '3-4 dias',
-    tags: ['moda', 'tendências', 'estilo', 'looks'],
-    color: 'bg-pink-600'
+    features: [
+      'Categorias de tópicos',
+      'Sistema de votação',
+      'Moderação de conteúdo',
+      'Perfis de usuário',
+      'Busca avançada',
+      'Notificações'
+    ]
   },
 
-  // Açaí e Produtos Naturais
+  // Business
   {
-    id: 'acai-shop',
-    name: 'Açaí Shop',
-    description: 'Sistema completo para lojas de açaí e sucos',
-    icon: IceCream,
-    category: 'acai',
-    features: ['Cardápio açaí', 'Tamanhos diferentes', 'Complementos', 'Promoções', 'Fidelidade', 'Personalização'],
+    id: 'crm-system',
+    name: 'Sistema CRM',
+    description: 'CRM completo para gestão de clientes e vendas',
+    category: 'business',
     complexity: 'medium',
-    estimatedTime: '3-5 dias',
-    tags: ['açaí', 'sucos', 'complementos', 'fidelidade'],
-    color: 'bg-purple-600'
+    features: [
+      'Gestão de leads',
+      'Pipeline de vendas',
+      'Histórico de contatos',
+      'Relatórios de performance',
+      'Integração com email',
+      'Dashboard executivo'
+    ]
   },
   {
-    id: 'acai-delivery',
-    name: 'Delivery Açaí',
-    description: 'App de delivery especializado em açaí e produtos naturais',
-    icon: Truck,
-    category: 'acai',
-    features: ['Pedidos online', 'Rastreamento tempo real', 'Múltiplas lojas', 'Cupons desconto', 'Programa pontos', 'Reviews'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['delivery', 'açaí', 'rastreamento', 'pontos'],
-    color: 'bg-emerald-600'
-  },
-  {
-    id: 'acai-franchise',
-    name: 'Franquia Açaí',
-    description: 'Sistema para gerenciar franquias de açaí',
-    icon: Building,
-    category: 'acai',
-    features: ['Gestão franquias', 'Padrão produtos', 'Relatórios vendas', 'Controle qualidade', 'Treinamentos', 'Royalties'],
+    id: 'erp-system',
+    name: 'Sistema ERP',
+    description: 'ERP empresarial com múltiplos módulos',
+    category: 'business',
     complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['franquia', 'gestão', 'padrão', 'relatórios'],
-    color: 'bg-violet-600'
-  },
-
-  // Lanchonetes
-  {
-    id: 'lanchonete-complete',
-    name: 'Lanchonete Completa',
-    description: 'Sistema completo para lanchonetes e fast food',
-    icon: Sandwich,
-    category: 'lanchonete',
-    features: ['Cardápio digital', 'Pedidos balcão', 'Delivery', 'Controle estoque', 'Relatórios vendas', 'Promoções'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['lanchonete', 'fast-food', 'balcão', 'delivery'],
-    color: 'bg-orange-600'
+    features: [
+      'Gestão financeira',
+      'Controle de estoque',
+      'Recursos humanos',
+      'Relatórios gerenciais',
+      'Workflow automático',
+      'Multi-empresa'
+    ]
   },
   {
-    id: 'hamburgueria',
-    name: 'Hamburgueria',
-    description: 'Sistema especializado para hamburguerias',
-    icon: Utensils,
-    category: 'lanchonete',
-    features: ['Monta seu burger', 'Pontos da carne', 'Acompanhamentos', 'Combos', 'Ingredientes extras', 'Personalização'],
-    complexity: 'medium',
-    estimatedTime: '4-5 dias',
-    tags: ['hamburger', 'personalização', 'combos', 'carne'],
-    color: 'bg-red-600'
-  },
-  {
-    id: 'hot-dog-cart',
-    name: 'Carrinho Hot Dog',
-    description: 'Sistema para carrinhos de hot dog e lanches rápidos',
-    icon: MapPin,
-    category: 'lanchonete',
-    features: ['Cardápio simples', 'Pedidos rápidos', 'Localização carrinho', 'Horário funcionamento', 'Molhos especiais', 'Fila virtual'],
+    id: 'invoice-system',
+    name: 'Sistema de Faturamento',
+    description: 'Sistema para emissão de notas fiscais e cobrança',
+    category: 'business',
     complexity: 'easy',
-    estimatedTime: '2-3 dias',
-    tags: ['hot-dog', 'carrinho', 'localização', 'rápido'],
-    color: 'bg-yellow-600'
-  },
-  {
-    id: 'sandwich-house',
-    name: 'Casa de Sanduíches',
-    description: 'Sistema para lojas especializadas em sanduíches',
-    icon: Sandwich,
-    category: 'lanchonete',
-    features: ['Sanduíches personalizados', 'Pães especiais', 'Molhos caseiros', 'Ingredientes frescos', 'Combos', 'Delivery'],
-    complexity: 'medium',
-    estimatedTime: '3-4 dias',
-    tags: ['sanduíches', 'personalizado', 'molhos', 'frescos'],
-    color: 'bg-amber-600'
+    features: [
+      'Emissão de NFe',
+      'Controle de cobrança',
+      'Relatórios fiscais',
+      'Integração bancária',
+      'Dashboard financeiro',
+      'Clientes e produtos'
+    ]
   },
 
-  // Pizzarias
+  // Content
   {
-    id: 'pizzaria-complete',
-    name: 'Pizzaria Completa',
-    description: 'Sistema completo para pizzarias com delivery',
-    icon: Pizza,
-    category: 'pizzaria',
-    features: ['Cardápio pizzas', 'Tamanhos diferentes', 'Sabores meio a meio', 'Bordas especiais', 'Delivery', 'Tempo entrega'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['pizza', 'delivery', 'meio-a-meio', 'bordas'],
-    color: 'bg-red-600'
-  },
-  {
-    id: 'pizza-delivery',
-    name: 'Pizza Delivery',
-    description: 'App de delivery especializado em pizzas',
-    icon: Truck,
-    category: 'pizzaria',
-    features: ['Rastreamento entregador', 'Tempo estimado', 'Promoções especiais', 'Cupons', 'Avaliação entrega', 'Histórico pedidos'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['pizza', 'delivery', 'rastreamento', 'promoções'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'pizzaria-gourmet',
-    name: 'Pizzaria Gourmet',
-    description: 'Sistema para pizzarias premium e gourmet',
-    icon: Star,
-    category: 'pizzaria',
-    features: ['Ingredientes premium', 'Massas especiais', 'Vinhos harmonização', 'Chef signature', 'Experiência gastronômica', 'Reservas mesa'],
-    complexity: 'hard',
-    estimatedTime: '6-8 dias',
-    tags: ['gourmet', 'premium', 'vinhos', 'chef'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'pizza-franchise',
-    name: 'Franquia Pizza',
-    description: 'Sistema para redes de pizzarias franqueadas',
-    icon: Building,
-    category: 'pizzaria',
-    features: ['Gestão franquias', 'Padrão receitas', 'Controle qualidade', 'Relatórios consolidados', 'Treinamentos', 'Suporte franqueado'],
-    complexity: 'hard',
-    estimatedTime: '10-12 dias',
-    tags: ['franquia', 'gestão', 'padrão', 'qualidade'],
-    color: 'bg-indigo-600'
-  },
-
-  // Keep all existing 76 templates...
-  // ... keep existing code (all 76 original templates)
-  {
-    id: 'ecommerce-books',
-    name: 'Livraria Virtual',
-    description: 'E-commerce especializado em livros físicos e digitais',
-    icon: BookOpen,
-    category: 'ecommerce',
-    features: ['E-books', 'Preview de livros', 'Categorias', 'Recomendações', 'Lista de desejos', 'Clube do livro'],
-    complexity: 'medium',
-    estimatedTime: '3-5 dias',
-    tags: ['livros', 'ebooks', 'leitura'],
-    color: 'bg-emerald-600'
-  },
-  {
-    id: 'ecommerce-beauty',
-    name: 'Loja de Cosméticos',
-    description: 'E-commerce para produtos de beleza e cuidados pessoais',
-    icon: Star,
-    category: 'ecommerce',
-    features: ['Tutoriais de maquiagem', 'Teste virtual', 'Assinatura mensal', 'Blog de beleza', 'Programa de fidelidade'],
-    complexity: 'hard',
-    estimatedTime: '5-7 dias',
-    tags: ['cosméticos', 'beleza', 'assinatura'],
-    color: 'bg-pink-600'
-  },
-  {
-    id: 'ecommerce-pets',
-    name: 'Pet Shop Online',
-    description: 'Loja virtual para produtos e serviços para pets',
-    icon: Heart,
-    category: 'ecommerce',
-    features: ['Produtos para pets', 'Agendamento veterinário', 'Perfil do pet', 'Receitas veterinárias', 'Delivery'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['pets', 'veterinário', 'agendamento'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'blog-lifestyle',
-    name: 'Blog de Lifestyle',
-    description: 'Blog pessoal sobre estilo de vida e bem-estar',
-    icon: Star,
-    category: 'blog',
-    features: ['Posts multimídia', 'Categorias', 'Instagram feed', 'Newsletter', 'Comentários sociais'],
+    id: 'blog-platform',
+    name: 'Plataforma de Blog',
+    description: 'CMS para blogs com múltiplos autores',
+    category: 'content',
     complexity: 'easy',
-    estimatedTime: '2-3 dias',
-    tags: ['lifestyle', 'bem-estar', 'pessoal'],
-    color: 'bg-rose-600'
+    features: [
+      'Editor de texto rico',
+      'Sistema de categorias',
+      'Comentários',
+      'SEO otimizado',
+      'Newsletter',
+      'Analytics integrado'
+    ]
   },
   {
-    id: 'blog-food',
-    name: 'Blog de Culinária',
-    description: 'Blog para receitas e dicas culinárias',
-    icon: Utensils,
-    category: 'blog',
-    features: ['Receitas', 'Timer de cozimento', 'Lista de compras', 'Calculadora nutricional', 'Vídeos'],
+    id: 'podcast-platform',
+    name: 'Plataforma de Podcast',
+    description: 'Sistema para hospedar e distribuir podcasts',
+    category: 'content',
     complexity: 'medium',
-    estimatedTime: '3-5 dias',
-    tags: ['culinária', 'receitas', 'vídeos'],
-    color: 'bg-orange-600'
+    features: [
+      'Upload de episódios',
+      'Player customizado',
+      'RSS feed automático',
+      'Analytics de audiência',
+      'Transcrições automáticas',
+      'Monetização'
+    ]
   },
   {
-    id: 'delivery-restaurant',
-    name: 'Delivery de Restaurante',
-    description: 'Sistema de delivery para restaurantes',
-    icon: Utensils,
-    category: 'delivery',
-    features: ['Cardápio digital', 'Pedidos online', 'Rastreamento', 'Múltiplas formas de pagamento', 'Reviews'],
+    id: 'news-portal',
+    name: 'Portal de Notícias',
+    description: 'Portal de notícias com sistema editorial',
+    category: 'content',
     complexity: 'medium',
-    estimatedTime: '3-5 dias',
-    tags: ['restaurante', 'delivery', 'pagamentos'],
-    color: 'bg-green-600'
+    features: [
+      'Sistema editorial',
+      'Categorias de notícias',
+      'Breaking news',
+      'Newsletter automática',
+      'SEO avançado',
+      'Comentários moderados'
+    ]
   },
-  {
-    id: 'delivery-coffee',
-    name: 'Delivery de Cafeteria',
-    description: 'App para delivery de café e lanches rápidos',
-    icon: Coffee,
-    category: 'delivery',
-    features: ['Menu de bebidas', 'Personalização', 'Programa de pontos', 'Pré-pedidos', 'Assinatura mensal'],
-    complexity: 'medium',
-    estimatedTime: '3-4 dias',
-    tags: ['café', 'bebidas', 'assinatura'],
-    color: 'bg-amber-600'
-  },
-  {
-    id: 'crm-sales',
-    name: 'CRM de Vendas',
-    description: 'Sistema completo de gestão de relacionamento com clientes',
-    icon: Users,
-    category: 'saas',
-    features: ['Pipeline de vendas', 'Gestão de leads', 'Relatórios', 'Integração email', 'Dashboard analytics'],
-    complexity: 'hard',
-    estimatedTime: '7-10 dias',
-    tags: ['crm', 'vendas', 'leads', 'analytics'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'project-management',
-    name: 'Gestão de Projetos',
-    description: 'Ferramenta para gerenciamento de projetos e equipes',
-    icon: Briefcase,
-    category: 'saas',
-    features: ['Kanban board', 'Timeline', 'Colaboração em tempo real', 'Time tracking', 'Relatórios'],
-    complexity: 'hard',
-    estimatedTime: '8-12 dias',
-    tags: ['projetos', 'kanban', 'colaboração'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'inventory-system',
-    name: 'Sistema de Estoque',
-    description: 'Controle completo de inventário e estoque',
-    icon: Database,
-    category: 'saas',
-    features: ['Controle de entrada/saída', 'Códigos de barras', 'Alertas de estoque baixo', 'Relatórios', 'Múltiplos depósitos'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['estoque', 'inventário', 'códigos'],
-    color: 'bg-slate-600'
-  },
-  {
-    id: 'hr-system',
-    name: 'Sistema de RH',
-    description: 'Plataforma para gestão de recursos humanos',
-    icon: Users,
-    category: 'saas',
-    features: ['Cadastro funcionários', 'Ponto eletrônico', 'Folha de pagamento', 'Avaliações', 'Documentos'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['rh', 'funcionários', 'ponto'],
-    color: 'bg-teal-600'
-  },
-  {
-    id: 'accounting-system',
-    name: 'Sistema Contábil',
-    description: 'Software para gestão financeira e contábil',
-    icon: DollarSign,
-    category: 'saas',
-    features: ['Fluxo de caixa', 'Contas a pagar/receber', 'Relatórios fiscais', 'Conciliação bancária', 'NFe'],
-    complexity: 'hard',
-    estimatedTime: '10-15 dias',
-    tags: ['contábil', 'financeiro', 'nfe'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'clinic-management',
-    name: 'Gestão de Clínica',
-    description: 'Sistema completo para clínicas médicas',
-    icon: Stethoscope,
-    category: 'healthcare',
-    features: ['Agendamento consultas', 'Prontuário eletrônico', 'Prescrições', 'Faturamento', 'Relatórios médicos'],
-    complexity: 'hard',
-    estimatedTime: '10-12 dias',
-    tags: ['clínica', 'prontuário', 'médico'],
-    color: 'bg-red-600'
-  },
+
+  // Health
   {
     id: 'telemedicine',
-    name: 'Telemedicina',
-    description: 'Plataforma para consultas médicas online',
-    icon: Video,
-    category: 'healthcare',
-    features: ['Videochamadas', 'Agendamento online', 'Receitas digitais', 'Histórico médico', 'Pagamentos'],
+    name: 'Plataforma de Telemedicina',
+    description: 'Sistema para consultas médicas online',
+    category: 'health',
     complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['telemedicina', 'vídeo', 'receitas'],
-    color: 'bg-blue-600'
+    features: [
+      'Agendamento online',
+      'Videochamadas',
+      'Prescrições digitais',
+      'Prontuário eletrônico',
+      'Sistema de pagamento',
+      'Integração com laboratórios'
+    ]
   },
   {
-    id: 'pharmacy-system',
-    name: 'Sistema de Farmácia',
-    description: 'Gestão completa para farmácias',
-    icon: Shield,
-    category: 'healthcare',
-    features: ['Controle de medicamentos', 'Receitas', 'Estoque', 'Vendas', 'Convênios', 'Validade'],
+    id: 'fitness-app',
+    name: 'App de Fitness',
+    description: 'Aplicativo para acompanhamento de exercícios e dieta',
+    category: 'health',
     complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['farmácia', 'medicamentos', 'receitas'],
-    color: 'bg-green-600'
+    features: [
+      'Planos de treino',
+      'Contador de calorias',
+      'Progresso de peso',
+      'Lembretes de exercício',
+      'Comunidade fitness',
+      'Personal trainer virtual'
+    ]
   },
+  {
+    id: 'mental-health',
+    name: 'App de Saúde Mental',
+    description: 'Plataforma para bem-estar mental e meditação',
+    category: 'health',
+    complexity: 'easy',
+    features: [
+      'Meditações guiadas',
+      'Diário de humor',
+      'Exercícios de respiração',
+      'Terapia online',
+      'Acompanhamento de progresso',
+      'Conteúdo educativo'
+    ]
+  },
+
+  // Education
   {
     id: 'lms-platform',
-    name: 'Plataforma de Ensino',
-    description: 'Sistema de gestão de aprendizagem (LMS)',
-    icon: GraduationCap,
+    name: 'Plataforma LMS',
+    description: 'Sistema de gestão de aprendizagem completo',
     category: 'education',
-    features: ['Cursos online', 'Vídeo aulas', 'Quizzes', 'Certificados', 'Progresso do aluno', 'Fórum'],
     complexity: 'hard',
-    estimatedTime: '8-12 dias',
-    tags: ['ensino', 'cursos', 'certificados'],
-    color: 'bg-indigo-600'
+    features: [
+      'Criação de cursos',
+      'Video aulas',
+      'Quiz e avaliações',
+      'Certificados',
+      'Fórum de dúvidas',
+      'Relatórios de progresso'
+    ]
+  },
+  {
+    id: 'online-courses',
+    name: 'Cursos Online',
+    description: 'Plataforma de venda de cursos online',
+    category: 'education',
+    complexity: 'medium',
+    features: [
+      'Marketplace de cursos',
+      'Sistema de pagamento',
+      'Área do aluno',
+      'Chat com instrutores',
+      'Certificação',
+      'Mobile friendly'
+    ]
   },
   {
     id: 'school-management',
     name: 'Gestão Escolar',
     description: 'Sistema completo para gestão de escolas',
-    icon: BookOpen,
     category: 'education',
-    features: ['Matrículas', 'Notas', 'Frequência', 'Boletins', 'Comunicados', 'Biblioteca'],
     complexity: 'hard',
-    estimatedTime: '10-15 dias',
-    tags: ['escola', 'notas', 'frequência'],
-    color: 'bg-blue-600'
+    features: [
+      'Gestão de alunos',
+      'Boletim eletrônico',
+      'Agenda escolar',
+      'Comunicação com pais',
+      'Financeiro escolar',
+      'Biblioteca digital'
+    ]
   },
+
+  // Entertainment
   {
-    id: 'language-learning',
-    name: 'App de Idiomas',
-    description: 'Aplicativo para aprendizado de idiomas',
-    icon: Globe,
-    category: 'education',
-    features: ['Lições interativas', 'Pronúncia', 'Gamificação', 'Progresso', 'Conversação', 'Certificação'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['idiomas', 'gamificação', 'conversação'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'real-estate-platform',
-    name: 'Imobiliária Online',
-    description: 'Plataforma para compra e venda de imóveis',
-    icon: Home,
-    category: 'realestate',
-    features: ['Busca de imóveis', 'Filtros avançados', 'Tour virtual', 'Calculadora financiamento', 'Favoritos'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['imóveis', 'busca', 'financiamento'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'property-management',
-    name: 'Gestão de Propriedades',
-    description: 'Sistema para administração de imóveis',
-    icon: Building,
-    category: 'realestate',
-    features: ['Contratos de aluguel', 'Manutenção', 'Pagamentos', 'Inquilinos', 'Relatórios financeiros'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['propriedades', 'aluguel', 'inquilinos'],
-    color: 'bg-gray-600'
-  },
-  {
-    id: 'car-marketplace',
-    name: 'Marketplace de Carros',
-    description: 'Plataforma para compra e venda de veículos',
-    icon: Car,
-    category: 'automotive',
-    features: ['Anúncios de carros', 'Filtros detalhados', 'Financiamento', 'Histórico do veículo', 'Chat'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['carros', 'marketplace', 'financiamento'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'auto-service',
-    name: 'Oficina Automotiva',
-    description: 'Sistema para gestão de oficinas mecânicas',
-    icon: Wrench,
-    category: 'automotive',
-    features: ['Ordens de serviço', 'Estoque de peças', 'Agendamento', 'Orçamentos', 'Histórico do veículo'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['oficina', 'serviços', 'peças'],
-    color: 'bg-gray-600'
-  },
-  {
-    id: 'fintech-wallet',
-    name: 'Carteira Digital',
-    description: 'Aplicativo de carteira digital e pagamentos',
-    icon: PiggyBank,
-    category: 'finance',
-    features: ['Transferências', 'PIX', 'Cartão virtual', 'Investimentos', 'Cashback', 'Relatórios'],
-    complexity: 'hard',
-    estimatedTime: '10-15 dias',
-    tags: ['fintech', 'pagamentos', 'pix'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'expense-tracker',
-    name: 'Controle de Gastos',
-    description: 'App para controle de gastos pessoais',
-    icon: BarChart3,
-    category: 'finance',
-    features: ['Categorias de gastos', 'Metas financeiras', 'Relatórios', 'Sincronização bancária', 'Alertas'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['gastos', 'finanças', 'metas'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'investment-platform',
-    name: 'Plataforma de Investimentos',
-    description: 'Sistema para investimentos e análises',
-    icon: TrendingUp,
-    category: 'finance',
-    features: ['Portfolio', 'Análise de ativos', 'Simulador', 'News financeiras', 'Alertas de preço'],
-    complexity: 'hard',
-    estimatedTime: '8-12 dias',
-    tags: ['investimentos', 'portfolio', 'análise'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'gym-management',
-    name: 'Gestão de Academia',
-    description: 'Sistema completo para academias',
-    icon: Dumbbell,
-    category: 'fitness',
-    features: ['Matrículas', 'Planos de treino', 'Controle de acesso', 'Pagamentos', 'Avaliações físicas'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['academia', 'treino', 'matrículas'],
-    color: 'bg-red-600'
-  },
-  {
-    id: 'fitness-app',
-    name: 'App de Fitness',
-    description: 'Aplicativo para exercícios e treinos',
-    icon: Target,
-    category: 'fitness',
-    features: ['Treinos personalizados', 'Vídeos exercícios', 'Progress tracking', 'Nutrição', 'Desafios'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['fitness', 'treinos', 'nutrição'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'music-streaming',
-    name: 'Streaming de Música',
-    description: 'Plataforma para streaming de música',
-    icon: Music,
+    id: 'streaming-platform',
+    name: 'Plataforma de Streaming',
+    description: 'Netflix-like para vídeos e filmes',
     category: 'entertainment',
-    features: ['Player de música', 'Playlists', 'Recomendações', 'Offline mode', 'Podcast', 'Social'],
     complexity: 'hard',
-    estimatedTime: '10-15 dias',
-    tags: ['música', 'streaming', 'playlists'],
-    color: 'bg-purple-600'
+    features: [
+      'Catálogo de vídeos',
+      'Player customizado',
+      'Recomendações por IA',
+      'Perfis familiares',
+      'Download offline',
+      'Sistema de assinatura'
+    ]
   },
   {
     id: 'gaming-platform',
-    name: 'Plataforma de Games',
-    description: 'Marketplace para jogos digitais',
-    icon: Gamepad2,
+    name: 'Plataforma de Jogos',
+    description: 'Steam-like para distribuição de jogos',
     category: 'entertainment',
-    features: ['Loja de jogos', 'Reviews', 'Ranking', 'Achievements', 'Chat', 'Streaming'],
     complexity: 'hard',
-    estimatedTime: '12-15 dias',
-    tags: ['games', 'marketplace', 'ranking'],
-    color: 'bg-indigo-600'
-  },
-  {
-    id: 'photo-sharing',
-    name: 'Rede Social de Fotos',
-    description: 'Plataforma para compartilhamento de fotos',
-    icon: Camera,
-    category: 'entertainment',
-    features: ['Upload de fotos', 'Filtros', 'Stories', 'Likes', 'Comentários', 'Hashtags'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['fotos', 'social', 'filtros'],
-    color: 'bg-pink-600'
-  },
-  {
-    id: 'social-network',
-    name: 'Rede Social',
-    description: 'Plataforma de rede social completa',
-    icon: Users,
-    category: 'social',
-    features: ['Timeline', 'Posts', 'Amigos', 'Grupos', 'Chat', 'Notificações'],
-    complexity: 'hard',
-    estimatedTime: '12-20 dias',
-    tags: ['social', 'timeline', 'chat'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'chat-app',
-    name: 'App de Mensagens',
-    description: 'Aplicativo de mensagens instantâneas',
-    icon: MessageSquare,
-    category: 'social',
-    features: ['Chat em tempo real', 'Grupos', 'Mídia', 'Chamadas', 'Status', 'Criptografia'],
-    complexity: 'hard',
-    estimatedTime: '8-12 dias',
-    tags: ['chat', 'mensagens', 'grupos'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'forum-platform',
-    name: 'Fórum de Discussão',
-    description: 'Plataforma de fórum e discussões',
-    icon: MessageCircle,
-    category: 'social',
-    features: ['Tópicos', 'Categorias', 'Moderação', 'Ranking', 'Busca avançada', 'Notificações'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['fórum', 'discussão', 'moderação'],
-    color: 'bg-indigo-600'
-  },
-  {
-    id: 'travel-booking',
-    name: 'Reservas de Viagem',
-    description: 'Plataforma para reservas de hotéis e voos',
-    icon: Plane,
-    category: 'travel',
-    features: ['Busca de hotéis', 'Comparação de preços', 'Reviews', 'Mapas', 'Itinerários', 'Check-in'],
-    complexity: 'hard',
-    estimatedTime: '8-12 dias',
-    tags: ['viagem', 'hotéis', 'reservas'],
-    color: 'bg-sky-600'
-  },
-  {
-    id: 'tour-guide',
-    name: 'Guia Turístico',
-    description: 'App para guias turísticos e tours',
-    icon: MapPin,
-    category: 'travel',
-    features: ['Tours guiados', 'Áudio tours', 'Mapas offline', 'Pontos de interesse', 'Realidade aumentada'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['turismo', 'tours', 'mapas'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'service-marketplace',
-    name: 'Marketplace de Serviços',
-    description: 'Plataforma para prestadores de serviços',
-    icon: Wrench,
-    category: 'marketplace',
-    features: ['Busca de profissionais', 'Agendamento', 'Avaliações', 'Pagamentos', 'Chat', 'Geolocalização'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['serviços', 'profissionais', 'agendamento'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'freelancer-platform',
-    name: 'Plataforma de Freelancers',
-    description: 'Marketplace para freelancers e projetos',
-    icon: Briefcase,
-    category: 'marketplace',
-    features: ['Projetos', 'Propostas', 'Portfolio', 'Pagamentos escrow', 'Reviews', 'Mensagens'],
-    complexity: 'hard',
-    estimatedTime: '10-12 dias',
-    tags: ['freelancer', 'projetos', 'portfolio'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'logistics-system',
-    name: 'Sistema Logístico',
-    description: 'Plataforma para gestão logística',
-    icon: Truck,
-    category: 'logistics',
-    features: ['Rastreamento em tempo real', 'Roteirização', 'Gestão de frota', 'Relatórios', 'API integração'],
-    complexity: 'hard',
-    estimatedTime: '10-15 dias',
-    tags: ['logística', 'rastreamento', 'frota'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'delivery-platform',
-    name: 'Plataforma de Delivery',
-    description: 'Sistema multi-restaurante de delivery',
-    icon: Truck,
-    category: 'logistics',
-    features: ['Multi-restaurantes', 'Entregadores', 'Rastreamento', 'Comissões', 'Analytics', 'App mobile'],
-    complexity: 'hard',
-    estimatedTime: '12-18 dias',
-    tags: ['delivery', 'multi-restaurante', 'entregadores'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'password-manager',
-    name: 'Gerenciador de Senhas',
-    description: 'App para gerenciamento seguro de senhas',
-    icon: Lock,
-    category: 'security',
-    features: ['Vault criptografado', 'Gerador de senhas', 'Autofill', '2FA', 'Compartilhamento seguro'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['senhas', 'segurança', '2fa'],
-    color: 'bg-red-600'
-  },
-  {
-    id: 'vpn-service',
-    name: 'Serviço VPN',
-    description: 'Aplicativo de VPN e privacidade',
-    icon: Shield,
-    category: 'security',
-    features: ['Conexão VPN', 'Servidores globais', 'Kill switch', 'DNS seguro', 'Logs zero'],
-    complexity: 'hard',
-    estimatedTime: '12-15 dias',
-    tags: ['vpn', 'privacidade', 'segurança'],
-    color: 'bg-gray-600'
-  },
-  {
-    id: 'news-platform',
-    name: 'Portal de Notícias',
-    description: 'Plataforma de notícias e jornalismo',
-    icon: FileText,
-    category: 'media',
-    features: ['CMS avançado', 'Categorias', 'Newsletter', 'Comentários', 'SEO', 'AMP'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['notícias', 'jornalismo', 'cms'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'podcast-platform',
-    name: 'Plataforma de Podcast',
-    description: 'Sistema para criação e distribuição de podcasts',
-    icon: Music,
-    category: 'media',
-    features: ['Upload de episódios', 'Player customizado', 'Analytics', 'RSS feeds', 'Monetização'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['podcast', 'áudio', 'monetização'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'analytics-dashboard',
-    name: 'Dashboard Analytics',
-    description: 'Plataforma de analytics e métricas',
-    icon: BarChart3,
-    category: 'analytics',
-    features: ['Coleta de dados', 'Dashboards customizáveis', 'Relatórios', 'APIs', 'Alertas'],
-    complexity: 'hard',
-    estimatedTime: '8-12 dias',
-    tags: ['analytics', 'métricas', 'dashboards'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'form-builder',
-    name: 'Construtor de Formulários',
-    description: 'Ferramenta para criar formulários dinâmicos',
-    icon: Edit,
-    category: 'tools',
-    features: ['Drag & drop', 'Validações', 'Integrações', 'Analytics', 'Temas customizáveis'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['formulários', 'drag-drop', 'validações'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'url-shortener',
-    name: 'Encurtador de URL',
-    description: 'Serviço para encurtar e rastrear links',
-    icon: Share2,
-    category: 'tools',
-    features: ['Encurtamento de links', 'Analytics de cliques', 'Links customizados', 'QR codes', 'API'],
-    complexity: 'easy',
-    estimatedTime: '2-3 dias',
-    tags: ['url', 'links', 'analytics'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'smart-home',
-    name: 'Casa Inteligente',
-    description: 'Sistema de automação residencial',
-    icon: Home,
-    category: 'iot',
-    features: ['Controle de dispositivos', 'Automações', 'Sensores', 'Energia', 'Segurança'],
-    complexity: 'hard',
-    estimatedTime: '12-18 dias',
-    tags: ['iot', 'automação', 'sensores'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'weather-station',
-    name: 'Estação Meteorológica',
-    description: 'Dashboard para dados meteorológicos',
-    icon: Cloud,
-    category: 'iot',
-    features: ['Dados em tempo real', 'Previsões', 'Alertas', 'Histórico', 'Mapas climáticos'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['clima', 'meteorologia', 'sensores'],
-    color: 'bg-sky-600'
-  },
-  {
-    id: 'api-gateway',
-    name: 'Gateway de API',
-    description: 'Sistema de gerenciamento de APIs',
-    icon: Zap,
-    category: 'developer',
-    features: ['Roteamento de APIs', 'Rate limiting', 'Autenticação', 'Analytics', 'Documentação'],
-    complexity: 'hard',
-    estimatedTime: '10-15 dias',
-    tags: ['api', 'gateway', 'rate-limiting'],
-    color: 'bg-yellow-600'
-  },
-  {
-    id: 'code-sharing',
-    name: 'Compartilhamento de Código',
-    description: 'Plataforma para snippets de código',
-    icon: FileText,
-    category: 'developer',
-    features: ['Syntax highlighting', 'Versioning', 'Colaboração', 'Comentários', 'Tags'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['código', 'snippets', 'colaboração'],
-    color: 'bg-gray-600'
+    features: [
+      'Loja de jogos',
+      'Sistema de DRM',
+      'Chat de jogadores',
+      'Achievements',
+      'Reviews e ratings',
+      'Comunidade de modding'
+    ]
   },
   {
     id: 'event-platform',
-    name: 'Gestão de Eventos',
-    description: 'Plataforma completa para eventos',
-    icon: Calendar,
-    category: 'events',
-    features: ['Criação de eventos', 'Venda de ingressos', 'Check-in', 'Networking', 'Relatórios'],
-    complexity: 'hard',
-    estimatedTime: '8-12 dias',
-    tags: ['eventos', 'ingressos', 'networking'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'conference-app',
-    name: 'App de Conferência',
-    description: 'Aplicativo para conferências e palestras',
-    icon: Users,
-    category: 'events',
-    features: ['Agenda', 'Palestrantes', 'Networking', 'Notificações', 'Feedback'],
+    name: 'Plataforma de Eventos',
+    description: 'Eventbrite-like para criação e venda de ingressos',
+    category: 'entertainment',
     complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['conferência', 'palestras', 'agenda'],
-    color: 'bg-indigo-600'
-  },
-  {
-    id: 'donation-platform',
-    name: 'Plataforma de Doações',
-    description: 'Sistema para captação de recursos',
-    icon: Heart,
-    category: 'nonprofit',
-    features: ['Campanhas', 'Doações recorrentes', 'Relatórios de impacto', 'Voluntários', 'Transparência'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['doações', 'campanhas', 'voluntários'],
-    color: 'bg-red-600'
-  },
-  {
-    id: 'volunteer-management',
-    name: 'Gestão de Voluntários',
-    description: 'Sistema para organizações voluntárias',
-    icon: Users,
-    category: 'nonprofit',
-    features: ['Cadastro voluntários', 'Agendamento', 'Comunicação', 'Certificados', 'Relatórios'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['voluntários', 'ong', 'certificados'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'sports-league',
-    name: 'Liga Esportiva',
-    description: 'Sistema para gestão de ligas esportivas',
-    icon: Award,
-    category: 'sports',
-    features: ['Tabelas', 'Jogos', 'Estatísticas', 'Ranking', 'Transmissões', 'Fantasy'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['esportes', 'liga', 'ranking'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'booking-sports',
-    name: 'Reserva de Quadras',
-    description: 'Sistema para reserva de espaços esportivos',
-    icon: Calendar,
-    category: 'sports',
-    features: ['Agendamento', 'Pagamentos', 'Recorrência', 'Cancelamentos', 'Avaliações'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['quadras', 'reserva', 'esportes'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'farm-management',
-    name: 'Gestão Agrícola',
-    description: 'Sistema para gestão de fazendas',
-    icon: Globe,
-    category: 'agriculture',
-    features: ['Plantio', 'Irrigação', 'Clima', 'Pragas', 'Colheita', 'Financeiro'],
-    complexity: 'hard',
-    estimatedTime: '10-15 dias',
-    tags: ['agricultura', 'fazenda', 'irrigação'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'environmental-monitoring',
-    name: 'Monitoramento Ambiental',
-    description: 'Sistema de monitoramento ecológico',
-    icon: Globe,
-    category: 'environment',
-    features: ['Sensores ambientais', 'Alertas', 'Relatórios', 'Mapas', 'Sustentabilidade'],
-    complexity: 'hard',
-    estimatedTime: '8-12 dias',
-    tags: ['meio-ambiente', 'sustentabilidade', 'sensores'],
-    color: 'bg-emerald-600'
-  },
-  {
-    id: 'legal-practice',
-    name: 'Gestão Jurídica',
-    description: 'Sistema para escritórios de advocacia',
-    icon: Shield,
-    category: 'legal',
-    features: ['Processos', 'Prazos', 'Clientes', 'Documentos', 'Timesheet', 'Faturamento'],
-    complexity: 'hard',
-    estimatedTime: '10-15 dias',
-    tags: ['jurídico', 'advocacia', 'processos'],
-    color: 'bg-gray-600'
-  },
-  {
-    id: 'compliance-system',
-    name: 'Sistema de Compliance',
-    description: 'Plataforma para gestão de compliance',
-    icon: CheckCircle,
-    category: 'legal',
-    features: ['Auditorias', 'Políticas', 'Treinamentos', 'Riscos', 'Relatórios'],
-    complexity: 'hard',
-    estimatedTime: '8-12 dias',
-    tags: ['compliance', 'auditoria', 'riscos'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'manufacturing-erp',
-    name: 'ERP Industrial',
-    description: 'Sistema ERP para indústrias',
-    icon: Settings,
-    category: 'manufacturing',
-    features: ['Produção', 'Qualidade', 'Manutenção', 'Estoque', 'Custos', 'Relatórios'],
-    complexity: 'hard',
-    estimatedTime: '15-20 dias',
-    tags: ['erp', 'indústria', 'produção'],
-    color: 'bg-gray-600'
-  },
-  {
-    id: 'quality-control',
-    name: 'Controle de Qualidade',
-    description: 'Sistema para controle de qualidade',
-    icon: CheckCircle,
-    category: 'manufacturing',
-    features: ['Inspeções', 'Não conformidades', 'Certificações', 'Rastreabilidade', 'KPIs'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['qualidade', 'inspeções', 'certificações'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'fleet-management',
-    name: 'Gestão de Frota',
-    description: 'Sistema para gestão de frotas',
-    icon: Truck,
-    category: 'transportation',
-    features: ['Rastreamento GPS', 'Manutenção', 'Combustível', 'Motoristas', 'Relatórios'],
-    complexity: 'hard',
-    estimatedTime: '8-12 dias',
-    tags: ['frota', 'gps', 'manutenção'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'rideshare-app',
-    name: 'App de Corridas',
-    description: 'Aplicativo tipo Uber',
-    icon: Car,
-    category: 'transportation',
-    features: ['Solicitação de corridas', 'GPS', 'Pagamentos', 'Avaliações', 'Histórico'],
-    complexity: 'hard',
-    estimatedTime: '12-18 dias',
-    tags: ['corridas', 'uber', 'gps'],
-    color: 'bg-yellow-600'
-  },
-  {
-    id: 'citizen-portal',
-    name: 'Portal do Cidadão',
-    description: 'Portal de serviços públicos',
-    icon: Users,
-    category: 'government',
-    features: ['Serviços online', 'Documentos', 'Atendimento', 'Transparência', 'Ouvidoria'],
-    complexity: 'hard',
-    estimatedTime: '10-15 dias',
-    tags: ['governo', 'serviços', 'transparência'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'voting-system',
-    name: 'Sistema de Votação',
-    description: 'Plataforma para votações eletrônicas',
-    icon: CheckCircle,
-    category: 'government',
-    features: ['Urna eletrônica', 'Autenticação', 'Auditoria', 'Resultados', 'Segurança'],
-    complexity: 'hard',
-    estimatedTime: '15-20 dias',
-    tags: ['votação', 'eleições', 'segurança'],
-    color: 'bg-red-600'
-  },
-  {
-    id: 'barbershop-system',
-    name: 'Sistema de Barbearia',
-    description: 'Gestão completa para barbearias',
-    icon: User,
-    category: 'local',
-    features: ['Agendamento online', 'Catálogo de serviços', 'Histórico do cliente', 'Programa fidelidade', 'Pagamentos'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['barbearia', 'agendamento', 'fidelidade'],
-    color: 'bg-amber-600'
-  },
-  {
-    id: 'beauty-salon',
-    name: 'Salão de Beleza',
-    description: 'Sistema para salões de beleza',
-    icon: Star,
-    category: 'local',
-    features: ['Agendamento multi-serviços', 'Profissionais', 'Produtos', 'Comissões', 'Relatórios'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['salão', 'beleza', 'multi-serviços'],
-    color: 'bg-pink-600'
-  },
-  {
-    id: 'laundry-service',
-    name: 'Lavanderia',
-    description: 'Sistema para serviços de lavanderia',
-    icon: Shirt,
-    category: 'local',
-    features: ['Coleta e entrega', 'Tipos de lavagem', 'Rastreamento', 'Pagamentos', 'Relatórios'],
-    complexity: 'medium',
-    estimatedTime: '4-5 dias',
-    tags: ['lavanderia', 'coleta', 'entrega'],
-    color: 'bg-blue-600'
+    features: [
+      'Criação de eventos',
+      'Venda de ingressos',
+      'Check-in por QR Code',
+      'Networking entre participantes',
+      'Streaming de eventos',
+      'Analytics de evento'
+    ]
   },
 
-  // Novos templates adicionados
-  {
-    id: 'crm-complete',
-    name: 'CRM Completo',
-    description: 'Sistema completo de gestão de relacionamento com clientes',
-    icon: Users,
-    category: 'business',
-    features: ['Gestão clientes', 'Pipeline vendas', 'Relatórios', 'Automação email'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['crm', 'clientes', 'vendas'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'stock-control',
-    name: 'Controle de Estoque',
-    description: 'Sistema para gestão completa de inventário e produtos',
-    icon: Database,
-    category: 'business',
-    features: ['Controle estoque', 'Alertas', 'Relatórios', 'Códigos de barras'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['estoque', 'inventário', 'produtos'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'pos-system',
-    name: 'Sistema PDV',
-    description: 'Ponto de venda completo para estabelecimentos comerciais',
-    icon: CreditCard,
-    category: 'business',
-    features: ['Vendas', 'Pagamentos', 'Cupom fiscal', 'Relatórios'],
-    complexity: 'hard',
-    estimatedTime: '7-9 dias',
-    tags: ['pdv', 'vendas', 'pagamentos'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'whatsapp-sales-bot',
-    name: 'Bot WhatsApp Vendas',
-    description: 'Bot inteligente para vendas e atendimento via WhatsApp',
-    icon: Bot,
-    category: 'business',
-    features: ['Catálogo produtos', 'Pedidos', 'Pagamentos', 'IA conversacional'],
-    complexity: 'hard',
-    estimatedTime: '6-8 dias',
-    tags: ['whatsapp', 'bot', 'vendas'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'whatsapp-appointment-bot',
-    name: 'Bot WhatsApp Agendamento',
-    description: 'Bot para agendamento de serviços via WhatsApp',
-    icon: Calendar,
-    category: 'business',
-    features: ['Agenda online', 'Confirmações', 'Lembretes', 'Disponibilidade'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['whatsapp', 'agendamento', 'bot'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'whatsapp-realestate-bot',
-    name: 'Bot WhatsApp Imobiliária',
-    description: 'Bot especializado para corretores e imobiliárias',
-    icon: Home,
-    category: 'business',
-    features: ['Filtro imóveis', 'Visitas', 'Documentos', 'Propostas'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['whatsapp', 'imóveis', 'corretor'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'whatsapp-restaurant-bot',
-    name: 'Bot WhatsApp Restaurante',
-    description: 'Bot para pedidos e delivery de restaurantes',
-    icon: Utensils,
-    category: 'business',
-    features: ['Cardápio digital', 'Pedidos', 'Delivery', 'Pagamentos'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['whatsapp', 'restaurante', 'delivery'],
-    color: 'bg-red-600'
-  },
-  {
-    id: 'whatsapp-clinic-bot',
-    name: 'Bot WhatsApp Consultório',
-    description: 'Bot para agendamento médico e comunicação com pacientes',
-    icon: Stethoscope,
-    category: 'business',
-    features: ['Agendamentos', 'Consultas', 'Receitas', 'Lembretes'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['whatsapp', 'médico', 'consultório'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'whatsapp-law-bot',
-    name: 'Bot WhatsApp Advocacia',
-    description: 'Bot especializado para escritórios de advocacia',
-    icon: Shield,
-    category: 'business',
-    features: ['Consultas jurídicas', 'Documentos', 'Processos', 'Agendamentos'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['whatsapp', 'advocacia', 'jurídico'],
-    color: 'bg-gray-600'
-  },
-  {
-    id: 'whatsapp-gym-bot',
-    name: 'Bot WhatsApp Academia',
-    description: 'Bot para academias e personal trainers',
-    icon: Dumbbell,
-    category: 'business',
-    features: ['Planos treino', 'Agendamentos', 'Pagamentos', 'Dicas fitness'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['whatsapp', 'academia', 'fitness'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'whatsapp-salon-bot',
-    name: 'Bot WhatsApp Salão Beleza',
-    description: 'Bot para salões de beleza e estética',
-    icon: Star,
-    category: 'business',
-    features: ['Agendamentos', 'Serviços', 'Promoções', 'Profissionais'],
-    complexity: 'medium',
-    estimatedTime: '4-5 dias',
-    tags: ['whatsapp', 'salão', 'beleza'],
-    color: 'bg-pink-600'
-  },
-  {
-    id: 'whatsapp-petshop-bot',
-    name: 'Bot WhatsApp Pet Shop',
-    description: 'Bot para pet shops e clínicas veterinárias',
-    icon: Heart,
-    category: 'business',
-    features: ['Agendamentos', 'Produtos pet', 'Vacinas', 'Consultas vet'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['whatsapp', 'pet', 'veterinário'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'whatsapp-auto-bot',
-    name: 'Bot WhatsApp Oficina Auto',
-    description: 'Bot para oficinas mecânicas e auto center',
-    icon: Wrench,
-    category: 'business',
-    features: ['Orçamentos', 'Agendamentos', 'Diagnósticos', 'Status serviço'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['whatsapp', 'oficina', 'automotivo'],
-    color: 'bg-gray-600'
-  },
-  {
-    id: 'whatsapp-school-bot',
-    name: 'Bot WhatsApp Escola',
-    description: 'Bot para escolas e cursos educacionais',
-    icon: GraduationCap,
-    category: 'business',
-    features: ['Matrículas', 'Notas', 'Comunicados', 'Eventos'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['whatsapp', 'escola', 'educação'],
-    color: 'bg-indigo-600'
-  },
-  {
-    id: 'whatsapp-ecommerce-bot',
-    name: 'Bot WhatsApp E-commerce',
-    description: 'Bot completo para lojas online via WhatsApp',
-    icon: ShoppingCart,
-    category: 'business',
-    features: ['Catálogo', 'Carrinho', 'Checkout', 'Rastreamento'],
-    complexity: 'hard',
-    estimatedTime: '6-8 dias',
-    tags: ['whatsapp', 'ecommerce', 'vendas'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'whatsapp-accounting-bot',
-    name: 'Bot WhatsApp Contabilidade',
-    description: 'Bot para escritórios de contabilidade',
-    icon: DollarSign,
-    category: 'business',
-    features: ['Documentos fiscais', 'Declarações', 'Consultas', 'Prazos'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['whatsapp', 'contabilidade', 'fiscal'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'whatsapp-pharmacy-bot',
-    name: 'Bot WhatsApp Farmácia',
-    description: 'Bot para farmácias e drogarias',
-    icon: Shield,
-    category: 'business',
-    features: ['Medicamentos', 'Receitas', 'Delivery', 'Consulta farmacêutica'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['whatsapp', 'farmácia', 'medicamentos'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'whatsapp-dentist-bot',
-    name: 'Bot WhatsApp Dentista',
-    description: 'Bot especializado para consultórios odontológicos',
-    icon: Stethoscope,
-    category: 'business',
-    features: ['Agendamentos', 'Tratamentos', 'Lembretes', 'Orçamentos'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['whatsapp', 'dentista', 'odontologia'],
-    color: 'bg-cyan-600'
-  },
-  {
-    id: 'whatsapp-psychologist-bot',
-    name: 'Bot WhatsApp Psicólogo',
-    description: 'Bot para psicólogos e terapeutas',
-    icon: Heart,
-    category: 'business',
-    features: ['Sessões online', 'Agendamentos', 'Exercícios', 'Acompanhamento'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['whatsapp', 'psicologia', 'terapia'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'whatsapp-physiotherapy-bot',
-    name: 'Bot WhatsApp Fisioterapia',
-    description: 'Bot para clínicas de fisioterapia',
-    icon: Target,
-    category: 'business',
-    features: ['Exercícios', 'Agendamentos', 'Evolução', 'Dicas'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['whatsapp', 'fisioterapia', 'reabilitação'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'whatsapp-nutrition-bot',
-    name: 'Bot WhatsApp Nutrição',
-    description: 'Bot para nutricionistas e consultórios',
-    icon: Utensils,
-    category: 'business',
-    features: ['Dietas', 'Cardápios', 'Consultas', 'Acompanhamento'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['whatsapp', 'nutrição', 'dieta'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'whatsapp-events-bot',
-    name: 'Bot WhatsApp Eventos',
-    description: 'Bot para organizadores de eventos e festas',
-    icon: Calendar,
-    category: 'business',
-    features: ['Orçamentos', 'Agenda', 'Fornecedores', 'Planejamento'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['whatsapp', 'eventos', 'festas'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'whatsapp-tourism-bot',
-    name: 'Bot WhatsApp Turismo',
-    description: 'Bot para agências de viagem e turismo',
-    icon: Plane,
-    category: 'business',
-    features: ['Pacotes', 'Reservas', 'Roteiros', 'Informações'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['whatsapp', 'turismo', 'viagem'],
-    color: 'bg-sky-600'
-  },
-  {
-    id: 'whatsapp-hotel-bot',
-    name: 'Bot WhatsApp Hotel',
-    description: 'Bot para hotéis e pousadas',
-    icon: Building,
-    category: 'business',
-    features: ['Reservas', 'Check-in', 'Serviços', 'Informações'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['whatsapp', 'hotel', 'hospedagem'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'whatsapp-delivery-bot',
-    name: 'Bot WhatsApp Delivery',
-    description: 'Bot universal para qualquer tipo de delivery',
-    icon: Truck,
-    category: 'business',
-    features: ['Cardápios', 'Pedidos', 'Rastreamento', 'Pagamentos'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['whatsapp', 'delivery', 'universal'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'whatsapp-tech-support-bot',
-    name: 'Bot WhatsApp Assistência Técnica',
-    description: 'Bot para assistências técnicas de eletrônicos',
-    icon: Wrench,
-    category: 'business',
-    features: ['Orçamentos', 'Status reparo', 'Garantia', 'Diagnósticos'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['whatsapp', 'assistência', 'eletrônicos'],
-    color: 'bg-gray-600'
-  },
-  {
-    id: 'telemedicine-platform',
-    name: 'Telemedicina',
-    description: 'Plataforma completa para consultas médicas online',
-    icon: Video,
-    category: 'healthcare',
-    features: ['Videochamadas', 'Prontuário digital', 'Receitas', 'Agendamentos'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['telemedicina', 'consultas', 'online'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'ai-mental-health',
-    name: 'IA Saúde Mental',
-    description: 'Assistente de IA para apoio em saúde mental e bem-estar',
-    icon: Bot,
-    category: 'healthcare',
-    features: ['Chatbot terapêutico', 'Análise humor', 'Exercícios mindfulness', 'Acompanhamento'],
-    complexity: 'hard',
-    estimatedTime: '10-12 dias',
-    tags: ['ia', 'saúde mental', 'terapia'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'fitness-tracker',
-    name: 'Rastreador Fitness',
-    description: 'App para monitoramento de atividades físicas e saúde',
-    icon: Target,
-    category: 'healthcare',
-    features: ['Contadores passos', 'Monitoramento cardíaco', 'Metas fitness', 'Exercícios'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['fitness', 'saúde', 'monitoramento'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'clinic-management-system',
-    name: 'Gestão Clínica',
-    description: 'Sistema completo para gestão de clínicas e consultórios',
-    icon: Building,
-    category: 'healthcare',
-    features: ['Agenda médica', 'Prontuários', 'Financeiro', 'Relatórios'],
-    complexity: 'hard',
-    estimatedTime: '10-12 dias',
-    tags: ['clínica', 'gestão', 'médico'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'digital-pharmacy',
-    name: 'Farmácia Digital',
-    description: 'Sistema para farmácias com delivery e receitas digitais',
-    icon: Shield,
-    category: 'healthcare',
-    features: ['Receitas digitais', 'Delivery medicamentos', 'Controle estoque', 'Interações'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['farmácia', 'digital', 'receitas'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'personalized-nutrition',
-    name: 'Nutrição Personalizada',
-    description: 'App para acompanhamento nutricional personalizado',
-    icon: Utensils,
-    category: 'healthcare',
-    features: ['Planos alimentares', 'Contagem calorias', 'Receitas saudáveis', 'Metas'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['nutrição', 'personalizada', 'dieta'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'guided-meditation',
-    name: 'Meditação Guiada',
-    description: 'Plataforma de meditação e mindfulness',
-    icon: Heart,
-    category: 'healthcare',
-    features: ['Sessões guiadas', 'Música relaxante', 'Progresso meditação', 'Técnicas'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['meditação', 'mindfulness', 'relaxamento'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'lab-results',
-    name: 'Resultados Laboratoriais',
-    description: 'Sistema para gestão de exames laboratoriais',
-    icon: FileText,
-    category: 'healthcare',
-    features: ['Upload resultados', 'Histórico exames', 'Análise IA', 'Compartilhamento'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['laboratório', 'exames', 'resultados'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'vaccine-control',
-    name: 'Controle Vacinas',
-    description: 'App para acompanhamento de cartão de vacinação',
-    icon: Shield,
-    category: 'healthcare',
-    features: ['Cartão digital', 'Lembretes vacinas', 'Histórico familiar', 'Campanhas'],
-    complexity: 'easy',
-    estimatedTime: '3-4 dias',
-    tags: ['vacinas', 'imunização', 'saúde'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'elderly-care',
-    name: 'Cuidado Idosos',
-    description: 'Plataforma para cuidado e monitoramento de idosos',
-    icon: Heart,
-    category: 'healthcare',
-    features: ['Monitoramento saúde', 'Lembretes medicação', 'Emergências', 'Família'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['idosos', 'cuidado', 'monitoramento'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'elearning-platform',
-    name: 'Plataforma EAD',
-    description: 'Sistema completo de ensino à distância',
-    icon: Monitor,
-    category: 'education',
-    features: ['Cursos online', 'Videoaulas', 'Avaliações', 'Certificados'],
-    complexity: 'hard',
-    estimatedTime: '10-12 dias',
-    tags: ['ead', 'ensino', 'online'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'school-management-complete',
-    name: 'Gestão Escolar',
-    description: 'Sistema completo para administração escolar',
-    icon: GraduationCap,
-    category: 'education',
-    features: ['Matrículas', 'Notas', 'Frequência', 'Comunicação'],
-    complexity: 'hard',
-    estimatedTime: '12-15 dias',
-    tags: ['escola', 'gestão', 'educação'],
-    color: 'bg-indigo-600'
-  },
-  {
-    id: 'language-learning-app',
-    name: 'Aprendizado Idiomas',
-    description: 'Plataforma interativa para aprender idiomas',
-    icon: Globe,
-    category: 'education',
-    features: ['Lições interativas', 'Reconhecimento voz', 'Jogos educativos', 'Progresso'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['idiomas', 'aprendizado', 'interativo'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'quiz-creator',
-    name: 'Criador Quiz',
-    description: 'Ferramenta para criar questionários e avaliações',
-    icon: Edit,
-    category: 'education',
-    features: ['Editor quiz', 'Múltipla escolha', 'Correção automática', 'Relatórios'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['quiz', 'avaliação', 'educação'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'online-tutoring',
-    name: 'Tutoria Online',
-    description: 'Plataforma para conectar tutores e estudantes',
-    icon: Users,
-    category: 'education',
-    features: ['Matching tutor-aluno', 'Aulas online', 'Pagamentos', 'Avaliações'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['tutoria', 'online', 'educação'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'digital-library',
-    name: 'Biblioteca Digital',
-    description: 'Sistema de biblioteca com acervo digital',
-    icon: BookOpen,
-    category: 'education',
-    features: ['Catálogo digital', 'Empréstimos online', 'E-books', 'Pesquisa'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['biblioteca', 'digital', 'livros'],
-    color: 'bg-emerald-600'
-  },
-  {
-    id: 'coding-bootcamp',
-    name: 'Bootcamp Programação',
-    description: 'Plataforma para bootcamps de programação',
-    icon: Monitor,
-    category: 'education',
-    features: ['Projetos práticos', 'Code review', 'Mentoria', 'Portfolio'],
-    complexity: 'hard',
-    estimatedTime: '12-15 dias',
-    tags: ['programação', 'bootcamp', 'código'],
-    color: 'bg-indigo-600'
-  },
-  {
-    id: 'kids-learning',
-    name: 'Aprendizado Infantil',
-    description: 'Jogos educativos para crianças',
-    icon: Star,
-    category: 'education',
-    features: ['Jogos interativos', 'Alfabetização', 'Matemática básica', 'Diversão'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['infantil', 'jogos', 'educação'],
-    color: 'bg-yellow-600'
-  },
-  {
-    id: 'food-delivery-platform',
-    name: 'Delivery Food',
-    description: 'Plataforma completa de delivery de comida',
-    icon: Truck,
-    category: 'food',
-    features: ['Múltiplos restaurantes', 'Rastreamento tempo real', 'Pagamentos online', 'Avaliações'],
-    complexity: 'hard',
-    estimatedTime: '10-12 dias',
-    tags: ['delivery', 'comida', 'restaurantes'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'restaurant-pos',
-    name: 'PDV Restaurante',
-    description: 'Sistema de ponto de venda para restaurantes',
-    icon: CreditCard,
-    category: 'food',
-    features: ['Comandas digitais', 'Controle mesas', 'Cardápio digital', 'Relatórios'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['pdv', 'restaurante', 'vendas'],
-    color: 'bg-red-600'
-  },
-  {
-    id: 'recipe-app',
-    name: 'App Receitas',
-    description: 'Aplicativo de receitas culinárias',
-    icon: BookOpen,
-    category: 'food',
-    features: ['Banco receitas', 'Lista compras', 'Nutrição', 'Favoritos'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['receitas', 'culinária', 'nutrição'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'meal-planner',
-    name: 'Planejador Refeições',
-    description: 'App para planejamento de refeições semanais',
-    icon: Calendar,
-    category: 'food',
-    features: ['Plano semanal', 'Lista compras automática', 'Calorias', 'Variedade'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['planejamento', 'refeições', 'semanal'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'kitchen-inventory',
-    name: 'Controle Estoque Cozinha',
-    description: 'Sistema para controle de estoque de restaurantes',
-    icon: Database,
-    category: 'food',
-    features: ['Ingredientes', 'Validades', 'Fornecedores', 'Custos'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['estoque', 'cozinha', 'ingredientes'],
-    color: 'bg-amber-600'
-  },
-  {
-    id: 'calorie-counter',
-    name: 'Contador Calorias',
-    description: 'App para contagem de calorias e nutrição',
-    icon: Target,
-    category: 'food',
-    features: ['Base alimentos', 'Escaneamento código barras', 'Metas nutricionais', 'Progresso'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['calorias', 'nutrição', 'dieta'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'rideshare-transport',
-    name: 'Compartilhamento Viagens',
-    description: 'App estilo Uber para transporte urbano',
-    icon: Car,
-    category: 'transport',
-    features: ['GPS tempo real', 'Pagamentos', 'Avaliações', 'Corridas'],
-    complexity: 'hard',
-    estimatedTime: '12-15 dias',
-    tags: ['transporte', 'uber', 'corridas'],
-    color: 'bg-yellow-600'
-  },
-  {
-    id: 'logistics-transport',
-    name: 'Logística Transporte',
-    description: 'Sistema de gestão logística e fretes',
-    icon: Truck,
-    category: 'transport',
-    features: ['Rastreamento cargas', 'Otimização rotas', 'Gestão frota', 'Relatórios'],
-    complexity: 'hard',
-    estimatedTime: '10-12 dias',
-    tags: ['logística', 'fretes', 'transporte'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'smart-parking',
-    name: 'Estacionamento Inteligente',
-    description: 'Sistema para gestão de estacionamentos',
-    icon: Car,
-    category: 'transport',
-    features: ['Vagas disponíveis', 'Reservas', 'Pagamento digital', 'Localização'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['estacionamento', 'vagas', 'smart'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'realestate-marketplace',
-    name: 'Marketplace Imóveis',
-    description: 'Plataforma completa para compra e venda de imóveis',
-    icon: Home,
-    category: 'realestate',
-    features: ['Listagem imóveis', 'Filtros avançados', 'Tour virtual', 'Financiamento'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['imóveis', 'marketplace', 'vendas'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'realestate-crm',
-    name: 'CRM Imobiliário',
-    description: 'Sistema CRM especializado para imobiliárias',
-    icon: Users,
-    category: 'realestate',
-    features: ['Gestão clientes', 'Pipeline vendas', 'Comissões', 'Relatórios'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['crm', 'imobiliário', 'vendas'],
-    color: 'bg-purple-600'
-  },
+  // Productivity
   {
     id: 'task-manager',
-    name: 'Gerenciador Tarefas',
-    description: 'App completo para gestão de tarefas e projetos',
-    icon: CheckCircle,
+    name: 'Gerenciador de Tarefas',
+    description: 'Asana-like para gestão de projetos e tarefas',
     category: 'productivity',
-    features: ['Listas tarefas', 'Prazos', 'Colaboração', 'Notificações'],
     complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['tarefas', 'produtividade', 'gestão'],
-    color: 'bg-green-600'
+    features: [
+      'Gestão de projetos',
+      'Kanban boards',
+      'Timeline de projetos',
+      'Colaboração em equipe',
+      'Relatórios de produtividade',
+      'Integração com calendário'
+    ]
   },
   {
-    id: 'time-tracker',
-    name: 'Controle Tempo',
-    description: 'Ferramenta para rastreamento de tempo e produtividade',
-    icon: Clock,
+    id: 'note-taking',
+    name: 'App de Anotações',
+    description: 'Notion-like para anotações e documentação',
     category: 'productivity',
-    features: ['Timer pomodoro', 'Relatórios tempo', 'Metas diárias', 'Projetos'],
-    complexity: 'medium',
-    estimatedTime: '4-6 dias',
-    tags: ['tempo', 'produtividade', 'pomodoro'],
-    color: 'bg-blue-600'
+    complexity: 'easy',
+    features: [
+      'Editor markdown',
+      'Organização em pastas',
+      'Busca avançada',
+      'Compartilhamento',
+      'Sincronização multi-device',
+      'Templates personalizados'
+    ]
   },
   {
-    id: 'analytics-dashboard-complete',
-    name: 'Dashboard Analítico',
-    description: 'Painel de controle com métricas e KPIs',
-    icon: BarChart3,
-    category: 'analytics',
-    features: ['Gráficos interativos', 'KPIs tempo real', 'Relatórios personalizados', 'Exportação'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['analytics', 'dashboard', 'kpis'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'social-media-analytics',
-    name: 'Analytics Redes Sociais',
-    description: 'Análise de performance em redes sociais',
-    icon: BarChart3,
-    category: 'analytics',
-    features: ['Múltiplas redes', 'Engagement', 'Crescimento seguidores', 'Hashtags'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['social media', 'analytics', 'engagement'],
-    color: 'bg-pink-600'
-  },
-  {
-    id: 'video-streaming',
-    name: 'Plataforma Streaming',
-    description: 'Serviço de streaming de vídeos',
-    icon: Play,
-    category: 'entertainment',
-    features: ['Upload vídeos', 'Player personalizado', 'Recomendações', 'Assinaturas'],
-    complexity: 'hard',
-    estimatedTime: '12-15 dias',
-    tags: ['streaming', 'vídeos', 'entretenimento'],
-    color: 'bg-red-600'
-  },
-  {
-    id: 'music-streaming-platform',
-    name: 'Streaming Música',
-    description: 'Plataforma de streaming musical',
-    icon: Music,
-    category: 'entertainment',
-    features: ['Player música', 'Playlists', 'Descoberta músicas', 'Offline'],
-    complexity: 'hard',
-    estimatedTime: '10-12 dias',
-    tags: ['música', 'streaming', 'playlists'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'gaming-community',
-    name: 'Plataforma Gaming',
-    description: 'Comunidade para gamers e jogos',
-    icon: Gamepad2,
-    category: 'entertainment',
-    features: ['Perfis jogadores', 'Ranking', 'Tournaments', 'Chat'],
-    complexity: 'hard',
-    estimatedTime: '10-12 dias',
-    tags: ['gaming', 'comunidade', 'ranking'],
-    color: 'bg-indigo-600'
-  },
-  {
-    id: 'personal-finance',
-    name: 'Finanças Pessoais',
-    description: 'App para controle de finanças pessoais',
-    icon: DollarSign,
-    category: 'finance',
-    features: ['Controle gastos', 'Orçamento', 'Metas financeiras', 'Categorias'],
-    complexity: 'medium',
-    estimatedTime: '6-8 dias',
-    tags: ['finanças', 'pessoal', 'gastos'],
-    color: 'bg-green-600'
-  },
-  {
-    id: 'billing-system',
-    name: 'Sistema Faturamento',
-    description: 'Geração de faturas e controle financeiro',
-    icon: FileText,
-    category: 'finance',
-    features: ['Emissão notas', 'Cobrança', 'Relatórios financeiros', 'Pagamentos'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['faturamento', 'notas', 'financeiro'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'crypto-wallet',
-    name: 'Carteira Crypto',
-    description: 'Carteira digital para criptomoedas',
-    icon: PiggyBank,
-    category: 'finance',
-    features: ['Multi moedas', 'Trading', 'Gráficos preços', 'Segurança'],
-    complexity: 'hard',
-    estimatedTime: '10-12 dias',
-    tags: ['crypto', 'carteira', 'trading'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'email-marketing-platform',
-    name: 'Email Marketing',
-    description: 'Plataforma de email marketing automatizado',
-    icon: Mail,
-    category: 'marketing',
-    features: ['Campanhas email', 'Automação', 'Segmentação', 'Analytics'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['email', 'marketing', 'automação'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'social-media-management',
-    name: 'Gestão Redes Sociais',
-    description: 'Ferramenta para gestão de redes sociais',
-    icon: Share2,
-    category: 'marketing',
-    features: ['Agendamento posts', 'Múltiplas redes', 'Analytics', 'Calendário'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['social media', 'gestão', 'agendamento'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'landing-page-builder',
-    name: 'Criador Landing Pages',
-    description: 'Editor para criar landing pages',
-    icon: Palette,
-    category: 'marketing',
-    features: ['Editor drag-drop', 'Templates', 'A/B testing', 'Analytics'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['landing page', 'editor', 'templates'],
-    color: 'bg-orange-600'
-  },
-  {
-    id: 'business-chat',
-    name: 'Chat Empresarial',
-    description: 'Sistema de chat para empresas',
-    icon: MessageSquare,
-    category: 'communication',
-    features: ['Chat tempo real', 'Grupos', 'Arquivos', 'Integração'],
-    complexity: 'hard',
-    estimatedTime: '8-10 dias',
-    tags: ['chat', 'empresarial', 'comunicação'],
-    color: 'bg-blue-600'
-  },
-  {
-    id: 'video-conference',
-    name: 'Videoconferência',
-    description: 'Plataforma de videoconferências',
-    icon: Video,
-    category: 'communication',
-    features: ['Salas virtuais', 'Compartilhamento tela', 'Gravação', 'Chat'],
-    complexity: 'hard',
-    estimatedTime: '10-12 dias',
-    tags: ['videoconferência', 'reuniões', 'online'],
-    color: 'bg-purple-600'
-  },
-  {
-    id: 'newsletter-system',
-    name: 'Newsletter System',
-    description: 'Sistema para envio de newsletters',
-    icon: Send,
-    category: 'communication',
-    features: ['Editor newsletters', 'Listas segmentadas', 'Templates', 'Analytics'],
-    complexity: 'medium',
-    estimatedTime: '5-7 dias',
-    tags: ['newsletter', 'email', 'marketing'],
-    color: 'bg-green-600'
+    id: 'time-tracking',
+    name: 'Controle de Tempo',
+    description: 'Sistema para controle de horas e produtividade',
+    category: 'productivity',
+    complexity: 'easy',
+    features: [
+      'Timer de atividades',
+      'Relatórios de tempo',
+      'Faturamento por horas',
+      'Múltiplos projetos',
+      'Dashboard de produtividade',
+      'Integração com calendário'
+    ]
   }
-];
-
-export const templateCategories = [
-  { id: 'all', name: 'Todos os Templates', icon: Grid, count: 0 },
-  { id: 'ecommerce', name: 'E-commerce', icon: ShoppingCart, count: 0 },
-  { id: 'blog', name: 'Blog & Conteúdo', icon: FileText, count: 0 },
-  { id: 'acai', name: 'Açaí & Naturais', icon: IceCream, count: 0 },
-  { id: 'lanchonete', name: 'Lanchonetes', icon: Sandwich, count: 0 },
-  { id: 'pizzaria', name: 'Pizzarias', icon: Pizza, count: 0 },
-  { id: 'business', name: 'Negócios', icon: Briefcase, count: 0 },
-  { id: 'healthcare', name: 'Saúde', icon: Stethoscope, count: 0 },
-  { id: 'education', name: 'Educação', icon: GraduationCap, count: 0 },
-  { id: 'food', name: 'Alimentação', icon: Utensils, count: 0 },
-  { id: 'transport', name: 'Transporte', icon: Car, count: 0 },
-  { id: 'realestate', name: 'Imobiliário', icon: Home, count: 0 },
-  { id: 'productivity', name: 'Produtividade', icon: Target, count: 0 },
-  { id: 'analytics', name: 'Analytics', icon: BarChart3, count: 0 },
-  { id: 'entertainment', name: 'Entretenimento', icon: Music, count: 0 },
-  { id: 'finance', name: 'Financeiro', icon: DollarSign, count: 0 },
-  { id: 'marketing', name: 'Marketing', icon: Megaphone, count: 0 },
-  { id: 'communication', name: 'Comunicação', icon: MessageSquare, count: 0 },
-  { id: 'saas', name: 'SaaS & Business', icon: Briefcase, count: 0 },
-  { id: 'delivery', name: 'Delivery & Food', icon: Truck, count: 0 },
-  { id: 'automotive', name: 'Automotivo', icon: Car, count: 0 },
-  { id: 'fitness', name: 'Fitness', icon: Dumbbell, count: 0 },
-  { id: 'social', name: 'Social', icon: Users, count: 0 },
-  { id: 'travel', name: 'Viagem', icon: Plane, count: 0 },
-  { id: 'marketplace', name: 'Marketplace', icon: Store, count: 0 },
-  { id: 'logistics', name: 'Logística', icon: Truck, count: 0 },
-  { id: 'security', name: 'Segurança', icon: Shield, count: 0 },
-  { id: 'media', name: 'Mídia', icon: Camera, count: 0 },
-  { id: 'tools', name: 'Ferramentas', icon: Settings, count: 0 },
-  { id: 'iot', name: 'IoT', icon: Zap, count: 0 },
-  { id: 'developer', name: 'Desenvolvedor', icon: Monitor, count: 0 },
-  { id: 'events', name: 'Eventos', icon: Calendar, count: 0 },
-  { id: 'nonprofit', name: 'ONG', icon: Heart, count: 0 },
-  { id: 'sports', name: 'Esportes', icon: Award, count: 0 },
-  { id: 'agriculture', name: 'Agricultura', icon: Globe, count: 0 },
-  { id: 'environment', name: 'Meio Ambiente', icon: Globe, count: 0 },
-  { id: 'legal', name: 'Jurídico', icon: Shield, count: 0 },
-  { id: 'manufacturing', name: 'Industrial', icon: Settings, count: 0 },
-  { id: 'transportation', name: 'Transporte', icon: Truck, count: 0 },
-  { id: 'government', name: 'Governo', icon: Building, count: 0 },
-  { id: 'local', name: 'Negócios Locais', icon: MapPin, count: 0 }
 ];
 
 export const getTemplatesByCategory = (categoryId: string): ProjectTemplate[] => {
@@ -2120,25 +434,10 @@ export const getTemplatesByCategory = (categoryId: string): ProjectTemplate[] =>
 };
 
 export const searchTemplates = (searchTerm: string): ProjectTemplate[] => {
-  const term = searchTerm.toLowerCase();
-  return projectTemplates.filter(template =>
-    template.name.toLowerCase().includes(term) ||
-    template.description.toLowerCase().includes(term) ||
-    template.tags.some(tag => tag.toLowerCase().includes(term)) ||
-    template.features.some(feature => feature.toLowerCase().includes(term))
-  );
-};
-
-export const getTemplateById = (id: string): ProjectTemplate | undefined => {
-  return projectTemplates.find(template => template.id === id);
-};
-
-export const getFeaturedTemplates = (): ProjectTemplate[] => {
+  const lowercaseSearch = searchTerm.toLowerCase();
   return projectTemplates.filter(template => 
-    ['ecommerce-complete', 'acai-shop', 'blog-personal', 'crm-complete', 'pizzaria-complete'].includes(template.id)
+    template.name.toLowerCase().includes(lowercaseSearch) ||
+    template.description.toLowerCase().includes(lowercaseSearch) ||
+    template.features.some(feature => feature.toLowerCase().includes(lowercaseSearch))
   );
-};
-
-export const getPopularTemplates = (): ProjectTemplate[] => {
-  return projectTemplates.slice(0, 12);
 };

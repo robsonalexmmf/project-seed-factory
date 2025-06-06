@@ -163,8 +163,22 @@ export type Database = {
     }
     Functions: {
       can_generate_project: {
-        Args: Record<PropertyKey, never> | { user_email: string }
+        Args: Record<PropertyKey, never> | { user_email?: string }
         Returns: boolean
+      }
+      get_current_user_data: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          email: string
+          full_name: string
+          plan_type: string
+          projects_generated: number
+          current_month_projects: number
+          monthly_limit: number
+          created_at: string
+          updated_at: string
+        }[]
       }
       increment_user_projects: {
         Args: { user_email: string }

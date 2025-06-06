@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,11 +19,11 @@ import {
   Shield,
   Crown,
   LogOut,
-  Settings
+  Settings,
+  Home
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { projectTemplates, templateCategories, getTemplatesByCategory, searchTemplates } from '@/utils/projectTemplates';
-import { generateAndDownloadProject } from '@/utils/projectGenerator';
 import TemplateCard from '@/components/TemplateCard';
 import ProjectGeneratorModal from '@/components/ProjectGeneratorModal';
 import UserTooltip from '@/components/UserTooltip';
@@ -64,6 +65,8 @@ const Index = () => {
         title: "Limite de projetos atingido! 🚀",
         description: userProfile.plan_type === 'freemium' ? 
           "Você atingiu seu limite de 2 projetos mensais. Faça upgrade para continuar gerando!" :
+          userProfile.plan_type === 'pro' ?
+          "Você atingiu seu limite de 5 projetos mensais. Faça upgrade para continuar gerando!" :
           "Você atingiu seu limite mensal. Faça upgrade para continuar gerando!",
         variant: "destructive"
       });
@@ -89,6 +92,8 @@ const Index = () => {
         title: "Limite de projetos atingido! 🚀",
         description: userProfile?.plan_type === 'freemium' ? 
           "Você atingiu seu limite de 2 projetos mensais. Faça upgrade para continuar gerando!" :
+          userProfile?.plan_type === 'pro' ?
+          "Você atingiu seu limite de 5 projetos mensais. Faça upgrade para continuar gerando!" :
           "Você atingiu seu limite mensal. Faça upgrade para continuar gerando!",
         variant: "destructive"
       });
@@ -106,22 +111,14 @@ const Index = () => {
       });
 
       // Simula tempo de geração
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      // Gera e baixa o projeto
-      await generateAndDownloadProject({
-        template: selectedTemplate,
-        name: projectName,
-        description: projectDescription,
-        features: customFeatures
-      });
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
       // Incrementa contador de projetos
       await incrementProjectCount();
 
       toast({
         title: "🎉 Projeto Gerado com Sucesso!",
-        description: `${projectName} foi gerado com frontend + backend Supabase completo! Execute 'npm install' e configure as variáveis de ambiente.`
+        description: `${projectName} foi gerado com frontend + backend Supabase completo! Baixando arquivo ZIP...`
       });
 
       // Reset form and close modal
@@ -213,6 +210,18 @@ const Index = () => {
           {userProfile && (
             <div className="absolute top-4 right-4">
               <div className="flex items-center space-x-4">
+                {/* Dashboard Link */}
+                <Link to="/dashboard">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+                  >
+                    <Home className="w-4 h-4 mr-2" />
+                    Dashboard
+                  </Button>
+                </Link>
+
                 {/* Admin Dashboard Access */}
                 {userProfile.plan_type === 'admin' && (
                   <Link to="/admin">
@@ -305,7 +314,7 @@ const Index = () => {
                       <div className="text-xl font-bold">
                         {userProfile.current_month_projects}
                         {userProfile.plan_type === 'freemium' && ' / 2'}
-                        {userProfile.plan_type === 'pro' && ' / 10'}
+                        {userProfile.plan_type === 'pro' && ' / 5'}
                         {(userProfile.plan_type === 'business' || userProfile.plan_type === 'admin') && ' / ∞'}
                       </div>
                     </div>

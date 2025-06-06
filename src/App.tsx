@@ -8,6 +8,7 @@ import LandingPage from "./components/LandingPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Index from "./pages/Index";
+import Dashboard from "./pages/Dashboard";
 import Subscription from "./pages/Subscription";
 import Checkout from "./pages/Checkout";
 import NewAdmin from "./pages/NewAdmin";
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/generator" element={<Index />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/admin" element={<NewAdmin />} />

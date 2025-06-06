@@ -13,6 +13,7 @@ export interface User {
   full_name?: string;
   plan_type: 'freemium' | 'pro' | 'business' | 'admin';
   projects_generated: number;
+  current_month_projects: number;
   monthly_limit: number;
   created_at: string;
 }
@@ -29,8 +30,8 @@ export const userPlans: UserPlan[] = [
     id: 'pro',
     name: 'Pro',
     price: 29.90,
-    monthlyLimit: 10,
-    features: ['10 projetos por mês', 'Todos os templates', 'Suporte prioritário', 'Customização avançada']
+    monthlyLimit: 5,
+    features: ['5 projetos por mês', 'Todos os templates', 'Suporte prioritário', 'Customização avançada']
   },
   {
     id: 'business',
