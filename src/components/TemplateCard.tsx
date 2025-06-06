@@ -38,19 +38,6 @@ const TemplateCard = ({ template, onSelect, categoryName, isBlocked }: TemplateC
               ))}
             </ul>
           </div>
-          
-          {template.technologies && template.technologies.length > 0 && (
-            <div>
-              <h4 className="font-semibold mb-2">Tecnologias:</h4>
-              <div className="flex flex-wrap gap-1">
-                {template.technologies.map((tech, index) => (
-                  <Badge key={index} variant="outline" className="text-xs">
-                    {tech}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
 
           {categoryName && (
             <div>
