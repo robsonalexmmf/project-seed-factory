@@ -40,7 +40,12 @@ const NewAdminDashboard = () => {
     if (authLoading) return;
 
     if (!userProfile) {
-      navigate('/login');
+      navigate('/login', { replace: true });
+      return;
+    }
+
+    if (userProfile.plan_type !== 'admin') {
+      navigate('/generator', { replace: true });
       return;
     }
 
@@ -64,6 +69,10 @@ const NewAdminDashboard = () => {
         </div>
       </div>
     );
+  }
+
+  if (!userProfile || userProfile.plan_type !== 'admin') {
+    return null;
   }
 
   return (

@@ -12,22 +12,23 @@ import { toast } from '@/hooks/use-toast';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { user, userProfile } = useAuth();
+  const { user, userProfile, loading: authLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Redirecionar se já estiver logado
+  // Redirecionar se já estiver logado - apenas uma vez quando os dados estiverem carregados
   useEffect(() => {
-    if (user && userProfile) {
+    if (!authLoading && user && userProfile) {
+      console.log('User logged in, redirecting...', userProfile.plan_type);
       if (userProfile.plan_type === 'admin') {
-        navigate('/admin');
+        navigate('/admin', { replace: true });
       } else {
-        navigate('/generator');
+        navigate('/generator', { replace: true });
       }
     }
-  }, [user, userProfile, navigate]);
+  }, [user, userProfile, authLoading, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,11 +48,7 @@ const Login = () => {
           title: "Login realizado com sucesso",
           description: "Bem-vindo de volta!",
         });
-        
-        // Aguardar um pouco para o useAuth atualizar
-        setTimeout(() => {
-          navigate('/generator');
-        }, 1000);
+        // O redirecionamento será feito pelo useEffect quando o userProfile for carregado
       }
     } catch (error) {
       console.error('Erro no login:', error);
@@ -65,6 +62,18 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  // Mostrar loading enquanto verifica autenticação
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Verificando autenticação...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">

@@ -24,6 +24,7 @@ export const useAuth = () => {
 
   useEffect(() => {
     let mounted = true;
+    let profileFetched = false;
 
     // Get initial session
     const getInitialSession = async () => {
@@ -39,7 +40,8 @@ export const useAuth = () => {
           setSession(session);
           setUser(session?.user ?? null);
           
-          if (session?.user) {
+          if (session?.user && !profileFetched) {
+            profileFetched = true;
             await fetchUserProfile(session.user.id);
           }
           
@@ -64,13 +66,20 @@ export const useAuth = () => {
         setSession(session);
         setUser(session?.user ?? null);
         
-        if (session?.user) {
-          await fetchUserProfile(session.user.id);
-        } else {
+        if (session?.user && !profileFetched) {
+          profileFetched = true;
+          // Use setTimeout to prevent blocking the auth state change
+          setTimeout(() => {
+            if (mounted) {
+              fetchUserProfile(session.user.id);
+            }
+          }, 100);
+        } else if (!session?.user) {
           setUserProfile(null);
+          profileFetched = false;
         }
         
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     );
 
@@ -160,10 +169,9 @@ export const useAuth = () => {
     }
   };
 
-  // Calcular projetos restantes
   const getProjectsRemaining = () => {
     if (!userProfile) return 0;
-    if (userProfile.plan_type === 'admin' || userProfile.plan_type === 'business') return -1; // Ilimitado
+    if (userProfile.plan_type === 'admin' || userProfile.plan_type === 'business') return -1;
     return Math.max(0, userProfile.monthly_limit - userProfile.current_month_projects);
   };
 
