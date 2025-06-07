@@ -170,7 +170,6 @@ import {
   Cable, 
   Plug, 
   Power, 
-  Zap as Lightning, 
   Antenna, 
   Router, 
   CircuitBoard, 
@@ -795,7 +794,7 @@ export const healthTemplates: ProjectTemplate[] = [
     id: 'first-aid-guide',
     name: 'Guia de Primeiros Socorros',
     description: 'Instruções de emergência médica',
-    icon: Cross,
+    icon: Shield,
     complexity: 'easy',
     features: [
       'Procedimentos passo-a-passo',

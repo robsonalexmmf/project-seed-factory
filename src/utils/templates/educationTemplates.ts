@@ -1,4 +1,3 @@
-
 import { 
   GraduationCap, 
   BookOpen, 
@@ -139,7 +138,6 @@ import {
   Speaker,
   Battery,
   Signal,
-  Wifi as WifiIcon,
   Bluetooth,
   Usb,
   Power,
@@ -150,7 +148,6 @@ import {
   Keyboard,
   Mouse,
   Printer,
-  Scanner as ScannerIcon,
   Webcam,
   Router,
   Antenna,
@@ -216,8 +213,7 @@ import {
   Mail as MailIcon,
   Phone as PhoneIcon,
   MessageSquare as MessageIcon,
-  Bell as BellIcon,
-  Notification
+  Bell as BellIcon
 } from 'lucide-react';
 
 import { ProjectTemplate } from '../projectTemplates';
