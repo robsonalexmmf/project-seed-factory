@@ -1,4 +1,5 @@
-import { Music, Video, Gamepad2, Mic, Camera, Theater, Radio, Headphones, Film, Tv, FerrisWheel, Zap, BookOpen, Key, Wand, Users, Star, Palette, Smile, Dice6, Heart, Volume2, Tent, PenTool, Shirt, ChefHat, Image, Hat, Trophy, Projector, Eye } from 'lucide-react';
+
+import { Music, Video, Gamepad2, Mic, Camera, Theater, Radio, Headphones, Film, Tv, Zap, BookOpen, Key, Crown, Users, Star, Palette, Smile, Dice6, Heart, Volume2, PenTool, Shirt, ChefHat, Image, Trophy, Projector, Eye, Brain, Bot, Dna, Smartphone, Watch, MessageSquare, Scan, TrendingUp, Target, Baby, UserCheck, Stethoscope, Activity, Building, Wrench, DollarSign, Rocket, Search, Timer, Shield, Leaf, Phone, Video as VideoIcon, GraduationCap, Database, Languages, Moon, Wind, Atom, AlertTriangle, Bell, Copy, Receipt, Wifi, Printer, Monitor } from 'lucide-react';
 import { ProjectTemplate } from '../projectTemplates';
 
 export const entertainmentTemplates: ProjectTemplate[] = [

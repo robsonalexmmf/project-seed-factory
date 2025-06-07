@@ -1,4 +1,4 @@
-import { Heart, Calendar, Pill, Activity, FileText, Users, Phone, Stethoscope, Brain, Shield, Bot, Dna, Smartphone, Watch, MessageSquare, Scan, TrendingUp, Gamepad2, Target, Zap, Baby, UserCheck, Smile, Eye, Database, Languages, Moon, Wind, DollarSign, Flask } from 'lucide-react';
+import { Heart, Calendar, Pill, Activity, FileText, Users, Phone, Stethoscope, Brain, Shield, Bot, Dna, Smartphone, Watch, MessageSquare, Scan, TrendingUp, Gamepad2, Target, Zap, Baby, UserCheck, Smile, Eye, Database, Languages, Moon, Wind, DollarSign, FlaskConical } from 'lucide-react';
 import { ProjectTemplate } from '../projectTemplates';
 
 export const healthTemplates: ProjectTemplate[] = [
