@@ -1,5 +1,4 @@
-
-import { Music, Video, Gamepad2, Mic, Camera, Theater, Radio, Headphones, Film, Tv } from 'lucide-react';
+import { Music, Video, Gamepad2, Mic, Camera, Theater, Radio, Headphones, Film, Tv, FerrisWheel, Zap, BookOpen, Key, Wand, Users, Star, Palette, Smile, Dice6, Heart, Volume2, Tent, PenTool, Shirt, ChefHat, Image, Hat, Trophy, Projector, Eye } from 'lucide-react';
 import { ProjectTemplate } from '../projectTemplates';
 
 export const entertainmentTemplates: ProjectTemplate[] = [
@@ -151,6 +150,606 @@ export const entertainmentTemplates: ProjectTemplate[] = [
       'Favoritos personalizados',
       'Notificações push',
       'Múltiplos canais'
+    ]
+  },
+  {
+    id: 'virtual-concert-platform',
+    name: 'Plataforma de Concertos Virtuais',
+    description: 'Experiências musicais imersivas em realidade virtual',
+    icon: Music,
+    complexity: 'hard',
+    features: [
+      'Shows em VR',
+      'Interação com artistas',
+      'Múltiplas câmeras',
+      'Chat ao vivo',
+      'Merchandise virtual',
+      'Experiência social'
+    ]
+  },
+  {
+    id: 'ai-music-composer',
+    name: 'Compositor Musical IA',
+    description: 'Criação automática de músicas com inteligência artificial',
+    icon: Brain,
+    complexity: 'hard',
+    features: [
+      'Composição automática',
+      'Múltiplos estilos',
+      'Colaboração humano-IA',
+      'Instrumentação inteligente',
+      'Análise harmônica',
+      'Exportação profissional'
+    ]
+  },
+  {
+    id: 'interactive-storytelling',
+    name: 'Narrativa Interativa',
+    description: 'Histórias que se adaptam às escolhas do usuário',
+    icon: BookOpen,
+    complexity: 'hard',
+    features: [
+      'Narrativas ramificadas',
+      'Personagens adaptativos',
+      'IA narrativa',
+      'Múltiplos finais',
+      'Geração procedural',
+      'Experiência personalizada'
+    ]
+  },
+  {
+    id: 'virtual-theme-park',
+    name: 'Parque Temático Virtual',
+    description: 'Parque de diversões em realidade virtual',
+    icon: FerrisWheel,
+    complexity: 'hard',
+    features: [
+      'Atrações virtuais',
+      'Experiências imersivas',
+      'Multiplayer',
+      'Economia virtual',
+      'Eventos sazonais',
+      'Personalização de avatar'
+    ]
+  },
+  {
+    id: 'ai-video-editor',
+    name: 'Editor de Vídeo IA',
+    description: 'Edição automatizada de vídeos com inteligência artificial',
+    icon: Video,
+    complexity: 'hard',
+    features: [
+      'Edição automática',
+      'Detecção de cenas',
+      'Sincronização musical',
+      'Efeitos inteligentes',
+      'Colorização automática',
+      'Múltiplos formatos'
+    ]
+  },
+  {
+    id: 'virtual-sports-arena',
+    name: 'Arena Esportiva Virtual',
+    description: 'Esportes e competições em ambiente virtual',
+    icon: Trophy,
+    complexity: 'hard',
+    features: [
+      'Esportes virtuais',
+      'Competições online',
+      'Transmissões ao vivo',
+      'Sistema de ranking',
+      'Apostas virtuais',
+      'Análise de performance'
+    ]
+  },
+  {
+    id: 'holographic-entertainment',
+    name: 'Entretenimento Holográfico',
+    description: 'Experiências de entretenimento com hologramas',
+    icon: Zap,
+    complexity: 'hard',
+    features: [
+      'Projeções holográficas',
+      'Interação gestual',
+      'Performances virtuais',
+      'Múltiplas perspectivas',
+      'Sincronização espacial',
+      'Experiência coletiva'
+    ]
+  },
+  {
+    id: 'procedural-game-generator',
+    name: 'Gerador Procedural de Jogos',
+    description: 'IA que cria jogos automaticamente',
+    icon: Gamepad2,
+    complexity: 'hard',
+    features: [
+      'Geração de níveis',
+      'Criação de mecânicas',
+      'Balanceamento automático',
+      'Arte procedural',
+      'Narrativa gerada',
+      'Múltiplos gêneros'
+    ]
+  },
+  {
+    id: 'virtual-museum-platform',
+    name: 'Plataforma de Museu Virtual',
+    description: 'Experiências museológicas imersivas',
+    icon: Building,
+    complexity: 'hard',
+    features: [
+      'Exposições virtuais',
+      'Tours imersivos',
+      'Realidade aumentada',
+      'Informações contextuais',
+      'Experiências educativas',
+      'Curadoria digital'
+    ]
+  },
+  {
+    id: 'ai-screenplay-writer',
+    name: 'Roteirista IA',
+    description: 'Criação automática de roteiros para filmes e séries',
+    icon: Film,
+    complexity: 'hard',
+    features: [
+      'Geração de roteiros',
+      'Desenvolvimento de personagens',
+      'Estrutura narrativa',
+      'Diálogos naturais',
+      'Análise de gênero',
+      'Feedback criativo'
+    ]
+  },
+  {
+    id: 'virtual-fashion-show',
+    name: 'Desfile de Moda Virtual',
+    description: 'Plataforma para desfiles de moda digitais',
+    icon: Shirt,
+    complexity: 'medium',
+    features: [
+      'Runway virtual',
+      'Modelos 3D',
+      'Roupas digitais',
+      'Transmissão ao vivo',
+      'Interação do público',
+      'E-commerce integrado'
+    ]
+  },
+  {
+    id: 'ai-dance-choreographer',
+    name: 'Coreógrafo IA',
+    description: 'Criação automática de coreografias de dança',
+    icon: Music,
+    complexity: 'hard',
+    features: [
+      'Geração de movimentos',
+      'Sincronização musical',
+      'Estilos de dança',
+      'Análise de ritmo',
+      'Captura de movimento',
+      'Ensino de dança'
+    ]
+  },
+  {
+    id: 'virtual-comedy-club',
+    name: 'Clube de Comédia Virtual',
+    description: 'Plataforma para shows de stand-up virtuais',
+    icon: Smile,
+    complexity: 'medium',
+    features: [
+      'Shows ao vivo',
+      'Interação com audiência',
+      'Sistema de risadas',
+      'Open mic virtual',
+      'Networking de comediantes',
+      'Monetização de shows'
+    ]
+  },
+  {
+    id: 'ai-art-generator',
+    name: 'Gerador de Arte IA',
+    description: 'Criação automática de obras de arte com IA',
+    icon: Palette,
+    complexity: 'hard',
+    features: [
+      'Múltiplos estilos artísticos',
+      'Geração procedural',
+      'Colaboração artística',
+      'NFT integration',
+      'Galeria virtual',
+      'Monetização de arte'
+    ]
+  },
+  {
+    id: 'virtual-karaoke-platform',
+    name: 'Plataforma de Karaokê Virtual',
+    description: 'Karaokê social em ambiente virtual',
+    icon: Mic,
+    complexity: 'medium',
+    features: [
+      'Salas virtuais',
+      'Biblioteca musical',
+      'Efeitos de voz',
+      'Competições',
+      'Gravação de performances',
+      'Ranking social'
+    ]
+  },
+  {
+    id: 'interactive-movie-platform',
+    name: 'Plataforma de Filmes Interativos',
+    description: 'Filmes onde o espectador influencia a narrativa',
+    icon: Film,
+    complexity: 'hard',
+    features: [
+      'Narrativa ramificada',
+      'Decisões em tempo real',
+      'Múltiplos finais',
+      'Análise de escolhas',
+      'Experiência personalizada',
+      'Produção interativa'
+    ]
+  },
+  {
+    id: 'virtual-escape-room',
+    name: 'Escape Room Virtual',
+    description: 'Salas de fuga em realidade virtual',
+    icon: Key,
+    complexity: 'hard',
+    features: [
+      'Puzzles imersivos',
+      'Cooperação multiplayer',
+      'Múltiplos temas',
+      'Dificuldade adaptativa',
+      'Sistema de dicas',
+      'Ranking de velocidade'
+    ]
+  },
+  {
+    id: 'ai-podcast-producer',
+    name: 'Produtor de Podcast IA',
+    description: 'Produção automática de podcasts com IA',
+    icon: Radio,
+    complexity: 'hard',
+    features: [
+      'Geração de conteúdo',
+      'Síntese de voz',
+      'Edição automática',
+      'Múltiplos hosts virtuais',
+      'Personalização de audiência',
+      'Distribuição automática'
+    ]
+  },
+  {
+    id: 'virtual-magic-show',
+    name: 'Show de Mágica Virtual',
+    description: 'Performances de mágica em ambiente digital',
+    icon: Wand,
+    complexity: 'hard',
+    features: [
+      'Truques digitais',
+      'Interação com audiência',
+      'Efeitos especiais',
+      'Workshops de mágica',
+      'Múltiplos performers',
+      'Experiência imersiva'
+    ]
+  },
+  {
+    id: 'ai-news-anchor',
+    name: 'Âncora de Notícias IA',
+    description: 'Apresentadores virtuais para telejornais',
+    icon: Tv,
+    complexity: 'hard',
+    features: [
+      'Apresentadores virtuais',
+      'Síntese de fala natural',
+      'Geração de notícias',
+      'Múltiplos idiomas',
+      'Personalização de conteúdo',
+      'Transmissão 24/7'
+    ]
+  },
+  {
+    id: 'virtual-circus-platform',
+    name: 'Plataforma de Circo Virtual',
+    description: 'Espetáculos circenses em realidade virtual',
+    icon: Tent,
+    complexity: 'hard',
+    features: [
+      'Performances acrobáticas',
+      'Animais virtuais',
+      'Interação com artistas',
+      'Múltiplas perspectivas',
+      'Experiência familiar',
+      'Shows personalizados'
+    ]
+  },
+  {
+    id: 'ai-improv-theater',
+    name: 'Teatro de Improviso IA',
+    description: 'IA que participa de improvisações teatrais',
+    icon: Theater,
+    complexity: 'hard',
+    features: [
+      'Improvisação em tempo real',
+      'Personagens adaptativos',
+      'Diálogos naturais',
+      'Cenários dinâmicos',
+      'Interação com atores',
+      'Múltiplos gêneros'
+    ]
+  },
+  {
+    id: 'virtual-talent-show',
+    name: 'Show de Talentos Virtual',
+    description: 'Competição de talentos em plataforma digital',
+    icon: Star,
+    complexity: 'medium',
+    features: [
+      'Audições virtuais',
+      'Votação da audiência',
+      'Múltiplas categorias',
+      'Judges virtuais',
+      'Transmissão ao vivo',
+      'Prêmios digitais'
+    ]
+  },
+  {
+    id: 'ai-trivia-host',
+    name: 'Apresentador de Quiz IA',
+    description: 'IA que conduz jogos de perguntas e respostas',
+    icon: Brain,
+    complexity: 'medium',
+    features: [
+      'Perguntas dinâmicas',
+      'Múltiplas categorias',
+      'Dificuldade adaptativa',
+      'Personalidade do host',
+      'Competições online',
+      'Sistema de pontuação'
+    ]
+  },
+  {
+    id: 'virtual-book-club',
+    name: 'Clube do Livro Virtual',
+    description: 'Discussões literárias em ambiente virtual',
+    icon: BookOpen,
+    complexity: 'medium',
+    features: [
+      'Salas de discussão',
+      'Análise de livros',
+      'Autor virtual',
+      'Calendário de leituras',
+      'Recomendações IA',
+      'Comunidade literária'
+    ]
+  },
+  {
+    id: 'ai-sports-commentator',
+    name: 'Comentarista Esportivo IA',
+    description: 'IA que comenta eventos esportivos em tempo real',
+    icon: Mic,
+    complexity: 'hard',
+    features: [
+      'Comentários em tempo real',
+      'Análise estatística',
+      'Múltiplos esportes',
+      'Personalização de estilo',
+      'Detecção de eventos',
+      'Transmissão automática'
+    ]
+  },
+  {
+    id: 'virtual-cooking-show',
+    name: 'Show de Culinária Virtual',
+    description: 'Programas de culinária interativos',
+    icon: ChefHat,
+    complexity: 'medium',
+    features: [
+      'Receitas interativas',
+      'Chef virtual',
+      'Técnicas de cozinha',
+      'Lista de ingredientes',
+      'Timer automático',
+      'Avaliação de pratos'
+    ]
+  },
+  {
+    id: 'ai-meme-generator',
+    name: 'Gerador de Memes IA',
+    description: 'Criação automática de memes com IA',
+    icon: Smile,
+    complexity: 'medium',
+    features: [
+      'Geração automática',
+      'Templates populares',
+      'Análise de tendências',
+      'Compartilhamento social',
+      'Personalização',
+      'Viralização inteligente'
+    ]
+  },
+  {
+    id: 'virtual-pet-simulation',
+    name: 'Simulação de Pet Virtual',
+    description: 'Bichinhos virtuais com IA avançada',
+    icon: Heart,
+    complexity: 'medium',
+    features: [
+      'Pets inteligentes',
+      'Personalidade única',
+      'Evolução comportamental',
+      'Cuidados virtuais',
+      'Interação social',
+      'Múltiplas espécies'
+    ]
+  },
+  {
+    id: 'ai-game-master',
+    name: 'Mestre de RPG IA',
+    description: 'IA que conduz sessões de RPG de mesa',
+    icon: Dice6,
+    complexity: 'hard',
+    features: [
+      'Narrativa dinâmica',
+      'Criação de NPCs',
+      'Combates automáticos',
+      'Múltiplos sistemas',
+      'Adaptação de história',
+      'Experiência personalizada'
+    ]
+  },
+  {
+    id: 'virtual-dating-show',
+    name: 'Reality Show de Namoro Virtual',
+    description: 'Programa de relacionamentos em ambiente virtual',
+    icon: Heart,
+    complexity: 'medium',
+    features: [
+      'Participantes virtuais',
+      'Desafios românticos',
+      'Votação da audiência',
+      'Múltiplas temporadas',
+      'Personalidades IA',
+      'Drama artificial'
+    ]
+  },
+  {
+    id: 'ai-film-critic',
+    name: 'Crítico de Cinema IA',
+    description: 'IA que analisa e critica filmes automaticamente',
+    icon: Film,
+    complexity: 'hard',
+    features: [
+      'Análise cinematográfica',
+      'Resenhas automáticas',
+      'Comparações inteligentes',
+      'Múltiplos critérios',
+      'Recomendações personalizadas',
+      'Tendências de mercado'
+    ]
+  },
+  {
+    id: 'virtual-standup-ai',
+    name: 'Comediante IA',
+    description: 'IA que escreve e apresenta comédia stand-up',
+    icon: Mic,
+    complexity: 'hard',
+    features: [
+      'Piadas geradas',
+      'Timing perfeito',
+      'Adaptação de audiência',
+      'Múltiplos estilos',
+      'Interação com público',
+      'Evolução humorística'
+    ]
+  },
+  {
+    id: 'virtual-band-platform',
+    name: 'Plataforma de Banda Virtual',
+    description: 'Formação de bandas com membros virtuais',
+    icon: Users,
+    complexity: 'hard',
+    features: [
+      'Músicos virtuais',
+      'Composição colaborativa',
+      'Múltiplos instrumentos',
+      'Sincronização perfeita',
+      'Performances ao vivo',
+      'Gravação profissional'
+    ]
+  },
+  {
+    id: 'ai-party-planner',
+    name: 'Planejador de Festas IA',
+    description: 'IA que organiza eventos e festas virtuais',
+    icon: PartyPopper,
+    complexity: 'medium',
+    features: [
+      'Planejamento automático',
+      'Decoração virtual',
+      'Lista de convidados',
+      'Atividades personalizadas',
+      'Música automática',
+      'Coordenação de eventos'
+    ]
+  },
+  {
+    id: 'virtual-magic-academy',
+    name: 'Academia de Mágica Virtual',
+    description: 'Aprenda mágica em ambiente virtual imersivo',
+    icon: Hat,
+    complexity: 'hard',
+    features: [
+      'Aulas de mágica',
+      'Truques interativos',
+      'Mentores virtuais',
+      'Prática segura',
+      'Múltiplas disciplinas',
+      'Certificação mágica'
+    ]
+  },
+  {
+    id: 'ai-voice-actor',
+    name: 'Dublador IA',
+    description: 'IA que cria dublagens para personagens',
+    icon: Volume2,
+    complexity: 'hard',
+    features: [
+      'Síntese de voz avançada',
+      'Múltiplas personalidades',
+      'Sincronia labial',
+      'Emoções realistas',
+      'Múltiplos idiomas',
+      'Adaptação de contexto'
+    ]
+  },
+  {
+    id: 'virtual-theater-platform',
+    name: 'Plataforma de Teatro Virtual',
+    description: 'Peças teatrais em ambiente virtual interativo',
+    icon: Theater,
+    complexity: 'hard',
+    features: [
+      'Palco virtual',
+      'Atores digitais',
+      'Cenários dinâmicos',
+      'Interação com audiência',
+      'Múltiplas perspectivas',
+      'Experiência imersiva'
+    ]
+  },
+  {
+    id: 'ai-entertainment-curator',
+    name: 'Curador de Entretenimento IA',
+    description: 'IA que personaliza experiências de entretenimento',
+    icon: Star,
+    complexity: 'hard',
+    features: [
+      'Recomendações inteligentes',
+      'Análise de preferências',
+      'Conteúdo personalizado',
+      'Múltiplas mídias',
+      'Descoberta automática',
+      'Experiência única'
+    ]
+  },
+  {
+    id: 'virtual-comedy-writer',
+    name: 'Roteirista de Comédia IA',
+    description: 'IA especializada em escrever comédia',
+    icon: PenTool,
+    complexity: 'hard',
+    features: [
+      'Roteiros cômicos',
+      'Timing de piadas',
+      'Personagens engraçados',
+      'Múltiplos formatos',
+      'Adaptação cultural',
+      'Análise de humor'
     ]
   }
 ];
