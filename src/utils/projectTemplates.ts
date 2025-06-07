@@ -1,3 +1,4 @@
+
 import { 
   ShoppingCart, 
   Store, 
@@ -57,12 +58,14 @@ export interface ProjectTemplate {
   icon: any;
   complexity: 'easy' | 'medium' | 'hard';
   features: string[];
+  category?: string;
 }
 
 export interface TemplateCategory {
   id: string;
   name: string;
   description: string;
+  icon?: any;
   templates: ProjectTemplate[];
 }
 
@@ -74,6 +77,7 @@ const originalTemplates: ProjectTemplate[] = [
     description: 'Um gerenciador de tarefas simples e eficiente para organizar sua rotina',
     icon: CheckCircle,
     complexity: 'easy',
+    category: 'utility',
     features: [
       'Adicionar e remover tarefas',
       'Marcar como concluído',
@@ -88,6 +92,7 @@ const originalTemplates: ProjectTemplate[] = [
     description: 'Sistema completo para criação e gerenciamento de blogs',
     icon: FileText,
     complexity: 'medium',
+    category: 'utility',
     features: [
       'Editor de posts rico',
       'Sistema de categorias',
@@ -103,6 +108,7 @@ const originalTemplates: ProjectTemplate[] = [
     description: 'Aplicativo de previsão do tempo com dados em tempo real',
     icon: Cloud,
     complexity: 'medium',
+    category: 'utility',
     features: [
       'Previsão atual e semanal',
       'Múltiplas cidades',
@@ -118,6 +124,7 @@ const originalTemplates: ProjectTemplate[] = [
     description: 'Gerencie suas finanças pessoais de forma inteligente',
     icon: BarChart3,
     complexity: 'medium',
+    category: 'business',
     features: [
       'Registro de receitas e despesas',
       'Categorização automática',
@@ -133,6 +140,7 @@ const originalTemplates: ProjectTemplate[] = [
     description: 'Aplicativo para descobrir e compartilhar receitas culinárias',
     icon: Heart,
     complexity: 'easy',
+    category: 'utility',
     features: [
       'Catálogo de receitas',
       'Busca por ingredientes',
@@ -144,14 +152,40 @@ const originalTemplates: ProjectTemplate[] = [
   }
 ];
 
+// Adicionar categoria aos templates importados
+const businessTemplatesWithCategory = businessTemplates.map(template => ({
+  ...template,
+  category: 'business'
+}));
+
+const educationTemplatesWithCategory = educationTemplates.map(template => ({
+  ...template,
+  category: 'education'
+}));
+
+const healthTemplatesWithCategory = healthTemplates.map(template => ({
+  ...template,
+  category: 'health'
+}));
+
+const entertainmentTemplatesWithCategory = entertainmentTemplates.map(template => ({
+  ...template,
+  category: 'entertainment'
+}));
+
+const utilityTemplatesWithCategory = utilityTemplates.map(template => ({
+  ...template,
+  category: 'utility'
+}));
+
 // Combine todos os templates
 const allTemplates = [
   ...originalTemplates,
-  ...businessTemplates,
-  ...educationTemplates,
-  ...healthTemplates,
-  ...entertainmentTemplates,
-  ...utilityTemplates
+  ...businessTemplatesWithCategory,
+  ...educationTemplatesWithCategory,
+  ...healthTemplatesWithCategory,
+  ...entertainmentTemplatesWithCategory,
+  ...utilityTemplatesWithCategory
 ];
 
 export const templateCategories: TemplateCategory[] = [
@@ -159,31 +193,36 @@ export const templateCategories: TemplateCategory[] = [
     id: 'business',
     name: 'Negócios e E-commerce',
     description: 'Soluções para empresas, vendas online e gestão comercial',
-    templates: [...originalTemplates.filter(t => ['expense-tracker'].includes(t.id)), ...businessTemplates]
+    icon: Briefcase,
+    templates: [...originalTemplates.filter(t => t.category === 'business'), ...businessTemplatesWithCategory]
   },
   {
     id: 'education',
     name: 'Educação e Aprendizado',
     description: 'Plataformas educacionais, cursos online e ferramentas de ensino',
-    templates: educationTemplates
+    icon: GraduationCap,
+    templates: educationTemplatesWithCategory
   },
   {
     id: 'health',
     name: 'Saúde e Bem-estar',
     description: 'Aplicações médicas, fitness e cuidados com a saúde',
-    templates: healthTemplates
+    icon: Heart,
+    templates: healthTemplatesWithCategory
   },
   {
     id: 'entertainment',
     name: 'Entretenimento e Mídia',
     description: 'Plataformas de streaming, jogos e conteúdo digital',
-    templates: entertainmentTemplates
+    icon: Music,
+    templates: entertainmentTemplatesWithCategory
   },
   {
     id: 'utility',
     name: 'Utilitários e Produtividade',
     description: 'Ferramentas úteis para o dia a dia e produtividade',
-    templates: [...originalTemplates.filter(t => ['todo-app', 'blog-platform', 'weather-app', 'recipe-app'].includes(t.id)), ...utilityTemplates]
+    icon: Settings,
+    templates: [...originalTemplates.filter(t => t.category === 'utility'), ...utilityTemplatesWithCategory]
   }
 ];
 

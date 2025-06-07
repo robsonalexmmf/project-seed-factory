@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,7 +19,8 @@ import {
   Crown,
   LogOut,
   Settings,
-  Home
+  Home,
+  Globe
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { projectTemplates, templateCategories, getTemplatesByCategory, searchTemplates } from '@/utils/projectTemplates';
@@ -151,7 +151,7 @@ const Index = () => {
   const totalTemplates = projectTemplates.length;
   const categoryCounts = templateCategories.map(cat => ({
     ...cat,
-    count: cat.id === 'all' ? totalTemplates : getTemplatesByCategory(cat.id).length
+    count: cat.templates.length
   }));
 
   const getProjectsRemaining = () => {
@@ -390,7 +390,24 @@ const Index = () => {
               Categorias de Templates
             </Label>
             <div className="flex flex-wrap justify-center gap-4">
-              {categoryCounts.map((category) => (
+              <Button
+                key="all"
+                variant={selectedCategory === 'all' ? "default" : "outline"}
+                size="lg"
+                onClick={() => setSelectedCategory('all')}
+                className={`flex items-center space-x-3 px-8 py-4 rounded-2xl transition-all duration-300 font-bold text-lg shadow-lg ${
+                  selectedCategory === 'all' 
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 shadow-2xl transform scale-110 text-white' 
+                    : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:scale-105 border-2 border-gray-200 hover:border-purple-300 bg-white/80 backdrop-blur-sm'
+                }`}
+              >
+                <Globe className="w-6 h-6" />
+                <span>Todos os Templates</span>
+                <Badge variant="secondary" className={`ml-2 ${selectedCategory === 'all' ? 'bg-white/20 text-white' : ''}`}>
+                  {totalTemplates}
+                </Badge>
+              </Button>
+              {templateCategories.map((category) => (
                 <Button
                   key={category.id}
                   variant={selectedCategory === category.id ? "default" : "outline"}
@@ -402,7 +419,7 @@ const Index = () => {
                       : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:scale-105 border-2 border-gray-200 hover:border-purple-300 bg-white/80 backdrop-blur-sm'
                   }`}
                 >
-                  <category.icon className="w-6 h-6" />
+                  {category.icon && <category.icon className="w-6 h-6" />}
                   <span>{category.name}</span>
                   <Badge variant="secondary" className={`ml-2 ${selectedCategory === category.id ? 'bg-white/20 text-white' : ''}`}>
                     {category.count}
