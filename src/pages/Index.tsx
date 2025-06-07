@@ -407,7 +407,7 @@ const Index = () => {
                   {totalTemplates}
                 </Badge>
               </Button>
-              {templateCategories.map((category) => (
+              {categoryCounts.map((category) => (
                 <Button
                   key={category.id}
                   variant={selectedCategory === category.id ? "default" : "outline"}
