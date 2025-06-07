@@ -1,4 +1,42 @@
-import { GraduationCap, BookOpen, Users, Video, Award, FileText, Calculator, Globe, Brain, Code, FlaskConical, UserCheck, Clock, Atom, Telescope, User, Music, Palette, MessageSquare, PenTool, TreePine, DollarSign, TrendingUp, Wrench, Search, Presentation, Folder, Target, Lightbulb, Scale, Crown } from 'lucide-react';
+
+import { 
+  GraduationCap, 
+  BookOpen, 
+  Users, 
+  Video, 
+  Award, 
+  FileText, 
+  Calculator, 
+  Globe, 
+  Brain, 
+  Code, 
+  FlaskConical, 
+  UserCheck, 
+  Clock, 
+  Atom, 
+  Telescope, 
+  User, 
+  Music, 
+  Palette, 
+  MessageSquare, 
+  PenTool, 
+  TreePine, 
+  DollarSign, 
+  TrendingUp, 
+  Wrench, 
+  Search, 
+  Presentation, 
+  Folder, 
+  Target, 
+  Lightbulb, 
+  Scale, 
+  Crown, 
+  Map,
+  Zap,
+  Gamepad2,
+  Shield,
+  Heart
+} from 'lucide-react';
 import { ProjectTemplate } from '../projectTemplates';
 
 export const educationTemplates: ProjectTemplate[] = [

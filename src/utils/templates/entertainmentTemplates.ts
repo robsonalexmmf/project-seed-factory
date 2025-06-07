@@ -1,5 +1,74 @@
-
-import { Music, Video, Gamepad2, Mic, Camera, Theater, Radio, Headphones, Film, Tv, Zap, BookOpen, Key, Crown, Users, Star, Palette, Smile, Dice6, Heart, Volume2, PenTool, Shirt, ChefHat, Image, Trophy, Projector, Eye, Brain, Bot, Dna, Smartphone, Watch, MessageSquare, Scan, TrendingUp, Target, Baby, UserCheck, Stethoscope, Activity, Building, Wrench, DollarSign, Rocket, Search, Timer, Shield, Leaf, Phone, Video as VideoIcon, GraduationCap, Database, Languages, Moon, Wind, Atom, AlertTriangle, Bell, Copy, Receipt, Wifi, Printer, Monitor } from 'lucide-react';
+import { 
+  Music, 
+  Video, 
+  Gamepad2, 
+  Film, 
+  Radio, 
+  Tv, 
+  Camera, 
+  Mic, 
+  Headphones, 
+  Theater, 
+  Star, 
+  Award, 
+  Trophy, 
+  Crown, 
+  Dice1, 
+  Play, 
+  Pause, 
+  Volume2, 
+  Share, 
+  Users, 
+  Calendar, 
+  ShoppingCart, 
+  Clock, 
+  Bell, 
+  MessageSquare, 
+  ThumbsUp, 
+  Eye, 
+  Download, 
+  Upload, 
+  Shuffle, 
+  Repeat, 
+  Heart, 
+  Bookmark, 
+  Gift, 
+  Sparkles, 
+  Wand2, 
+  Map, 
+  Globe, 
+  Zap, 
+  Target, 
+  Activity, 
+  BarChart3, 
+  TrendingUp, 
+  DollarSign, 
+  Shield, 
+  Lock, 
+  Settings, 
+  Database, 
+  Code, 
+  Smartphone, 
+  Monitor, 
+  Wifi, 
+  Cloud, 
+  Paintbrush, 
+  Palette, 
+  Image, 
+  Layers, 
+  Edit, 
+  PenTool, 
+  Brush, 
+  Move, 
+  RotateCcw, 
+  Copy, 
+  Save, 
+  FileImage, 
+  Grid, 
+  Square, 
+  Circle, 
+  Triangle 
+} from 'lucide-react';
 import { ProjectTemplate } from '../projectTemplates';
 
 export const entertainmentTemplates: ProjectTemplate[] = [
@@ -751,6 +820,81 @@ export const entertainmentTemplates: ProjectTemplate[] = [
       'Múltiplos formatos',
       'Adaptação cultural',
       'Análise de humor'
+    ]
+  },
+  {
+    id: 'theme-park-app',
+    name: 'App de Parque Temático',
+    description: 'Aplicativo completo para parques de diversão',
+    icon: Map,
+    complexity: 'hard',
+    features: [
+      'Mapa interativo do parque',
+      'Tempos de espera em tempo real',
+      'Reserva de atrações',
+      'Sistema de fast pass',
+      'Localização de amigos',
+      'Compra de ingressos'
+    ]
+  },
+  {
+    id: 'magic-show-platform',
+    name: 'Plataforma de Shows de Magia',
+    description: 'Aprenda e compartilhe truques de mágica',
+    icon: Wand2,
+    complexity: 'medium',
+    features: [
+      'Biblioteca de truques',
+      'Tutoriais em vídeo',
+      'Comunidade de mágicos',
+      'Avaliação de performances',
+      'Loja de acessórios',
+      'Eventos e competições'
+    ]
+  },
+  {
+    id: 'camping-platform',
+    name: 'Plataforma de Camping',
+    description: 'Descubra e reserve locais para camping',
+    icon: Map,
+    complexity: 'medium',
+    features: [
+      'Mapa de locais',
+      'Reservas online',
+      'Avaliações de campistas',
+      'Equipamentos necessários',
+      'Previsão do tempo',
+      'Atividades próximas'
+    ]
+  },
+  {
+    id: 'party-planning',
+    name: 'Planejamento de Festas',
+    description: 'Organize festas memoráveis com facilidade',
+    icon: Calendar,
+    complexity: 'medium',
+    features: [
+      'Planejamento de eventos',
+      'Lista de convidados',
+      'Orçamento de festa',
+      'Fornecedores recomendados',
+      'Cronograma de atividades',
+      'Galeria de fotos'
+    ]
+  },
+  {
+    id: 'costume-designer',
+    name: 'Designer de Fantasias',
+    description: 'Crie e compartilhe designs de fantasias',
+    icon: Paintbrush,
+    complexity: 'medium',
+    features: [
+      'Editor de fantasias',
+      'Galeria de inspirações',
+      'Tutoriais de criação',
+      'Comunidade de designers',
+      'Marketplace de fantasias',
+      'Calculadora de materiais'
     ]
   }
 ];
