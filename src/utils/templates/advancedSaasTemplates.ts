@@ -60,13 +60,11 @@ import {
   Coins,
   Wallet,
   Receipt,
-  Invoice,
   Calculator,
   PieChart,
   LineChart,
   AreaChart,
   Activity,
-  Pulse,
   Workflow,
   Layers,
   Grid,
@@ -146,7 +144,8 @@ import {
   Tv,
   Film,
   Music,
-  Gamepad2
+  Gamepad2,
+  Scale
 } from 'lucide-react';
 
 import { ProjectTemplate } from '../projectTemplates';
