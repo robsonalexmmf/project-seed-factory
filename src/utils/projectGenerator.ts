@@ -25,7 +25,7 @@ export const generateAndDownloadProject = async (config: ProjectConfig): Promise
   saveAs(blob, `${config.name.toLowerCase().replace(/\s+/g, '-')}.zip`);
 };
 
-const generateProjectFiles = (config: ProjectTemplate): Record<string, string> => {
+const generateProjectFiles = (config: ProjectConfig): Record<string, string> => {
   const { template, name, description, features } = config;
   
   const baseDependencies = {
@@ -64,9 +64,7 @@ const generateProjectFiles = (config: ProjectTemplate): Record<string, string> =
     "react-hook-form": "^7.53.0",
     "zod": "^3.23.8",
     "@hookform/resolvers": "^3.9.0",
-    "@supabase/supabase-js": "^2.39.0",
-    "jszip": "^3.10.1",
-    "file-saver": "^2.0.5"
+    "@supabase/supabase-js": "^2.39.0"
   };
 
   const packageJson = {
@@ -94,15 +92,14 @@ const generateProjectFiles = (config: ProjectTemplate): Record<string, string> =
       "postcss": "^8.4.45",
       "tailwindcss": "^3.4.10",
       "typescript": "^5.5.4",
-      "vite": "^5.4.3",
-      "@types/file-saver": "^2.0.7"
+      "vite": "^5.4.3"
     }
   };
 
   const files: Record<string, string> = {
     'package.json': JSON.stringify(packageJson, null, 2),
     'src/main.tsx': generateMainComponent(),
-    'src/App.tsx': generateAppComponent(template),
+    'src/App.tsx': generateAppComponent(template, name),
     'src/index.css': generateIndexCss(),
     'index.html': generateIndexHtml(name),
     'README.md': generateReadme(template, name, description, features),
@@ -136,12 +133,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 )`;
 };
 
-const generateAppComponent = (template: ProjectTemplate) => {
+const generateAppComponent = (template: ProjectTemplate, name: string) => {
   return `import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ${template.icon.name} } from 'lucide-react'
-import { Toaster } from '@/components/ui/toaster'
 
 const queryClient = new QueryClient()
 
@@ -154,26 +150,25 @@ function App() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
               <div className="flex items-center">
                 <${template.icon.name} className="h-8 w-8 text-blue-600 mr-3" />
-                <h1 className="text-2xl font-bold text-gray-900">${template.name}</h1>
+                <h1 className="text-2xl font-bold text-gray-900">${name}</h1>
               </div>
             </div>
           </header>
           
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Bem-vindo ao ${template.name}</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Bem-vindo ao ${name}</h2>
               <p className="text-gray-600 mb-6">${template.description}</p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 ${template.features.map(feature => `
-                <div className="p-4 border border-gray-200 rounded-lg">
+                <div className="p-4 border border-gray-200 rounded-lg" key="${feature}">
                   <h3 className="font-medium text-gray-900">${feature}</h3>
                 </div>`).join('')}
               </div>
             </div>
           </main>
         </div>
-        <Toaster />
       </Router>
     </QueryClientProvider>
   )

@@ -88,7 +88,6 @@ import {
   Server,
   HardDrive,
   Cpu,
-  MemoryStick,
   Wifi,
   Bluetooth,
   Usb,
@@ -103,7 +102,6 @@ import {
   VolumeX,
   Play,
   Pause,
-  Stop,
   Rewind,
   FastForward,
   SkipBack,
@@ -121,13 +119,6 @@ import {
   Tv,
   Theater,
   Gamepad2,
-  Joystick,
-  Dice1,
-  Dice2,
-  Dice3,
-  Dice4,
-  Dice5,
-  Dice6,
   Puzzle,
   Crosshair,
   Radar,
@@ -142,9 +133,7 @@ import {
   Bike,
   Ship,
   Rocket,
-  Helicopter,
   Ambulance,
-  Taxi,
   TrendingDown,
   BarChart,
   LineChart,
@@ -157,7 +146,6 @@ import {
   Forward,
   Archive,
   Trash2,
-  Spam,
   MailOpen,
   MailCheck,
   AtSign,
@@ -238,7 +226,6 @@ import {
   Table,
   Clock,
   Watch,
-  Stopwatch,
   Hourglass,
   Sunrise,
   Sunset,
@@ -253,8 +240,6 @@ import {
   Snowflake,
   Thermometer,
   Wind,
-  Tornado,
-  Volcano,
   Mountain,
   TreePine,
   Trees,
@@ -269,30 +254,17 @@ import {
   Squirrel,
   Dog,
   Cat,
-  Horse,
-  Cow,
-  Pig,
-  Sheep,
-  Chicken,
-  Egg,
-  Bone,
-  Footprints,
-  Paw,
   Apple,
   Cherry,
   Grape,
-  Orange,
   Banana,
-  Strawberry,
   Carrot,
-  Corn,
   Pizza,
   Sandwich,
   Cookie,
   Cake,
   IceCream,
   Coffee,
-  Tea,
   Beer,
   Wine,
   Martini,
@@ -300,15 +272,7 @@ import {
   Salad,
   ChefHat,
   UtensilsCrossed,
-  Fork,
-  Spoon,
-  Knife,
-  Plate,
-  Glass,
-  Bottle,
-  Can,
   Baby,
-  Child,
   UserPlus,
   UserMinus,
   UserCheck,
@@ -318,8 +282,6 @@ import {
   UserSquare,
   UserCircle,
   Contact,
-  Contacts,
-  AddressBook,
   IdCard,
   Badge,
   ShieldCheck,
@@ -334,11 +296,7 @@ import {
   Tags,
   NotepadText,
   StickyNote,
-  Pushpin,
   Paperclip,
-  Stapler,
-  Abacus,
-  Protractor,
   Microscope,
   Telescope,
   Magnet,
@@ -348,22 +306,18 @@ import {
   Syringe,
   Bandage,
   Stethoscope,
-  XRay,
-  Pulse,
   HeartPulse,
   Lightbulb,
   Flashlight,
-  Candle,
-  Fire,
   Flame,
-  Spark,
   Comet,
   Planet,
   Earth,
   Satellite,
-  Ufo,
   Alien,
-  Bot
+  Leaf as LeafIcon,
+  Wrench,
+  Scale
 } from 'lucide-react';
 
 import { ProjectTemplate } from '../projectTemplates';
@@ -595,183 +549,108 @@ export const businessTemplates: ProjectTemplate[] = [
     ]
   },
   {
-    id: 'influencer-platform',
-    name: 'Plataforma de Influenciadores',
-    description: 'Conecte marcas com influenciadores digitais',
-    icon: Users,
-    complexity: 'hard',
-    features: [
-      'Perfis de influenciadores',
-      'Métricas de engajamento',
-      'Sistema de propostas',
-      'Gestão de campanhas',
-      'Pagamentos automáticos',
-      'Analytics de performance'
-    ]
-  },
-  {
-    id: 'virtual-coworking',
-    name: 'Coworking Virtual',
-    description: 'Espaço de trabalho colaborativo online',
-    icon: Users,
-    complexity: 'hard',
-    features: [
-      'Salas virtuais',
-      'Reserva de espaços',
-      'Networking entre membros',
-      'Eventos online',
-      'Sistema de pontos',
-      'Dashboard de produtividade'
-    ]
-  },
-  {
-    id: 'subscription-box',
-    name: 'Box de Assinatura',
-    description: 'Plataforma para serviços de box mensais',
-    icon: Package,
-    complexity: 'hard',
-    features: [
-      'Múltiplos tipos de box',
-      'Customização de produtos',
-      'Gestão de assinantes',
-      'Logística automatizada',
-      'Feedback de produtos',
-      'Programa de fidelidade'
-    ]
-  },
-  {
-    id: 'peer-to-peer-marketplace',
-    name: 'Marketplace P2P',
-    description: 'Marketplace pessoa-a-pessoa seguro',
-    icon: Users,
-    complexity: 'hard',
-    features: [
-      'Verificação de identidade',
-      'Sistema de avaliações',
-      'Pagamento escrow',
-      'Chat integrado',
-      'Resolução de disputas',
-      'Geolocalização'
-    ]
-  },
-  {
-    id: 'virtual-events-platform',
-    name: 'Plataforma de Eventos Virtuais',
-    description: 'Organize eventos online profissionais',
-    icon: Video,
-    complexity: 'hard',
-    features: [
-      'Transmissão ao vivo',
-      'Salas de breakout',
-      'Networking virtual',
-      'Stands de exposição',
-      'Sistema de tickets',
-      'Analytics de participação'
-    ]
-  },
-  {
-    id: 'carbon-offset-marketplace',
-    name: 'Marketplace de Créditos de Carbono',
-    description: 'Compra e venda de créditos de carbono',
-    icon: Leaf,
-    complexity: 'hard',
-    features: [
-      'Marketplace de créditos',
-      'Verificação de projetos',
-      'Calculadora de pegada',
-      'Certificação blockchain',
-      'Relatórios de impacto',
-      'Portfolio verde'
-    ]
-  },
-  {
-    id: 'fleet-management',
-    name: 'Gestão de Frota',
-    description: 'Sistema completo para gestão de frotas',
-    icon: Truck,
-    complexity: 'hard',
-    features: [
-      'Rastreamento GPS',
-      'Manutenção preventiva',
-      'Gestão de combustível',
-      'Roteirização inteligente',
-      'Relatórios de performance',
-      'Alertas automáticos'
-    ]
-  },
-  {
-    id: 'smart-contracts-platform',
-    name: 'Plataforma de Smart Contracts',
-    description: 'Criação e gestão de contratos inteligentes',
-    icon: FileText,
-    complexity: 'hard',
-    features: [
-      'Editor de contratos',
-      'Deploy automático',
-      'Auditoria de código',
-      'Multi-blockchain',
-      'Templates legais',
-      'Execução automática'
-    ]
-  },
-  {
-    id: 'virtual-reality-showroom',
-    name: 'Showroom em Realidade Virtual',
-    description: 'Experiências imersivas para vendas',
-    icon: Eye,
-    complexity: 'hard',
-    features: [
-      'Ambientes 3D',
-      'Interação em VR',
-      'Produtos configuráveis',
-      'Tour guiado',
-      'Analytics de comportamento',
-      'Integração com e-commerce'
-    ]
-  },
-  {
-    id: 'microlearning-platform',
-    name: 'Plataforma de Microlearning',
-    description: 'Aprendizado corporativo em pequenas doses',
-    icon: GraduationCap,
-    complexity: 'medium',
-    features: [
-      'Conteúdo bite-sized',
-      'Gamificação',
-      'Adaptive learning',
-      'Mobile-first',
-      'Analytics de engajamento',
-      'Certificações micro'
-    ]
-  },
-  {
-    id: 'ai-customer-service',
-    name: 'Atendimento com IA',
-    description: 'Chatbots inteligentes para atendimento',
+    id: 'ai-chatbot',
+    name: 'Chatbot com IA',
+    description: 'Assistente virtual inteligente para atendimento',
     icon: Bot,
     complexity: 'hard',
     features: [
-      'Chatbot com IA',
       'Processamento de linguagem natural',
-      'Escalação inteligente',
-      'Base de conhecimento',
-      'Analytics de conversas',
-      'Múltiplos canais'
+      'Respostas inteligentes',
+      'Integração com sistemas',
+      'Aprendizado contínuo',
+      'Múltiplos canais',
+      'Analytics de conversas'
     ]
   },
   {
-    id: 'blockchain-voting',
-    name: 'Votação Blockchain',
-    description: 'Sistema de votação transparente e seguro',
-    icon: Vote,
+    id: 'project-management',
+    name: 'Gestão de Projetos',
+    description: 'Ferramenta completa para gerenciamento de projetos',
+    icon: Target,
     complexity: 'hard',
     features: [
-      'Votação descentralizada',
-      'Verificação de identidade',
-      'Transparência total',
-      'Imutabilidade',
-      'Auditoria pública',
-      'Múltiplos tipos de eleição'
+      'Cronograma de tarefas',
+      'Gráfico de Gantt',
+      'Gestão de equipes',
+      'Controle de tempo',
+      'Relatórios de progresso',
+      'Integração com calendário'
+    ]
+  },
+  {
+    id: 'social-network',
+    name: 'Rede Social',
+    description: 'Plataforma de rede social com recursos modernos',
+    icon: Users,
+    complexity: 'hard',
+    features: [
+      'Feed de notícias',
+      'Sistema de amizades',
+      'Mensagens privadas',
+      'Grupos e comunidades',
+      'Compartilhamento de mídia',
+      'Sistema de notificações'
+    ]
+  },
+  {
+    id: 'learning-platform',
+    name: 'Plataforma de Ensino',
+    description: 'Sistema completo para cursos online',
+    icon: Brain,
+    complexity: 'hard',
+    features: [
+      'Criação de cursos',
+      'Vídeo aulas',
+      'Exercícios interativos',
+      'Certificados',
+      'Progresso do aluno',
+      'Fórum de discussão'
+    ]
+  },
+  {
+    id: 'music-streaming',
+    name: 'Streaming de Música',
+    description: 'Plataforma de streaming musical',
+    icon: Music,
+    complexity: 'hard',
+    features: [
+      'Biblioteca de músicas',
+      'Playlists personalizadas',
+      'Recomendações IA',
+      'Player avançado',
+      'Modo offline',
+      'Compartilhamento social'
+    ]
+  },
+  {
+    id: 'video-platform',
+    name: 'Plataforma de Vídeos',
+    description: 'Sistema de compartilhamento de vídeos',
+    icon: Video,
+    complexity: 'hard',
+    features: [
+      'Upload de vídeos',
+      'Streaming adaptativo',
+      'Sistema de comentários',
+      'Canais de usuários',
+      'Monetização',
+      'Analytics detalhados'
+    ]
+  },
+  {
+    id: 'blockchain-wallet',
+    name: 'Carteira Blockchain',
+    description: 'Carteira digital para criptomoedas',
+    icon: Wallet,
+    complexity: 'hard',
+    features: [
+      'Múltiplas criptomoedas',
+      'Transações seguras',
+      'Histórico completo',
+      'Exchange integrado',
+      'Staking de tokens',
+      'DeFi integration'
     ]
   },
   {
@@ -790,278 +669,8 @@ export const businessTemplates: ProjectTemplate[] = [
     ]
   },
   {
-    id: 'virtual-assistant-platform',
-    name: 'Plataforma de Assistente Virtual',
-    description: 'Assistentes virtuais personalizáveis',
-    icon: MessageSquare,
-    complexity: 'hard',
-    features: [
-      'IA conversacional',
-      'Integração com sistemas',
-      'Personalização de persona',
-      'Múltiplas linguagens',
-      'Analytics de interação',
-      'API de terceiros'
-    ]
-  },
-  {
-    id: 'predictive-maintenance',
-    name: 'Manutenção Preditiva',
-    description: 'IA para previsão de falhas em equipamentos',
-    icon: Wrench,
-    complexity: 'hard',
-    features: [
-      'Análise preditiva',
-      'Sensores IoT',
-      'Machine learning',
-      'Alertas preventivos',
-      'Otimização de custos',
-      'Relatórios de eficiência'
-    ]
-  },
-  {
-    id: 'robotic-process-automation',
-    name: 'Automação Robótica de Processos',
-    description: 'RPA para automatizar tarefas repetitivas',
-    icon: Robot,
-    complexity: 'hard',
-    features: [
-      'Designer de workflows',
-      'Bots configuráveis',
-      'Integração de sistemas',
-      'Monitoramento de execução',
-      'Escalabilidade automática',
-      'ROI tracking'
-    ]
-  },
-  {
-    id: 'quantum-computing-platform',
-    name: 'Plataforma de Computação Quântica',
-    description: 'Acesso a recursos de computação quântica',
-    icon: Atom,
-    complexity: 'hard',
-    features: [
-      'Simulador quântico',
-      'Algoritmos quânticos',
-      'Acesso a hardware real',
-      'SDK de desenvolvimento',
-      'Otimização quântica',
-      'Análise de resultados'
-    ]
-  },
-  {
-    id: 'neural-network-designer',
-    name: 'Designer de Redes Neurais',
-    description: 'Ferramenta visual para criar redes neurais',
-    icon: Brain,
-    complexity: 'hard',
-    features: [
-      'Editor visual',
-      'Múltiplas arquiteturas',
-      'Treinamento automático',
-      'Visualização de dados',
-      'Deploy em produção',
-      'Monitoramento de modelo'
-    ]
-  },
-  {
-    id: 'edge-ai-platform',
-    name: 'Plataforma de IA Edge',
-    description: 'IA executada em dispositivos locais',
-    icon: Smartphone,
-    complexity: 'hard',
-    features: [
-      'Modelos otimizados',
-      'Deploy em edge',
-      'Inferência local',
-      'Sincronização de modelos',
-      'Telemetria de uso',
-      'Otimização de hardware'
-    ]
-  },
-  {
-    id: 'synthetic-data-generator',
-    name: 'Gerador de Dados Sintéticos',
-    description: 'Criação de dados sintéticos para IA',
-    icon: Database,
-    complexity: 'hard',
-    features: [
-      'Geração de dados',
-      'Preservação de privacidade',
-      'Múltiplos tipos de dados',
-      'Validação estatística',
-      'Exportação de datasets',
-      'Configuração de parâmetros'
-    ]
-  },
-  {
-    id: 'automated-testing-platform',
-    name: 'Plataforma de Testes Automatizados',
-    description: 'Testes automatizados com IA',
-    icon: CheckCircle,
-    complexity: 'hard',
-    features: [
-      'Testes de UI automatizados',
-      'Geração de casos de teste',
-      'Relatórios de cobertura',
-      'Integração CI/CD',
-      'Testes de performance',
-      'Análise de falhas'
-    ]
-  },
-  {
-    id: 'code-review-ai',
-    name: 'Revisão de Código com IA',
-    description: 'IA para análise e revisão de código',
-    icon: Code,
-    complexity: 'hard',
-    features: [
-      'Análise de código',
-      'Detecção de bugs',
-      'Sugestões de melhoria',
-      'Métricas de qualidade',
-      'Integração com Git',
-      'Relatórios de segurança'
-    ]
-  },
-  {
-    id: 'digital-twin-platform',
-    name: 'Plataforma de Gêmeos Digitais',
-    description: 'Criação e gestão de gêmeos digitais',
-    icon: Copy,
-    complexity: 'hard',
-    features: [
-      'Modelagem 3D',
-      'Simulação em tempo real',
-      'Integração com IoT',
-      'Análise preditiva',
-      'Visualização imersiva',
-      'Otimização contínua'
-    ]
-  },
-  {
-    id: 'autonomous-vehicle-fleet',
-    name: 'Frota de Veículos Autônomos',
-    description: 'Gestão de frota de veículos autônomos',
-    icon: Car,
-    complexity: 'hard',
-    features: [
-      'Controle de frota',
-      'Planejamento de rotas',
-      'Manutenção preditiva',
-      'Sistema de segurança',
-      'Otimização de energia',
-      'Compliance regulatório'
-    ]
-  },
-  {
-    id: 'smart-city-management',
-    name: 'Gestão de Cidade Inteligente',
-    description: 'Plataforma integrada para cidades inteligentes',
-    icon: Building,
-    complexity: 'hard',
-    features: [
-      'IoT urbano',
-      'Gestão de tráfego',
-      'Monitoramento ambiental',
-      'Serviços cidadão',
-      'Planejamento urbano',
-      'Dashboard executivo'
-    ]
-  },
-  {
-    id: 'precision-agriculture',
-    name: 'Agricultura de Precisão',
-    description: 'Tecnologia para agricultura inteligente',
-    icon: Tractor,
-    complexity: 'hard',
-    features: [
-      'Monitoramento de culturas',
-      'Drones para mapeamento',
-      'Análise de solo',
-      'Previsão de safra',
-      'Otimização de recursos',
-      'Sustentabilidade'
-    ]
-  },
-  {
-    id: 'renewable-energy-trading',
-    name: 'Trading de Energia Renovável',
-    description: 'Marketplace para energia limpa',
-    icon: Sun,
-    complexity: 'hard',
-    features: [
-      'Trading de energia',
-      'Certificados verdes',
-      'Grid balancing',
-      'Previsão de geração',
-      'Smart contracts',
-      'Analytics de mercado'
-    ]
-  },
-  {
-    id: 'space-technology-platform',
-    name: 'Plataforma de Tecnologia Espacial',
-    description: 'Soluções para a indústria espacial',
-    icon: Rocket,
-    complexity: 'hard',
-    features: [
-      'Missão planning',
-      'Satellite tracking',
-      'Ground station management',
-      'Data processing',
-      'Communication protocols',
-      'Mission analytics'
-    ]
-  },
-  {
-    id: 'biotechnology-lab',
-    name: 'Laboratório de Biotecnologia',
-    description: 'Gestão de laboratório biotecnológico',
-    icon: Microscope,
-    complexity: 'hard',
-    features: [
-      'Gestão de experimentos',
-      'Sequenciamento genético',
-      'Análise de dados',
-      'Compliance regulatório',
-      'Colaboração científica',
-      'Propriedade intelectual'
-    ]
-  },
-  {
-    id: 'nanotechnology-simulator',
-    name: 'Simulador de Nanotecnologia',
-    description: 'Simulação molecular e nanotecnologia',
-    icon: Atom,
-    complexity: 'hard',
-    features: [
-      'Simulação molecular',
-      'Design de nanomateriais',
-      'Análise de propriedades',
-      'Visualização 3D',
-      'Cálculos quânticos',
-      'Publicação de resultados'
-    ]
-  },
-  {
-    id: 'virtual-reality-training',
-    name: 'Treinamento em Realidade Virtual',
-    description: 'Plataforma de treinamento imersivo',
-    icon: Headphones,
-    complexity: 'hard',
-    features: [
-      'Simulações VR',
-      'Cenários personalizáveis',
-      'Avaliação de desempenho',
-      'Multi-usuário',
-      'Analytics de aprendizado',
-      'Certificação digital'
-    ]
-  },
-  {
-    id: 'augmented-reality-commerce',
-    name: 'Comércio em Realidade Aumentada',
+    id: 'ar-shopping',
+    name: 'Shopping com Realidade Aumentada',
     description: 'E-commerce com experiência AR',
     icon: Eye,
     complexity: 'hard',
@@ -1075,123 +684,108 @@ export const businessTemplates: ProjectTemplate[] = [
     ]
   },
   {
-    id: 'holographic-display-platform',
-    name: 'Plataforma de Display Holográfico',
-    description: 'Criação de conteúdo holográfico',
-    icon: Projector,
+    id: 'smart-home',
+    name: 'Casa Inteligente',
+    description: 'Sistema de automação residencial',
+    icon: Home,
     complexity: 'hard',
     features: [
-      'Criação de hologramas',
-      'Renderização 3D',
-      'Controle gestual',
-      'Múltiplas plataformas',
-      'Streaming holográfico',
-      'Colaboração espacial'
-    ]
-  },
-  {
-    id: 'brain-computer-interface',
-    name: 'Interface Cérebro-Computador',
-    description: 'Controle de sistemas via sinais neurais',
-    icon: Brain,
-    complexity: 'hard',
-    features: [
-      'Processamento de sinais EEG',
-      'Machine learning neural',
       'Controle de dispositivos',
-      'Calibração de usuário',
-      'Feedback em tempo real',
-      'Aplicações médicas'
+      'Automação por cenários',
+      'Segurança integrada',
+      'Economia de energia',
+      'Controle por voz',
+      'App mobile'
     ]
   },
   {
-    id: 'robotic-surgery-platform',
-    name: 'Plataforma de Cirurgia Robótica',
-    description: 'Assistência robótica para cirurgias',
-    icon: Activity,
-    complexity: 'hard',
-    features: [
-      'Controle robótico',
-      'Precisão milimétrica',
-      'Feedback háptico',
-      'Visualização 3D',
-      'Planejamento cirúrgico',
-      'Teleoperation'
-    ]
-  },
-  {
-    id: 'personalized-medicine',
-    name: 'Medicina Personalizada',
-    description: 'Tratamentos baseados em genética',
-    icon: Dna,
-    complexity: 'hard',
-    features: [
-      'Análise genômica',
-      'Predição de riscos',
-      'Terapias personalizadas',
-      'Farmacogenômica',
-      'Biomarcadores',
-      'Medicina de precisão'
-    ]
-  },
-  {
-    id: 'telemedicine-ai',
-    name: 'Telemedicina com IA',
-    description: 'Consultas médicas assistidas por IA',
+    id: 'telemedicine',
+    name: 'Telemedicina',
+    description: 'Plataforma para consultas médicas online',
     icon: Stethoscope,
     complexity: 'hard',
     features: [
-      'Diagnóstico assistido',
-      'Análise de imagens médicas',
-      'Triagem automática',
-      'Prescrição inteligente',
-      'Monitoramento remoto',
-      'Interoperabilidade'
+      'Consultas por vídeo',
+      'Prontuário eletrônico',
+      'Prescrição digital',
+      'Agendamento online',
+      'Histórico médico',
+      'Integração com laboratórios'
     ]
   },
   {
-    id: 'wearable-health-platform',
-    name: 'Plataforma de Wearables de Saúde',
-    description: 'Ecossistema de dispositivos de saúde',
-    icon: Watch,
+    id: 'fintech-app',
+    name: 'Aplicativo Fintech',
+    description: 'Solução financeira digital completa',
+    icon: DollarSign,
     complexity: 'hard',
     features: [
-      'Múltiplos wearables',
-      'Monitoramento contínuo',
-      'Alertas de saúde',
-      'Integração médica',
-      'Analytics preditivos',
-      'Compliance HIPAA'
+      'Conta digital',
+      'Cartão virtual',
+      'Investimentos',
+      'Empréstimos',
+      'Cashback',
+      'Open Banking'
     ]
   },
   {
-    id: 'mental-health-ai',
-    name: 'IA para Saúde Mental',
-    description: 'Assistente de IA para bem-estar mental',
-    icon: Brain,
-    complexity: 'hard',
+    id: 'carbon-tracker',
+    name: 'Rastreador de Pegada de Carbono',
+    description: 'Monitor de sustentabilidade pessoal',
+    icon: LeafIcon,
+    complexity: 'medium',
     features: [
-      'Análise de humor',
-      'Terapia cognitiva digital',
-      'Detecção de crises',
-      'Exercícios personalizados',
-      'Monitoramento de progresso',
-      'Integração com terapeutas'
+      'Cálculo de pegada de carbono',
+      'Dicas de sustentabilidade',
+      'Metas ambientais',
+      'Offset de carbono',
+      'Comparação social',
+      'Certificados verdes'
     ]
   },
   {
-    id: 'pharmaceutical-research',
-    name: 'Pesquisa Farmacêutica',
-    description: 'Plataforma para desenvolvimento de medicamentos',
-    icon: Pill,
+    id: 'legal-tech',
+    name: 'Plataforma Jurídica Tech',
+    description: 'Automação de serviços jurídicos',
+    icon: Scale,
     complexity: 'hard',
     features: [
-      'Drug discovery',
-      'Ensaios clínicos',
-      'Análise molecular',
-      'Regulatory compliance',
-      'Colaboração científica',
-      'IP management'
+      'Contratos automatizados',
+      'Consultas jurídicas online',
+      'Gestão de processos',
+      'IA para análise legal',
+      'Assinatura digital',
+      'Compliance automático'
+    ]
+  },
+  {
+    id: 'quantum-simulator',
+    name: 'Simulador Quântico',
+    description: 'Plataforma de computação quântica simulada',
+    icon: Atom,
+    complexity: 'hard',
+    features: [
+      'Algoritmos quânticos',
+      'Simulação de circuitos',
+      'Visualização quântica',
+      'SDK de desenvolvimento',
+      'Otimização quântica',
+      'Análise de resultados'
+    ]
+  },
+  {
+    id: 'space-mission',
+    name: 'Controle de Missão Espacial',
+    description: 'Sistema de controle para missões espaciais',
+    icon: Rocket,
+    complexity: 'hard',
+    features: [
+      'Telemetria em tempo real',
+      'Controle de trajetória',
+      'Comunicação satelital',
+      'Planejamento de missão',
+      'Análise de dados',
+      'Simulação orbital'
     ]
   }
 ];
