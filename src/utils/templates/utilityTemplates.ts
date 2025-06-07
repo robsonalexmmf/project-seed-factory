@@ -1,3 +1,4 @@
+
 import { 
   CheckCircle, 
   Calculator, 
@@ -41,7 +42,6 @@ import {
   Bell, 
   Clock, 
   Timer, 
-  Stopwatch, 
   Target, 
   TrendingUp, 
   Activity, 
@@ -85,7 +85,6 @@ import {
   Brain, 
   Wrench, 
   Hammer, 
-  Screwdriver, 
   Paintbrush, 
   Ruler, 
   Scissors, 
@@ -109,7 +108,6 @@ import {
   MousePointer, 
   Keyboard, 
   Printer, 
-  Scanner, 
   Webcam, 
   Headphones, 
   Speaker, 
@@ -125,8 +123,8 @@ import {
   EyeOff, 
   RotateCcw, 
   RefreshCw, 
-  MaximizeIcon as Maximize, 
-  MinimizeIcon as Minimize, 
+  Maximize, 
+  Minimize, 
   ZoomIn, 
   ZoomOut, 
   Focus, 
@@ -135,18 +133,11 @@ import {
   Move, 
   Crop, 
   Filter, 
-  Adjust, 
   Contrast, 
-  Sun as Brightness, 
-  DropletIcon as Saturation, 
-  Spline, 
-  Bezier, 
   Pen, 
   Eraser, 
   Brush, 
-  SprayCanIcon as SprayCan, 
   PaintBucket, 
-  Eyedropper, 
   Type, 
   AlignLeft, 
   AlignCenter, 
@@ -161,7 +152,6 @@ import {
   Triangle, 
   Diamond, 
   Hexagon, 
-  Star as StarShape, 
   Plus, 
   Minus, 
   X, 
@@ -181,14 +171,8 @@ import {
   MoreHorizontal, 
   MoreVertical, 
   Menu, 
-  Search as SearchIcon, 
   Info, 
   HelpCircle, 
-  QuestionMarkCircleIcon as Question, 
-  ExclamationTriangleIcon as Warning, 
-  XCircleIcon as Error, 
-  CheckCircleIcon as Success, 
-  InformationCircleIcon as InfoCircle, 
   Cog, 
   Sliders, 
   ToggleLeft, 
@@ -204,7 +188,6 @@ import {
   AtSign, 
   Link, 
   ExternalLink, 
-  LinkIcon, 
   Share, 
   Share2, 
   Repeat2, 
@@ -215,13 +198,7 @@ import {
   PieChart, 
   AreaChart, 
   ScatterChart, 
-  TrendingUp as Trend, 
   Eye, 
-  EyeOff as Hide, 
-  Visible, 
-  Invisible, 
-  Download as DownloadIcon, 
-  Upload as UploadIcon, 
   CloudDownload, 
   CloudUpload, 
   HardDriveDownload, 
@@ -231,18 +208,12 @@ import {
   FileDown, 
   FileUp, 
   Import, 
-  Export, 
   Inbox, 
-  Outbox, 
   Send, 
-  Sent, 
   Reply, 
   ReplyAll, 
   Forward, 
-  Archive, 
   Trash2, 
-  Delete, 
-  Restore, 
   RefreshCcw, 
   Undo, 
   Redo, 
@@ -259,10 +230,8 @@ import {
   Sunset, 
   CloudSun, 
   CloudMoon, 
-  Tornado, 
   Snowflake, 
   CloudSnow, 
-  CloudRain as Rain, 
   CloudLightning, 
   Rainbow, 
   Mountain, 
@@ -270,11 +239,9 @@ import {
   Trees, 
   Sprout, 
   Flower2, 
-  Bug as BugIcon, 
   Butterfly, 
   Worm, 
   Bird, 
-  Fish as FishIcon, 
   Rabbit, 
   Squirrel, 
   Footprints, 
@@ -283,8 +250,6 @@ import {
   Cherry, 
   Grape, 
   Banana, 
-  Orange, 
-  Strawberry, 
   Carrot, 
   Corn, 
   Egg, 
@@ -309,7 +274,6 @@ import {
   UserRound, 
   UserSquare, 
   Contact, 
-  Contacts, 
   IdCard, 
   Badge, 
   ShieldCheck, 
@@ -322,11 +286,8 @@ import {
   NotepadText, 
   StickyNote, 
   Paperclip, 
-  Pushpin, 
-  Stapler, 
   Clip, 
   Unlink, 
-  ChainIcon as Chain, 
   Anchor, 
   Magnet, 
   Atom, 
@@ -337,18 +298,38 @@ import {
   Syringe, 
   Bandage, 
   Stethoscope, 
-  Thermometer as Temperature, 
   HeartPulse, 
-  Lightbulb as Light, 
-  Flashlight as Torch, 
-  Candle, 
-  Fire, 
   Flame, 
-  Spark, 
   Earth, 
   Satellite, 
   Rocket, 
-  Ufo 
+  BookOpen,
+  Smile,
+  ShoppingBag,
+  Droplets,
+  Terminal,
+  GitBranch,
+  Layers as LayersIcon,
+  Bot,
+  Cpu,
+  HardDriveIcon,
+  Workflow,
+  Boxes,
+  Users2,
+  Briefcase,
+  GraduationCap,
+  Scale,
+  AlertTriangle,
+  XCircle,
+  CheckCircle2,
+  Loader2,
+  Crown,
+  Shield as ShieldIcon,
+  TrendingUp as TrendingUpIcon,
+  BarChart2,
+  PieChart as PieChartIcon,
+  Activity as ActivityIcon,
+  Zap as ZapIcon
 } from 'lucide-react';
 
 import { ProjectTemplate } from '../projectTemplates';
@@ -530,22 +511,22 @@ export const utilityTemplates: ProjectTemplate[] = [
       'Anotações em tempo real',
       'Múltiplas resoluções',
       'Edição básica',
-      'Compartilhamento direto'
+      'Upload para nuvem'
     ]
   },
   {
-    id: 'expense-tracker',
-    name: 'Controle de Gastos',
-    description: 'Gerencie suas finanças pessoais de forma inteligente',
-    icon: BarChart,
+    id: 'productivity-tracker',
+    name: 'Monitor de Produtividade',
+    description: 'Acompanhe e melhore sua produtividade',
+    icon: TrendingUpIcon,
     complexity: 'medium',
     features: [
-      'Registro de receitas e despesas',
-      'Categorização automática',
-      'Relatórios visuais',
-      'Metas de economia',
-      'Lembretes de pagamento',
-      'Exportação de dados'
+      'Rastreamento de tempo',
+      'Análise de atividades',
+      'Metas diárias',
+      'Relatórios detalhados',
+      'Bloqueio de distrações',
+      'Gamificação'
     ]
   },
   {
@@ -553,674 +534,374 @@ export const utilityTemplates: ProjectTemplate[] = [
     name: 'Rastreador de Hábitos',
     description: 'Construa e mantenha hábitos saudáveis',
     icon: Target,
-    complexity: 'medium',
+    complexity: 'easy',
     features: [
       'Múltiplos hábitos',
-      'Streak tracking',
-      'Estatísticas visuais',
-      'Lembretes personalizáveis',
-      'Metas mensais',
-      'Análise de progresso'
+      'Streaks e estatísticas',
+      'Lembretes personalizados',
+      'Visualização de progresso',
+      'Desafios mensais',
+      'Recompensas virtuais'
+    ]
+  },
+  {
+    id: 'budget-planner',
+    name: 'Planejador de Orçamento',
+    description: 'Gerencie suas finanças pessoais',
+    icon: DollarSign,
+    complexity: 'medium',
+    features: [
+      'Orçamento mensal',
+      'Categorização de gastos',
+      'Metas de economia',
+      'Relatórios financeiros',
+      'Alertas de gastos',
+      'Sincronização bancária'
     ]
   },
   {
     id: 'bookmark-manager',
     name: 'Gerenciador de Favoritos',
-    description: 'Organize seus links favoritos da web',
+    description: 'Organize seus links e favoritos',
     icon: Bookmark,
-    complexity: 'medium',
+    complexity: 'easy',
     features: [
-      'Organização por pastas',
+      'Organização por categorias',
       'Tags personalizadas',
       'Busca rápida',
+      'Sincronização multi-device',
       'Importação de navegadores',
-      'Sincronização na nuvem',
       'Compartilhamento de coleções'
     ]
   },
   {
-    id: 'pomodoro-timer',
-    name: 'Timer Pomodoro',
-    description: 'Melhore sua produtividade com a técnica Pomodoro',
-    icon: Timer,
+    id: 'recipe-organizer',
+    name: 'Organizador de Receitas',
+    description: 'Gerencie e descubra receitas culinárias',
+    icon: ChefHat,
+    complexity: 'medium',
+    features: [
+      'Biblioteca de receitas',
+      'Lista de compras automática',
+      'Timer de cozinha',
+      'Planejamento de refeições',
+      'Cálculo nutricional',
+      'Compartilhamento social'
+    ]
+  },
+  {
+    id: 'password-generator',
+    name: 'Gerador de Senhas',
+    description: 'Gere senhas seguras e personalizadas',
+    icon: Key,
     complexity: 'easy',
     features: [
-      'Ciclos Pomodoro',
-      'Pausas automáticas',
-      'Estatísticas de produtividade',
-      'Sons personalizáveis',
-      'Tarefas integradas',
-      'Relatórios semanais'
+      'Múltiplas opções de complexidade',
+      'Senhas pronunciáveis',
+      'Verificação de força',
+      'Histórico de senhas',
+      'Cópia automática',
+      'Verificação de vazamentos'
     ]
   },
   {
     id: 'text-editor',
     name: 'Editor de Texto',
-    description: 'Editor de texto simples e eficiente',
+    description: 'Editor de texto com recursos avançados',
     icon: Edit,
     complexity: 'medium',
     features: [
-      'Edição de texto',
       'Sintaxe highlighting',
       'Múltiplas abas',
       'Busca e substituição',
-      'Contagem de palavras',
-      'Múltiplos formatos'
+      'Plugins e extensões',
+      'Modo escuro',
+      'Colaboração em tempo real'
     ]
   },
   {
     id: 'url-shortener',
     name: 'Encurtador de URLs',
-    description: 'Encurtie e gerencie seus links',
+    description: 'Encurte e gerencie seus links',
     icon: Link,
-    complexity: 'medium',
-    features: [
-      'Encurtamento de URLs',
-      'URLs personalizadas',
-      'Estatísticas de cliques',
-      'QR codes automáticos',
-      'Data de expiração',
-      'Proteção por senha'
-    ]
-  },
-  {
-    id: 'random-generator',
-    name: 'Gerador Aleatório',
-    description: 'Gere números, senhas e dados aleatórios',
-    icon: ShuffleIcon,
     complexity: 'easy',
     features: [
-      'Números aleatórios',
-      'Senhas seguras',
-      'Cores aleatórias',
-      'Decisões sim/não',
-      'Sorteio de listas',
-      'UUID generator'
-    ]
-  },
-  {
-    id: 'markdown-editor',
-    name: 'Editor Markdown',
-    description: 'Editor Markdown com pré-visualização em tempo real',
-    icon: FileText,
-    complexity: 'medium',
-    features: [
-      'Edição Markdown',
-      'Pré-visualização ao vivo',
-      'Exportação HTML/PDF',
-      'Tabelas e gráficos',
-      'Matemática LaTeX',
-      'Temas personalizáveis'
+      'URLs personalizadas',
+      'Analytics de cliques',
+      'QR codes automáticos',
+      'Expiração de links',
+      'Proteção por senha',
+      'Bulk shortening'
     ]
   },
   {
     id: 'clipboard-manager',
     name: 'Gerenciador de Área de Transferência',
-    description: 'Gerencie seu histórico de área de transferência',
+    description: 'Histórico e gestão da área de transferência',
     icon: Copy,
+    complexity: 'easy',
+    features: [
+      'Histórico completo',
+      'Busca no histórico',
+      'Favoritos fixos',
+      'Snippets reutilizáveis',
+      'Sincronização multi-device',
+      'Formatação automática'
+    ]
+  },
+  {
+    id: 'pomodoro-timer',
+    name: 'Timer Pomodoro',
+    description: 'Técnica Pomodoro para produtividade',
+    icon: Timer,
+    complexity: 'easy',
+    features: [
+      'Ciclos personalizáveis',
+      'Sons de notificação',
+      'Estatísticas de sessões',
+      'Lista de tarefas integrada',
+      'Bloqueio de distrações',
+      'Relatórios semanais'
+    ]
+  },
+  {
+    id: 'markdown-editor',
+    name: 'Editor Markdown',
+    description: 'Editor de Markdown com preview em tempo real',
+    icon: FileText,
     complexity: 'medium',
     features: [
-      'Histórico de clipboard',
-      'Busca em itens copiados',
-      'Favoritos persistentes',
-      'Sincronização entre dispositivos',
-      'Filtros por tipo',
-      'Limpeza automática'
+      'Preview em tempo real',
+      'Sintaxe highlighting',
+      'Exportação para HTML/PDF',
+      'Tabelas e diagramas',
+      'Math expressions',
+      'Temas personalizáveis'
     ]
   },
   {
     id: 'system-monitor',
     name: 'Monitor do Sistema',
     description: 'Monitore o desempenho do seu sistema',
-    icon: Activity,
+    icon: ActivityIcon,
     complexity: 'hard',
     features: [
-      'Uso de CPU e RAM',
-      'Monitoramento de rede',
-      'Temperatura do sistema',
+      'CPU e memória',
       'Processos ativos',
-      'Histórico de performance',
-      'Alertas de recursos'
-    ]
-  },
-  {
-    id: 'recipe-app',
-    name: 'Livro de Receitas',
-    description: 'Aplicativo para descobrir e compartilhar receitas culinárias',
-    icon: ChefHat,
-    complexity: 'easy',
-    features: [
-      'Catálogo de receitas',
-      'Busca por ingredientes',
-      'Lista de compras automática',
-      'Avaliações e comentários',
-      'Modo passo-a-passo',
-      'Favoritos pessoais'
-    ]
-  },
-  {
-    id: 'music-player',
-    name: 'Player de Música',
-    description: 'Reprodutor de música com recursos avançados',
-    icon: Music,
-    complexity: 'hard',
-    features: [
-      'Reprodução de áudio',
-      'Playlists personalizadas',
-      'Equalizador',
-      'Visualizações',
-      'Letras sincronizadas',
-      'Biblioteca organizada'
-    ]
-  },
-  {
-    id: 'photo-gallery',
-    name: 'Galeria de Fotos',
-    description: 'Organize e visualize suas fotos',
-    icon: Camera,
-    complexity: 'medium',
-    features: [
-      'Visualização de imagens',
-      'Organização por álbuns',
-      'Slideshow automático',
-      'Edição básica',
-      'Busca por metadados',
-      'Compartilhamento social'
-    ]
-  },
-  {
-    id: 'map-navigator',
-    name: 'Navegador de Mapas',
-    description: 'Navegação GPS com mapas offline',
-    icon: Map,
-    complexity: 'hard',
-    features: [
-      'Navegação GPS',
-      'Mapas offline',
-      'Pontos de interesse',
-      'Cálculo de rotas',
-      'Tráfego em tempo real',
-      'Favoritos e histórico'
-    ]
-  },
-  {
-    id: 'drawing-app',
-    name: 'Aplicativo de Desenho',
-    description: 'Crie desenhos e ilustrações digitais',
-    icon: Brush,
-    complexity: 'hard',
-    features: [
-      'Ferramentas de desenho',
-      'Camadas múltiplas',
-      'Pincéis personalizáveis',
-      'Paleta de cores',
-      'Exportação de imagens',
-      'Controle de pressão'
-    ]
-  },
-  {
-    id: 'language-translator',
-    name: 'Tradutor de Idiomas',
-    description: 'Traduza textos entre diferentes idiomas',
-    icon: Globe,
-    complexity: 'medium',
-    features: [
-      'Tradução de texto',
-      'Múltiplos idiomas',
-      'Detecção automática',
-      'Histórico de traduções',
-      'Tradução por voz',
-      'Favoritos e frasebook'
-    ]
-  },
-  {
-    id: 'flashcards-app',
-    name: 'Cartões de Estudo',
-    description: 'Sistema de repetição espaçada para estudos',
-    icon: BookOpen,
-    complexity: 'medium',
-    features: [
-      'Criação de flashcards',
-      'Algoritmo de repetição',
-      'Múltiplos baralhos',
-      'Estatísticas de estudo',
-      'Compartilhamento de decks',
-      'Modo offline'
+      'Uso de disco',
+      'Rede e bandwidth',
+      'Temperatura do sistema',
+      'Histórico de performance'
     ]
   },
   {
     id: 'wifi-analyzer',
-    name: 'Analisador WiFi',
-    description: 'Analise e otimize sua rede WiFi',
+    name: 'Analisador Wi-Fi',
+    description: 'Analise e otimize sua rede Wi-Fi',
     icon: Wifi,
     complexity: 'medium',
     features: [
-      'Escaneamento de redes',
-      'Análise de sinal',
-      'Canais recomendados',
+      'Scan de redes próximas',
+      'Força do sinal',
+      'Canais menos congestionados',
       'Teste de velocidade',
       'Histórico de conexões',
-      'Mapa de cobertura'
+      'Relatórios de qualidade'
     ]
   },
   {
-    id: 'battery-monitor',
-    name: 'Monitor de Bateria',
-    description: 'Monitore a saúde da bateria do dispositivo',
-    icon: Battery,
+    id: 'backup-utility',
+    name: 'Utilitário de Backup',
+    description: 'Faça backup de seus dados importantes',
+    icon: Archive,
     complexity: 'medium',
     features: [
-      'Status da bateria',
-      'Histórico de carregamento',
-      'Saúde da bateria',
-      'Tempo estimado',
-      'Alertas de bateria baixa',
-      'Dicas de economia'
+      'Backup automático',
+      'Múltiplos destinos',
+      'Compressão inteligente',
+      'Versionamento de arquivos',
+      'Restauração seletiva',
+      'Agendamento flexível'
     ]
   },
   {
-    id: 'barcode-scanner',
-    name: 'Leitor de Código de Barras',
-    description: 'Escaneie códigos de barras e QR codes',
-    icon: Barcode,
-    complexity: 'medium',
-    features: [
-      'Scanner de códigos',
-      'Múltiplos formatos',
-      'Histórico de scans',
-      'Busca de produtos',
-      'Comparação de preços',
-      'Criação de códigos'
-    ]
-  },
-  {
-    id: 'voice-recorder',
-    name: 'Gravador de Voz',
-    description: 'Grave e organize suas gravações de áudio',
-    icon: Mic,
-    complexity: 'medium',
-    features: [
-      'Gravação de alta qualidade',
-      'Edição básica de áudio',
-      'Organização por pastas',
-      'Compartilhamento rápido',
-      'Transcrição automática',
-      'Controle de ruído'
-    ]
-  },
-  {
-    id: 'compass-app',
-    name: 'Bússola Digital',
-    description: 'Bússola digital com recursos de navegação',
-    icon: Compass,
+    id: 'disk-cleaner',
+    name: 'Limpador de Disco',
+    description: 'Libere espaço no seu disco rígido',
+    icon: HardDrive,
     complexity: 'easy',
     features: [
-      'Bússola magnética',
-      'Coordenadas GPS',
-      'Direção do sol',
-      'Inclinômetro',
-      'Calibração automática',
-      'Modo noturno'
+      'Análise de uso de disco',
+      'Limpeza de arquivos temporários',
+      'Duplicatas automáticas',
+      'Cache de aplicativos',
+      'Logs antigos',
+      'Relatórios de limpeza'
     ]
   },
   {
-    id: 'flashlight-app',
-    name: 'Lanterna',
-    description: 'Lanterna simples e eficiente',
-    icon: Flashlight,
-    complexity: 'easy',
-    features: [
-      'Luz LED brilhante',
-      'Controle de intensidade',
-      'Modo estroboscópico',
-      'SOS em morse',
-      'Timer automático',
-      'Widget de tela inicial'
-    ]
-  },
-  {
-    id: 'level-app',
-    name: 'Nível Digital',
-    description: 'Ferramenta de nivelamento digital',
-    icon: Ruler,
-    complexity: 'easy',
-    features: [
-      'Nível de bolha',
-      'Múltiplas orientações',
-      'Calibração manual',
-      'Precisão em graus',
-      'Som de alerta',
-      'Modo de superfície'
-    ]
-  },
-  {
-    id: 'tuner-app',
-    name: 'Afinador de Instrumentos',
-    description: 'Afine seus instrumentos musicais',
-    icon: Music,
-    complexity: 'medium',
-    features: [
-      'Afinação cromática',
-      'Múltiplos instrumentos',
-      'Indicador visual preciso',
-      'Calibração de frequência',
-      'Modo automático',
-      'Histórico de afinações'
-    ]
-  },
-  {
-    id: 'decibel-meter',
-    name: 'Medidor de Decibéis',
-    description: 'Meça o nível de ruído ambiente',
-    icon: Volume2,
-    complexity: 'medium',
-    features: [
-      'Medição de decibéis',
-      'Gráfico em tempo real',
-      'Histórico de medições',
-      'Alertas de ruído',
-      'Calibração do microfone',
-      'Exportação de dados'
-    ]
-  },
-  {
-    id: 'mind-map',
-    name: 'Mapa Mental',
-    description: 'Crie mapas mentais e diagramas',
-    icon: Brain,
-    complexity: 'hard',
-    features: [
-      'Criação de mapas mentais',
-      'Múltiplas formas',
-      'Cores e estilos',
-      'Exportação de imagens',
-      'Colaboração em tempo real',
-      'Templates prontos'
-    ]
-  },
-  {
-    id: 'whiteboard-app',
-    name: 'Quadro Branco Digital',
-    description: 'Quadro branco para brainstorming e apresentações',
-    icon: Edit,
-    complexity: 'hard',
-    features: [
-      'Desenho livre',
-      'Formas geométricas',
-      'Texto e anotações',
-      'Múltiplas páginas',
-      'Colaboração em tempo real',
-      'Exportação de projetos'
-    ]
-  },
-  {
-    id: 'dictionary-app',
-    name: 'Dicionário Digital',
-    description: 'Dicionário completo com definições e sinônimos',
-    icon: Book,
-    complexity: 'medium',
-    features: [
-      'Busca de palavras',
-      'Definições completas',
-      'Sinônimos e antônimos',
-      'Pronúncia em áudio',
-      'Histórico de buscas',
-      'Palavras favoritas'
-    ]
-  },
-  {
-    id: 'calendar-planner',
-    name: 'Planejador de Calendário',
-    description: 'Organize sua agenda e compromissos',
-    icon: Calendar,
-    complexity: 'medium',
-    features: [
-      'Calendário mensal/semanal',
-      'Criação de eventos',
-      'Lembretes e notificações',
-      'Categorias coloridas',
-      'Sincronização com outros calendários',
-      'Visualizações personalizadas'
-    ]
-  },
-  {
-    id: 'world-clock',
-    name: 'Relógio Mundial',
-    description: 'Veja horários de diferentes fusos horários',
+    id: 'network-scanner',
+    name: 'Scanner de Rede',
+    description: 'Descubra dispositivos na sua rede',
     icon: Globe,
-    complexity: 'easy',
+    complexity: 'medium',
     features: [
-      'Múltiplos fusos horários',
-      'Busca por cidade',
-      'Conversão de horários',
-      'Widget de tela inicial',
-      'Modo escuro/claro',
-      'Alertas de reunião'
+      'Scan de dispositivos',
+      'Portas abertas',
+      'Informações de sistema',
+      'Wake-on-LAN',
+      'Ping e traceroute',
+      'Monitoramento contínuo'
     ]
   },
   {
-    id: 'contacts-manager',
-    name: 'Gerenciador de Contatos',
-    description: 'Organize e gerencie seus contatos',
-    icon: Users,
+    id: 'startup-manager',
+    name: 'Gerenciador de Inicialização',
+    description: 'Controle programas que iniciam com o sistema',
+    icon: Rocket,
+    complexity: 'easy',
+    features: [
+      'Lista de programas de inicialização',
+      'Habilitar/desabilitar itens',
+      'Impacto na inicialização',
+      'Backup de configurações',
+      'Recomendações inteligentes',
+      'Tempo de boot'
+    ]
+  },
+  {
+    id: 'registry-cleaner',
+    name: 'Limpador de Registro',
+    description: 'Otimize o registro do Windows',
+    icon: Settings,
     complexity: 'medium',
     features: [
-      'Lista de contatos',
-      'Grupos e categorias',
+      'Scan de problemas',
+      'Backup automático',
+      'Limpeza segura',
+      'Otimização de performance',
+      'Agendamento automático',
+      'Relatórios detalhados'
+    ]
+  },
+  {
+    id: 'font-manager',
+    name: 'Gerenciador de Fontes',
+    description: 'Organize e gerencie suas fontes',
+    icon: Type,
+    complexity: 'easy',
+    features: [
+      'Preview de fontes',
+      'Organização por categorias',
+      'Ativação/desativação',
+      'Comparação de fontes',
       'Busca avançada',
-      'Backup e sincronização',
-      'Integração com redes sociais',
-      'Histórico de comunicação'
+      'Exportação de coleções'
     ]
   },
   {
-    id: 'budget-tracker',
-    name: 'Controle Orçamentário',
-    description: 'Gerencie seu orçamento pessoal',
-    icon: DollarSign,
+    id: 'screen-capture',
+    name: 'Captura de Tela',
+    description: 'Capture e edite screenshots',
+    icon: Camera,
     complexity: 'medium',
     features: [
-      'Planejamento orçamentário',
-      'Categorias de gastos',
-      'Metas financeiras',
-      'Relatórios mensais',
-      'Alertas de limites',
-      'Análise de tendências'
+      'Captura de área selecionada',
+      'Captura de janela',
+      'Anotações e setas',
+      'Upload automático',
+      'Histórico de capturas',
+      'Múltiplos formatos'
     ]
   },
   {
-    id: 'meditation-app',
-    name: 'Aplicativo de Meditação',
-    description: 'Pratique meditação e mindfulness',
-    icon: Heart,
-    complexity: 'medium',
+    id: 'api-tester',
+    name: 'Testador de API',
+    description: 'Teste e documente APIs REST',
+    icon: Code,
+    complexity: 'hard',
     features: [
-      'Sessões guiadas',
-      'Timer de meditação',
-      'Sons relaxantes',
-      'Progresso de prática',
-      'Múltiplas técnicas',
-      'Lembretes diários'
+      'Múltiplos métodos HTTP',
+      'Headers customizados',
+      'Autenticação integrada',
+      'Histórico de requisições',
+      'Documentação automática',
+      'Testes automatizados'
     ]
   },
   {
-    id: 'plant-care',
-    name: 'Cuidado de Plantas',
-    description: 'Cuide melhor das suas plantas',
-    icon: Sprout,
-    complexity: 'medium',
-    features: [
-      'Identificação de plantas',
-      'Cronograma de rega',
-      'Diário de cuidados',
-      'Dicas de jardinagem',
-      'Lembretes de fertilização',
-      'Galeria de plantas'
-    ]
-  },
-  {
-    id: 'sleep-tracker',
-    name: 'Rastreador de Sono',
-    description: 'Monitore e melhore sua qualidade de sono',
-    icon: Moon,
-    complexity: 'medium',
-    features: [
-      'Monitoramento de sono',
-      'Despertador inteligente',
-      'Análise de padrões',
-      'Sons para dormir',
-      'Histórico de sono',
-      'Dicas para melhor sono'
-    ]
-  },
-  {
-    id: 'water-reminder',
-    name: 'Lembrete de Hidratação',
-    description: 'Mantenha-se hidratado durante o dia',
-    icon: Droplets,
+    id: 'json-formatter',
+    name: 'Formatador JSON',
+    description: 'Formate e valide documentos JSON',
+    icon: Code,
     complexity: 'easy',
     features: [
-      'Lembretes personalizáveis',
-      'Registro de consumo',
-      'Metas diárias',
-      'Estatísticas de hidratação',
-      'Diferentes tipos de bebidas',
-      'Widgets úteis'
+      'Formatação automática',
+      'Validação de sintaxe',
+      'Minificação',
+      'Conversão para outros formatos',
+      'Busca em objetos',
+      'Comparação de JSONs'
     ]
   },
   {
-    id: 'mood-tracker',
-    name: 'Rastreador de Humor',
-    description: 'Registre e analise seu humor diário',
-    icon: Smile,
+    id: 'regex-tester',
+    name: 'Testador de Regex',
+    description: 'Teste e construa expressões regulares',
+    icon: Search,
     complexity: 'medium',
     features: [
-      'Registro diário de humor',
-      'Fatores influenciadores',
-      'Gráficos de tendências',
-      'Notas pessoais',
-      'Lembretes de check-in',
-      'Exportação de dados'
+      'Teste em tempo real',
+      'Explicação da regex',
+      'Biblioteca de padrões',
+      'Múltiplas linguagens',
+      'Casos de teste',
+      'Gerador automático'
     ]
   },
   {
-    id: 'workout-tracker',
-    name: 'Rastreador de Exercícios',
-    description: 'Acompanhe seus treinos e progresso',
-    icon: Activity,
-    complexity: 'medium',
-    features: [
-      'Registro de exercícios',
-      'Cronômetro de treino',
-      'Histórico de workouts',
-      'Múltiplas modalidades',
-      'Gráficos de progresso',
-      'Planos de treino'
-    ]
-  },
-  {
-    id: 'diary-app',
-    name: 'Diário Digital',
-    description: 'Mantenha um diário pessoal seguro',
-    icon: Book,
-    complexity: 'medium',
-    features: [
-      'Entradas de diário',
-      'Busca por data/conteúdo',
-      'Anexos de mídia',
-      'Backup criptografado',
-      'Múltiplos temas',
-      'Proteção por senha'
-    ]
-  },
-  {
-    id: 'shopping-list',
-    name: 'Lista de Compras',
-    description: 'Organize suas compras de forma inteligente',
-    icon: ShoppingBag,
+    id: 'hash-generator',
+    name: 'Gerador de Hash',
+    description: 'Gere hashes criptográficos',
+    icon: Hash,
     complexity: 'easy',
     features: [
-      'Criação de listas',
-      'Categorização de itens',
-      'Compartilhamento familiar',
-      'Histórico de compras',
-      'Sugestões inteligentes',
-      'Modo offline'
+      'Múltiplos algoritmos',
+      'Hash de arquivos',
+      'Verificação de integridade',
+      'Comparação de hashes',
+      'Batch processing',
+      'Histórico de cálculos'
     ]
   },
   {
-    id: 'meal-planner',
-    name: 'Planejador de Refeições',
-    description: 'Planeje suas refeições semanais',
-    icon: UtensilsCrossed,
-    complexity: 'medium',
+    id: 'base64-converter',
+    name: 'Conversor Base64',
+    description: 'Codifique e decodifique Base64',
+    icon: Code,
+    complexity: 'easy',
     features: [
-      'Planejamento semanal',
-      'Banco de receitas',
-      'Lista de compras automática',
-      'Cálculo nutricional',
-      'Restrições alimentares',
-      'Histórico de refeições'
+      'Codificação/decodificação',
+      'Suporte a arquivos',
+      'URL encoding',
+      'Múltiplos formatos',
+      'Validação automática',
+      'Batch conversion'
     ]
   },
   {
-    id: 'zoom-meeting-clone',
-    name: 'Clone do Zoom',
-    description: 'Plataforma de videoconferência completa',
-    icon: Video,
-    complexity: 'hard',
+    id: 'lorem-generator',
+    name: 'Gerador Lorem Ipsum',
+    description: 'Gere texto placeholder Lorem Ipsum',
+    icon: Type,
+    complexity: 'easy',
     features: [
-      'Salas de reunião',
-      'Compartilhamento de tela',
-      'Chat integrado',
-      'Gravação de reuniões',
-      'Controle de participantes',
-      'Integração com calendário'
-    ]
-  },
-  {
-    id: 'space-weather-app',
-    name: 'App de Clima Espacial',
-    description: 'Monitore atividade solar e condições espaciais',
-    icon: Sun,
-    complexity: 'hard',
-    features: [
-      'Atividade solar',
-      'Tempestades magnéticas',
-      'Alertas de radiação',
-      'Previsões espaciais',
-      'Dados de satélites',
-      'Visualizações em 3D'
-    ]
-  },
-  {
-    id: 'quantum-simulator',
-    name: 'Simulador Quântico',
-    description: 'Simule circuitos e algoritmos quânticos',
-    icon: Atom,
-    complexity: 'hard',
-    features: [
-      'Criação de circuitos',
-      'Simulação quântica',
-      'Algoritmos clássicos',
-      'Visualização de estados',
-      'Medições quânticas',
-      'Export de resultados'
-    ]
-  },
-  {
-    id: 'alien-research',
-    name: 'Pesquisa de Vida Extraterrestre',
-    description: 'Analise dados de SETI e exoplanetas',
-    icon: Satellite,
-    complexity: 'hard',
-    features: [
-      'Análise de sinais',
-      'Base de exoplanetas',
-      'Algoritmos de detecção',
-      'Visualização de dados',
-      'Relatórios científicos',
-      'Colaboração global'
+      'Múltiplos tipos de texto',
+      'Controle de quantidade',
+      'Formatos diferentes',
+      'Idiomas alternativos',
+      'Cópia automática',
+      'Templates personalizados'
     ]
   }
 ];

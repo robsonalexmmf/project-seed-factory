@@ -1,3 +1,4 @@
+
 import { 
   ShoppingCart, 
   Store, 
@@ -16,7 +17,6 @@ import {
   Code,
   Settings,
   Zap,
-  Bot,
   Activity,
   Shield,
   CheckCircle,
@@ -102,7 +102,6 @@ import {
   VolumeX,
   Play,
   Pause,
-  Stop,
   Rewind,
   FastForward,
   SkipBack,
@@ -141,9 +140,7 @@ import {
   Bike,
   Ship,
   Rocket,
-  Helicopter,
   Ambulance,
-  Taxi,
   TrendingDown,
   BarChart,
   LineChart,
@@ -156,7 +153,6 @@ import {
   Forward,
   Archive,
   Trash2,
-  Spam,
   MailOpen,
   MailCheck,
   AtSign,
@@ -170,8 +166,6 @@ import {
   Italic,
   Underline,
   Strikethrough,
-  Subscript,
-  Superscript,
   List,
   ListOrdered,
   Quote,
@@ -237,7 +231,6 @@ import {
   Table,
   Clock,
   Watch,
-  Stopwatch,
   Hourglass,
   Sunrise,
   Sunset,
@@ -252,8 +245,6 @@ import {
   Snowflake,
   Thermometer,
   Wind,
-  Tornado,
-  Volcano,
   Mountain,
   TreePine,
   Trees,
@@ -268,30 +259,20 @@ import {
   Squirrel,
   Dog,
   Cat,
-  Horse,
-  Cow,
-  Pig,
-  Sheep,
-  Chicken,
   Egg,
   Bone,
   Footprints,
-  Paw,
   Apple,
   Cherry,
   Grape,
-  Orange,
   Banana,
-  Strawberry,
   Carrot,
-  Corn,
   Pizza,
   Sandwich,
   Cookie,
   Cake,
   IceCream,
   Coffee,
-  Tea,
   Beer,
   Wine,
   Martini,
@@ -299,15 +280,7 @@ import {
   Salad,
   ChefHat,
   UtensilsCrossed,
-  Fork,
-  Spoon,
-  Knife,
-  Plate,
-  Glass,
-  Bottle,
-  Can,
   Baby,
-  Child,
   UserPlus,
   UserMinus,
   UserCheck,
@@ -317,8 +290,6 @@ import {
   UserSquare,
   UserCircle,
   Contact,
-  Contacts,
-  AddressBook,
   IdCard,
   Badge,
   ShieldCheck,
@@ -333,11 +304,8 @@ import {
   Tags,
   NotepadText,
   StickyNote,
-  Pushpin,
   Paperclip,
-  Stapler,
   Abacus,
-  Protractor,
   Microscope,
   Telescope,
   Magnet,
@@ -347,18 +315,43 @@ import {
   Syringe,
   Bandage,
   Stethoscope,
-  XRay,
-  Pulse,
   HeartPulse,
   Lightbulb,
   Flashlight,
-  Candle,
-  Fire,
   Flame,
-  Spark,
   Earth,
   Satellite,
-  Ufo
+  Scale,
+  Wrench,
+  Factory,
+  Warehouse,
+  Package2,
+  ShoppingBag,
+  Receipt,
+  TrendingDown as Decline,
+  Bot,
+  Handshake,
+  BookOpen,
+  GraduationCap,
+  Presentation,
+  UserCog,
+  Gavel,
+  BarChart4,
+  Database as Db,
+  MousePointer,
+  Keyboard,
+  Printer,
+  Scanner,
+  Webcam,
+  Cog,
+  Sliders,
+  ToggleLeft,
+  ToggleRight,
+  Volume1,
+  RefreshCcw,
+  History,
+  HelpCircle,
+  Info
 } from 'lucide-react';
 
 import { ProjectTemplate } from '../projectTemplates';
@@ -650,183 +643,333 @@ export const businessTemplates: ProjectTemplate[] = [
     ]
   },
   {
-    id: 'music-streaming',
-    name: 'Streaming de Música',
-    description: 'Plataforma de streaming musical',
-    icon: Music,
+    id: 'hr-management',
+    name: 'Sistema de RH',
+    description: 'Gestão completa de recursos humanos',
+    icon: UserCog,
     complexity: 'hard',
     features: [
-      'Biblioteca de músicas',
-      'Playlists personalizadas',
-      'Recomendações IA',
-      'Player avançado',
-      'Modo offline',
-      'Compartilhamento social'
+      'Controle de ponto',
+      'Folha de pagamento',
+      'Avaliação de desempenho',
+      'Banco de talentos',
+      'Gestão de benefícios',
+      'Portal do funcionário'
     ]
   },
   {
-    id: 'video-platform',
-    name: 'Plataforma de Vídeos',
-    description: 'Sistema de compartilhamento de vídeos',
-    icon: Video,
+    id: 'supply-chain',
+    name: 'Cadeia de Suprimentos',
+    description: 'Gestão completa da cadeia de suprimentos',
+    icon: Truck,
     complexity: 'hard',
     features: [
-      'Upload de vídeos',
-      'Streaming adaptativo',
-      'Sistema de comentários',
-      'Canais de usuários',
-      'Monetização',
-      'Analytics detalhados'
+      'Rastreamento de produtos',
+      'Gestão de fornecedores',
+      'Otimização de rotas',
+      'Controle de qualidade',
+      'Analytics de desempenho',
+      'Previsão de demanda'
     ]
   },
   {
-    id: 'blockchain-wallet',
-    name: 'Carteira Blockchain',
-    description: 'Carteira digital para criptomoedas',
-    icon: Wallet,
+    id: 'manufacturing-erp',
+    name: 'ERP Industrial',
+    description: 'Sistema ERP para indústrias manufatureiras',
+    icon: Factory,
     complexity: 'hard',
     features: [
-      'Múltiplas criptomoedas',
-      'Transações seguras',
+      'Planejamento de produção',
+      'Controle de qualidade',
+      'Gestão de recursos',
+      'Manutenção preventiva',
+      'Custos de produção',
+      'Rastreabilidade completa'
+    ]
+  },
+  {
+    id: 'warehouse-management',
+    name: 'Gestão de Armazém',
+    description: 'Sistema WMS para otimização de armazéns',
+    icon: Warehouse,
+    complexity: 'hard',
+    features: [
+      'Localização inteligente',
+      'Picking otimizado',
+      'Controle de entrada/saída',
+      'Inventário cíclico',
+      'Integração com transportadoras',
+      'Analytics de produtividade'
+    ]
+  },
+  {
+    id: 'procurement-system',
+    name: 'Sistema de Compras',
+    description: 'Plataforma para gestão de compras corporativas',
+    icon: ShoppingBag,
+    complexity: 'medium',
+    features: [
+      'Catálogo de produtos',
+      'Fluxo de aprovação',
+      'Comparação de preços',
+      'Gestão de contratos',
+      'Avaliação de fornecedores',
+      'Relatórios de gastos'
+    ]
+  },
+  {
+    id: 'expense-management',
+    name: 'Gestão de Despesas',
+    description: 'Sistema para controle de despesas corporativas',
+    icon: Receipt,
+    complexity: 'medium',
+    features: [
+      'Captura de recibos',
+      'Aprovação automática',
+      'Reembolso rápido',
+      'Integração contábil',
+      'Políticas personalizadas',
+      'Analytics de gastos'
+    ]
+  },
+  {
+    id: 'fleet-management',
+    name: 'Gestão de Frota',
+    description: 'Sistema completo para gestão de frotas',
+    icon: Car,
+    complexity: 'hard',
+    features: [
+      'Rastreamento GPS',
+      'Controle de combustível',
+      'Manutenção preventiva',
+      'Gestão de motoristas',
+      'Otimização de rotas',
+      'Relatórios de performance'
+    ]
+  },
+  {
+    id: 'asset-management',
+    name: 'Gestão de Ativos',
+    description: 'Controle patrimonial e gestão de ativos',
+    icon: Package2,
+    complexity: 'medium',
+    features: [
+      'Cadastro de ativos',
+      'Depreciação automática',
+      'Manutenção programada',
+      'Localização de ativos',
       'Histórico completo',
-      'Exchange integrado',
-      'Staking de tokens',
-      'DeFi integration'
+      'Relatórios fiscais'
     ]
   },
   {
-    id: 'iot-dashboard',
-    name: 'Dashboard IoT',
-    description: 'Central de controle para dispositivos IoT',
-    icon: Wifi,
+    id: 'business-intelligence',
+    name: 'Business Intelligence',
+    description: 'Plataforma de inteligência de negócios',
+    icon: BarChart4,
     complexity: 'hard',
     features: [
-      'Gestão de dispositivos',
+      'Dashboards interativos',
+      'Data mining',
+      'Análise preditiva',
+      'KPIs em tempo real',
+      'Relatórios automáticos',
+      'Visualização avançada'
+    ]
+  },
+  {
+    id: 'compliance-management',
+    name: 'Gestão de Compliance',
+    description: 'Sistema para gestão de conformidade regulatória',
+    icon: Shield,
+    complexity: 'hard',
+    features: [
+      'Monitoramento regulatório',
+      'Auditorias internas',
+      'Gestão de riscos',
+      'Treinamento compliance',
+      'Relatórios regulatórios',
+      'Alertas automáticos'
+    ]
+  },
+  {
+    id: 'contract-management',
+    name: 'Gestão de Contratos',
+    description: 'Sistema para gerenciamento de contratos',
+    icon: FileText,
+    complexity: 'medium',
+    features: [
+      'Biblioteca de contratos',
+      'Assinatura digital',
+      'Renovação automática',
+      'Alertas de vencimento',
+      'Templates padronizados',
+      'Histórico de alterações'
+    ]
+  },
+  {
+    id: 'legal-case-management',
+    name: 'Gestão Jurídica',
+    description: 'Sistema para escritórios de advocacia',
+    icon: Gavel,
+    complexity: 'hard',
+    features: [
+      'Gestão de processos',
+      'Controle de prazos',
+      'Agenda de audiências',
+      'Biblioteca jurídica',
+      'Controle financeiro',
+      'Portal do cliente'
+    ]
+  },
+  {
+    id: 'quality-management',
+    name: 'Gestão da Qualidade',
+    description: 'Sistema QMS para controle de qualidade',
+    icon: Award,
+    complexity: 'hard',
+    features: [
+      'Controle de processos',
+      'Não conformidades',
+      'Ações corretivas',
+      'Auditorias internas',
+      'Certificações ISO',
+      'Melhoria contínua'
+    ]
+  },
+  {
+    id: 'vendor-management',
+    name: 'Gestão de Fornecedores',
+    description: 'Sistema para avaliação e gestão de fornecedores',
+    icon: Handshake,
+    complexity: 'medium',
+    features: [
+      'Cadastro de fornecedores',
+      'Avaliação de performance',
+      'Qualificação automática',
+      'Portal do fornecedor',
+      'Gestão de SLAs',
+      'Analytics de compras'
+    ]
+  },
+  {
+    id: 'training-management',
+    name: 'Gestão de Treinamentos',
+    description: 'Plataforma para treinamentos corporativos',
+    icon: GraduationCap,
+    complexity: 'medium',
+    features: [
+      'Catálogo de cursos',
+      'Trilhas de aprendizado',
+      'Avaliações online',
+      'Certificações',
+      'Plano de desenvolvimento',
+      'Relatórios de progresso'
+    ]
+  },
+  {
+    id: 'safety-management',
+    name: 'Gestão de Segurança',
+    description: 'Sistema para gestão de segurança do trabalho',
+    icon: Shield,
+    complexity: 'medium',
+    features: [
+      'Registro de acidentes',
+      'Análise de riscos',
+      'Treinamentos de segurança',
+      'Inspeções programadas',
+      'EPIs e equipamentos',
+      'Indicadores de segurança'
+    ]
+  },
+  {
+    id: 'energy-management',
+    name: 'Gestão de Energia',
+    description: 'Sistema para monitoramento e otimização energética',
+    icon: Zap,
+    complexity: 'hard',
+    features: [
       'Monitoramento em tempo real',
-      'Automação de regras',
-      'Alertas inteligentes',
-      'Análise de dados',
-      'Controle remoto'
+      'Análise de consumo',
+      'Detecção de desperdício',
+      'Otimização automática',
+      'Relatórios de eficiência',
+      'Previsão de custos'
     ]
   },
   {
-    id: 'ar-shopping',
-    name: 'Shopping com Realidade Aumentada',
-    description: 'E-commerce com experiência AR',
-    icon: Eye,
+    id: 'maintenance-management',
+    name: 'Gestão de Manutenção',
+    description: 'Sistema CMMS para manutenção industrial',
+    icon: Wrench,
     complexity: 'hard',
     features: [
-      'Try-before-buy AR',
-      'Visualização 3D',
-      'Configurador de produtos',
-      'Social shopping',
-      'Analytics de engajamento',
-      'Cross-platform support'
-    ]
-  },
-  {
-    id: 'smart-home',
-    name: 'Casa Inteligente',
-    description: 'Sistema de automação residencial',
-    icon: Home,
-    complexity: 'hard',
-    features: [
-      'Controle de dispositivos',
-      'Automação por cenários',
-      'Segurança integrada',
-      'Economia de energia',
-      'Controle por voz',
-      'App mobile'
-    ]
-  },
-  {
-    id: 'telemedicine',
-    name: 'Telemedicina',
-    description: 'Plataforma para consultas médicas online',
-    icon: Stethoscope,
-    complexity: 'hard',
-    features: [
-      'Consultas por vídeo',
-      'Prontuário eletrônico',
-      'Prescrição digital',
-      'Agendamento online',
-      'Histórico médico',
-      'Integração com laboratórios'
-    ]
-  },
-  {
-    id: 'fintech-app',
-    name: 'Aplicativo Fintech',
-    description: 'Solução financeira digital completa',
-    icon: DollarSign,
-    complexity: 'hard',
-    features: [
-      'Conta digital',
-      'Cartão virtual',
-      'Investimentos',
-      'Empréstimos',
-      'Cashback',
-      'Open Banking'
+      'Ordens de serviço',
+      'Manutenção preventiva',
+      'Controle de peças',
+      'Histórico de equipamentos',
+      'Planejamento de paradas',
+      'KPIs de manutenção'
     ]
   },
   {
     id: 'carbon-tracker',
     name: 'Rastreador de Pegada de Carbono',
-    description: 'Monitor de sustentabilidade pessoal',
-    icon: LeafIcon,
+    description: 'Monitor de sustentabilidade empresarial',
+    icon: Leaf,
     complexity: 'medium',
     features: [
       'Cálculo de pegada de carbono',
-      'Dicas de sustentabilidade',
-      'Metas ambientais',
+      'Metas de sustentabilidade',
+      'Relatórios ESG',
       'Offset de carbono',
-      'Comparação social',
-      'Certificados verdes'
+      'Certificações verdes',
+      'Dashboard ambiental'
     ]
   },
   {
-    id: 'legal-tech',
-    name: 'Plataforma Jurídica Tech',
-    description: 'Automação de serviços jurídicos',
-    icon: Scale,
-    complexity: 'hard',
+    id: 'knowledge-management',
+    name: 'Gestão do Conhecimento',
+    description: 'Base de conhecimento corporativa',
+    icon: BookOpen,
+    complexity: 'medium',
     features: [
-      'Contratos automatizados',
-      'Consultas jurídicas online',
-      'Gestão de processos',
-      'IA para análise legal',
-      'Assinatura digital',
-      'Compliance automático'
+      'Base de conhecimento',
+      'Wiki corporativa',
+      'Busca inteligente',
+      'Versionamento de documentos',
+      'Colaboração em equipe',
+      'Analytics de uso'
     ]
   },
   {
-    id: 'quantum-simulator',
-    name: 'Simulador Quântico',
-    description: 'Plataforma de computação quântica simulada',
-    icon: Atom,
-    complexity: 'hard',
+    id: 'presentation-platform',
+    name: 'Plataforma de Apresentações',
+    description: 'Sistema para criação e gestão de apresentações',
+    icon: Presentation,
+    complexity: 'medium',
     features: [
-      'Algoritmos quânticos',
-      'Simulação de circuitos',
-      'Visualização quântica',
-      'SDK de desenvolvimento',
-      'Otimização quântica',
-      'Análise de resultados'
+      'Editor de apresentações',
+      'Templates corporativos',
+      'Colaboração em tempo real',
+      'Biblioteca de mídia',
+      'Apresentação remota',
+      'Analytics de engajamento'
     ]
   },
   {
-    id: 'space-mission',
-    name: 'Controle de Missão Espacial',
-    description: 'Sistema de controle para missões espaciais',
-    icon: Satellite,
+    id: 'document-automation',
+    name: 'Automação de Documentos',
+    description: 'Sistema para automação de criação de documentos',
+    icon: FileText,
     complexity: 'hard',
     features: [
-      'Telemetria em tempo real',
-      'Controle de trajetória',
-      'Comunicação satelital',
-      'Planejamento de missão',
-      'Análise de dados',
-      'Simulação orbital'
+      'Templates inteligentes',
+      'Preenchimento automático',
+      'Fluxo de aprovação',
+      'Assinatura eletrônica',
+      'Versionamento',
+      'Integração com sistemas'
     ]
   }
 ];
