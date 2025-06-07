@@ -1,4 +1,3 @@
-
 import { 
   ShoppingCart, 
   Store, 
@@ -50,6 +49,7 @@ import { educationTemplates } from './templates/educationTemplates';
 import { healthTemplates } from './templates/healthTemplates';
 import { entertainmentTemplates } from './templates/entertainmentTemplates';
 import { utilityTemplates } from './templates/utilityTemplates';
+import { advancedSaasTemplates } from './templates/advancedSaasTemplates';
 
 export interface ProjectTemplate {
   id: string;
@@ -178,6 +178,12 @@ const utilityTemplatesWithCategory = utilityTemplates.map(template => ({
   category: 'utility'
 }));
 
+// Adicionar novos templates SaaS avançados
+const advancedSaasTemplatesWithCategory = advancedSaasTemplates.map(template => ({
+  ...template,
+  category: 'business'
+}));
+
 // Combine todos os templates
 const allTemplates = [
   ...originalTemplates,
@@ -185,7 +191,8 @@ const allTemplates = [
   ...educationTemplatesWithCategory,
   ...healthTemplatesWithCategory,
   ...entertainmentTemplatesWithCategory,
-  ...utilityTemplatesWithCategory
+  ...utilityTemplatesWithCategory,
+  ...advancedSaasTemplatesWithCategory
 ];
 
 export const templateCategories: TemplateCategory[] = [
@@ -194,7 +201,11 @@ export const templateCategories: TemplateCategory[] = [
     name: 'Negócios e E-commerce',
     description: 'Soluções para empresas, vendas online e gestão comercial',
     icon: Briefcase,
-    templates: [...originalTemplates.filter(t => t.category === 'business'), ...businessTemplatesWithCategory]
+    templates: [
+      ...originalTemplates.filter(t => t.category === 'business'), 
+      ...businessTemplatesWithCategory,
+      ...advancedSaasTemplatesWithCategory
+    ]
   },
   {
     id: 'education',
