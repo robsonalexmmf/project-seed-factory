@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { projectTemplates, templateCategories, getTemplatesByCategory, searchTemplates } from '@/utils/projectTemplates';
+import { generateAndDownloadProject } from '@/utils/projectGenerator';
 import TemplateCard from '@/components/TemplateCard';
 import ProjectGeneratorModal from '@/components/ProjectGeneratorModal';
 import UserTooltip from '@/components/UserTooltip';
@@ -103,22 +104,32 @@ const Index = () => {
     setIsGenerating(true);
     
     try {
-      console.log('Iniciando geração do projeto:', {
+      console.log('🚀 Iniciando geração do projeto:', {
+        template: selectedTemplate.name,
+        name: projectName,
+        description: projectDescription,
+        features: customFeatures
+      });
+
+      toast({
+        title: "🔄 Gerando Projeto...",
+        description: `Criando ${projectName} com frontend + backend completo...`
+      });
+
+      // Gerar e baixar o projeto real
+      await generateAndDownloadProject({
         template: selectedTemplate,
         name: projectName,
         description: projectDescription,
         features: customFeatures
       });
 
-      // Simula tempo de geração
-      await new Promise(resolve => setTimeout(resolve, 3000));
-
       // Incrementa contador de projetos
       await incrementProjectCount();
 
       toast({
         title: "🎉 Projeto Gerado com Sucesso!",
-        description: `${projectName} foi gerado com frontend + backend Supabase completo! Baixando arquivo ZIP...`
+        description: `${projectName} foi gerado com frontend + backend Supabase completo! Arquivo ZIP baixado.`
       });
 
       // Reset form and close modal
@@ -128,7 +139,7 @@ const Index = () => {
       setCustomFeatures('');
       setIsModalOpen(false);
     } catch (error) {
-      console.error('Erro na geração:', error);
+      console.error('❌ Erro na geração:', error);
       toast({
         title: "Erro na Geração",
         description: "Ocorreu um erro ao gerar o projeto. Tente novamente.",

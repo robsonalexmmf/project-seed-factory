@@ -13,16 +13,28 @@ export const generateAndDownloadProject = async (config: ProjectConfig): Promise
   const zip = new JSZip();
   const files = generateProjectFiles(config);
 
+  console.log('Gerando projeto:', config.name);
+  console.log('Arquivos a serem criados:', Object.keys(files).length);
+
   // Adicionar todos os arquivos ao ZIP
   Object.entries(files).forEach(([path, content]) => {
     zip.file(path, content);
   });
 
   // Gerar o ZIP
-  const blob = await zip.generateAsync({ type: 'blob' });
+  console.log('Criando arquivo ZIP...');
+  const blob = await zip.generateAsync({ 
+    type: 'blob',
+    compression: "DEFLATE",
+    compressionOptions: {
+      level: 6
+    }
+  });
   
   // Fazer download usando file-saver
-  saveAs(blob, `${config.name.toLowerCase().replace(/\s+/g, '-')}.zip`);
+  const fileName = `${config.name.toLowerCase().replace(/\s+/g, '-')}-saas-project.zip`;
+  console.log('Fazendo download:', fileName);
+  saveAs(blob, fileName);
 };
 
 const generateProjectFiles = (config: ProjectConfig): Record<string, string> => {
@@ -42,29 +54,16 @@ const generateProjectFiles = (config: ProjectConfig): Record<string, string> => 
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-select": "^2.1.1",
-    "@radix-ui/react-accordion": "^1.2.0",
-    "@radix-ui/react-alert-dialog": "^1.1.1",
-    "@radix-ui/react-avatar": "^1.1.0",
-    "@radix-ui/react-badge": "^1.0.4",
     "@radix-ui/react-button": "^1.1.0",
     "@radix-ui/react-card": "^1.1.0",
-    "@radix-ui/react-checkbox": "^1.1.1",
-    "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-input": "^1.1.0",
     "@radix-ui/react-label": "^2.1.0",
-    "@radix-ui/react-popover": "^1.1.1",
-    "@radix-ui/react-progress": "^1.1.0",
-    "@radix-ui/react-scroll-area": "^1.1.0",
-    "@radix-ui/react-separator": "^1.1.0",
-    "@radix-ui/react-switch": "^1.1.0",
-    "@radix-ui/react-table": "^1.1.0",
-    "@radix-ui/react-textarea": "^1.1.0",
+    "@supabase/supabase-js": "^2.39.0",
     "recharts": "^2.12.7",
     "date-fns": "^3.6.0",
     "react-hook-form": "^7.53.0",
     "zod": "^3.23.8",
-    "@hookform/resolvers": "^3.9.0",
-    "@supabase/supabase-js": "^2.39.0"
+    "@hookform/resolvers": "^3.9.0"
   };
 
   const packageJson = {
@@ -99,7 +98,7 @@ const generateProjectFiles = (config: ProjectConfig): Record<string, string> => 
   const files: Record<string, string> = {
     'package.json': JSON.stringify(packageJson, null, 2),
     'src/main.tsx': generateMainComponent(),
-    'src/App.tsx': generateAppComponent(template, name),
+    'src/App.tsx': generateAppComponent(template, name, description),
     'src/index.css': generateIndexCss(),
     'index.html': generateIndexHtml(name),
     'README.md': generateReadme(template, name, description, features),
@@ -112,8 +111,15 @@ const generateProjectFiles = (config: ProjectConfig): Record<string, string> => 
     '.gitignore': generateGitignore(),
     'src/lib/utils.ts': generateLibUtils(),
     '.env.example': generateEnvExample(),
-    'supabase/config.toml': generateSupabaseConfig(),
-    'supabase/seed.sql': generateSupabaseSeed(template)
+    'src/components/ui/button.tsx': generateButtonComponent(),
+    'src/components/ui/card.tsx': generateCardComponent(),
+    'src/components/ui/input.tsx': generateInputComponent(),
+    'src/components/ui/label.tsx': generateLabelComponent(),
+    'src/components/Header.tsx': generateHeaderComponent(template, name),
+    'src/components/Dashboard.tsx': generateDashboardComponent(template),
+    'src/components/Sidebar.tsx': generateSidebarComponent(template),
+    'src/hooks/useSupabase.ts': generateSupabaseHook(),
+    'src/types/index.ts': generateTypes()
   };
 
   return files;
@@ -133,11 +139,16 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 )`;
 };
 
-const generateAppComponent = (template: ProjectTemplate, name: string) => {
+const generateAppComponent = (template: ProjectTemplate, name: string, description: string) => {
+  const iconName = template.icon.name || 'Rocket';
+  
   return `import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ${template.icon.name} } from 'lucide-react'
+import { ${iconName} } from 'lucide-react'
+import Header from './components/Header'
+import Dashboard from './components/Dashboard'
+import Sidebar from './components/Sidebar'
 
 const queryClient = new QueryClient()
 
@@ -145,29 +156,16 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-          <header className="bg-white shadow-sm border-b">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-              <div className="flex items-center">
-                <${template.icon.name} className="h-8 w-8 text-blue-600 mr-3" />
-                <h1 className="text-2xl font-bold text-gray-900">${name}</h1>
-              </div>
-            </div>
-          </header>
-          
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Bem-vindo ao ${name}</h2>
-              <p className="text-gray-600 mb-6">${template.description}</p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                ${template.features.map(feature => `
-                <div className="p-4 border border-gray-200 rounded-lg" key="${feature}">
-                  <h3 className="font-medium text-gray-900">${feature}</h3>
-                </div>`).join('')}
-              </div>
-            </div>
-          </main>
+        <div className="min-h-screen bg-gray-50">
+          <Header />
+          <div className="flex">
+            <Sidebar />
+            <main className="flex-1 p-6">
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+              </Routes>
+            </main>
+          </div>
         </div>
       </Router>
     </QueryClientProvider>
@@ -177,65 +175,379 @@ function App() {
 export default App`;
 };
 
-const generateIndexCss = () => {
-  return `@tailwind base;
-@tailwind components;
-@tailwind utilities;
+const generateHeaderComponent = (template: ProjectTemplate, name: string) => {
+  const iconName = template.icon.name || 'Rocket';
+  
+  return `import React from 'react'
+import { ${iconName} } from 'lucide-react'
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
-  }
+const Header = () => {
+  return (
+    <header className="bg-white shadow-sm border-b border-gray-200">
+      <div className="px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <${iconName} className="h-8 w-8 text-blue-600" />
+            <h1 className="text-2xl font-bold text-gray-900">${name}</h1>
+          </div>
+          <div className="flex items-center space-x-4">
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+              Configurações
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+  )
 }
 
-@layer base {
-  * {
-    @apply border-border;
+export default Header`;
+};
+
+const generateDashboardComponent = (template: ProjectTemplate) => {
+  return `import React from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
+import { BarChart3, Users, DollarSign, TrendingUp } from 'lucide-react'
+
+const Dashboard = () => {
+  const stats = [
+    { title: 'Total de Usuários', value: '2,543', icon: Users, change: '+12%' },
+    { title: 'Receita Mensal', value: 'R$ 45,231', icon: DollarSign, change: '+20%' },
+    { title: 'Conversões', value: '89.2%', icon: TrendingUp, change: '+5%' },
+    { title: 'Vendas Hoje', value: '156', icon: BarChart3, change: '+8%' },
+  ]
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-3xl font-bold text-gray-900">Dashboard</h2>
+        <p className="text-gray-600 mt-2">Visão geral do seu ${template.name}</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, index) => (
+          <Card key={index}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">
+                {stat.title}
+              </CardTitle>
+              <stat.icon className="h-4 w-4 text-gray-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stat.value}</div>
+              <p className="text-xs text-green-600 mt-1">
+                {stat.change} em relação ao mês passado
+              </p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Funcionalidades Principais</CardTitle>
+            <CardDescription>
+              Recursos incluídos neste ${template.name}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              ${template.features.map(feature => `
+              <div className="flex items-center space-x-3" key="${feature}">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-gray-700">${feature}</span>
+              </div>`).join('')}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Próximos Passos</CardTitle>
+            <CardDescription>
+              Configure seu sistema para começar
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-medium text-blue-900">1. Configure o Supabase</h4>
+                <p className="text-sm text-blue-700 mt-1">
+                  Adicione suas credenciais no arquivo .env
+                </p>
+              </div>
+              <div className="p-4 bg-green-50 rounded-lg">
+                <h4 className="font-medium text-green-900">2. Personalize o Design</h4>
+                <p className="text-sm text-green-700 mt-1">
+                  Ajuste cores e layout conforme sua marca
+                </p>
+              </div>
+              <div className="p-4 bg-purple-50 rounded-lg">
+                <h4 className="font-medium text-purple-900">3. Adicione Funcionalidades</h4>
+                <p className="text-sm text-purple-700 mt-1">
+                  Expanda com recursos específicos do seu negócio
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
+
+export default Dashboard`;
+};
+
+const generateSidebarComponent = (template: ProjectTemplate) => {
+  return `import React from 'react'
+import { Home, Settings, Users, BarChart3, FileText } from 'lucide-react'
+
+const Sidebar = () => {
+  const menuItems = [
+    { icon: Home, label: 'Dashboard', href: '/' },
+    { icon: BarChart3, label: 'Relatórios', href: '/reports' },
+    { icon: Users, label: 'Usuários', href: '/users' },
+    { icon: FileText, label: 'Documentos', href: '/docs' },
+    { icon: Settings, label: 'Configurações', href: '/settings' },
+  ]
+
+  return (
+    <aside className="w-64 bg-white shadow-sm border-r border-gray-200 min-h-screen">
+      <nav className="p-4">
+        <ul className="space-y-2">
+          {menuItems.map((item, index) => (
+            <li key={index}>
+              <a
+                href={item.href}
+                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 transition-colors group"
+              >
+                <item.icon className="h-5 w-5 text-gray-500 group-hover:text-blue-600" />
+                <span className="text-gray-700 group-hover:text-blue-600 font-medium">
+                  {item.label}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </aside>
+  )
+}
+
+export default Sidebar`;
+};
+
+const generateButtonComponent = () => {
+  return `import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3",
+        lg: "h-11 rounded-md px-8",
+        icon: "h-10 w-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
   }
-  body {
-    @apply bg-background text-foreground;
+)
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
   }
+)
+Button.displayName = "Button"
+
+export { Button, buttonVariants }`;
+};
+
+const generateCardComponent = () => {
+  return `import * as React from "react"
+import { cn } from "@/lib/utils"
+
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      className
+    )}
+    {...props}
+  />
+))
+Card.displayName = "Card"
+
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
+))
+CardHeader.displayName = "CardHeader"
+
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      "text-2xl font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  />
+))
+CardTitle.displayName = "CardTitle"
+
+const CardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+CardDescription.displayName = "CardDescription"
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+))
+CardContent.displayName = "CardContent"
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("flex items-center p-6 pt-0", className)} {...props} />
+))
+CardFooter.displayName = "CardFooter"
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }`;
+};
+
+const generateInputComponent = () => {
+  return `import * as React from "react"
+import { cn } from "@/lib/utils"
+
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, ...props }, ref) => {
+    return (
+      <input
+        type={type}
+        className={cn(
+          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Input.displayName = "Input"
+
+export { Input }`;
+};
+
+const generateLabelComponent = () => {
+  return `import * as React from "react"
+import * as LabelPrimitive from "@radix-ui/react-label"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
+
+const labelVariants = cva(
+  "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+)
+
+const Label = React.forwardRef<
+  React.ElementRef<typeof LabelPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
+    VariantProps<typeof labelVariants>
+>(({ className, ...props }, ref) => (
+  <LabelPrimitive.Root
+    ref={ref}
+    className={cn(labelVariants(), className)}
+    {...props}
+  />
+))
+Label.displayName = LabelPrimitive.Root.displayName
+
+export { Label }`;
+};
+
+const generateSupabaseHook = () => {
+  return `import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+export const supabase = createClient(supabaseUrl, supabaseKey)
+
+export const useSupabase = () => {
+  return { supabase }
+}`;
+};
+
+const generateTypes = () => {
+  return `export interface User {
+  id: string
+  email: string
+  name: string
+  created_at: string
+}
+
+export interface Project {
+  id: string
+  name: string
+  description: string
+  user_id: string
+  created_at: string
+  updated_at: string
 }`;
 };
 
@@ -260,78 +572,150 @@ const generateReadme = (template: ProjectTemplate, name: string, description: st
 
 ${description || template.description}
 
-## Recursos Principais
+## 🚀 Funcionalidades Principais
 
-${template.features.map(feature => `- ${feature}`).join('\n')}
+${template.features.map(feature => `- ✅ ${feature}`).join('\n')}
 
-${features ? `\n## Recursos Personalizados\n\n${features}` : ''}
+${features ? `\n## 🎯 Funcionalidades Personalizadas\n\n${features.split('\n').map(f => f.trim() ? `- 🎨 ${f.trim()}` : '').filter(Boolean).join('\n')}` : ''}
 
-## Tecnologias Utilizadas
+## 🛠️ Tecnologias Utilizadas
 
-- React 18 com TypeScript
-- Vite para build e desenvolvimento
-- Tailwind CSS para estilização
-- Supabase para backend e autenticação
-- Shadcn/ui para componentes
-- React Router para navegação
-- TanStack Query para gerenciamento de estado
-- Lucide React para ícones
+- **Frontend:** React 18 + TypeScript + Vite
+- **Styling:** Tailwind CSS + Shadcn/ui
+- **Backend:** Supabase (PostgreSQL + Auth + Storage)
+- **Roteamento:** React Router DOM
+- **Estado:** TanStack Query
+- **Ícones:** Lucide React
+- **Forms:** React Hook Form + Zod
 
-## Como Executar
+## 📦 Como Executar
 
-1. Instale as dependências:
+1. **Instale as dependências:**
 \`\`\`bash
 npm install
 \`\`\`
 
-2. Configure as variáveis de ambiente:
+2. **Configure as variáveis de ambiente:**
 \`\`\`bash
 cp .env.example .env
 \`\`\`
 
-3. Configure o Supabase:
-- Acesse [supabase.com](https://supabase.com)
-- Crie um novo projeto
-- Configure as variáveis no arquivo \`.env\`
+3. **Configure o Supabase:**
+   - Acesse [supabase.com](https://supabase.com)
+   - Crie um novo projeto
+   - Copie a URL e a chave anônima para o arquivo \`.env\`
 
-4. Execute o projeto:
+4. **Execute o projeto:**
 \`\`\`bash
 npm run dev
 \`\`\`
 
-## Deploy
+## 🌐 Deploy
 
-Para fazer deploy do projeto:
-
-1. Build do projeto:
+**Vercel:**
 \`\`\`bash
 npm run build
+vercel --prod
 \`\`\`
 
-2. Deploy para Vercel, Netlify ou outra plataforma de sua escolha.
+**Netlify:**
+\`\`\`bash
+npm run build
+# Upload da pasta dist
+\`\`\`
 
-## Estrutura do Projeto
+## 📁 Estrutura do Projeto
 
 \`\`\`
 src/
-├── components/     # Componentes reutilizáveis
-├── pages/         # Páginas da aplicação
-├── lib/           # Utilitários e configurações
-├── hooks/         # Hooks personalizados
-└── types/         # Tipos TypeScript
+├── components/          # Componentes reutilizáveis
+│   ├── ui/             # Componentes base (shadcn/ui)
+│   ├── Header.tsx      # Cabeçalho da aplicação
+│   ├── Sidebar.tsx     # Menu lateral
+│   └── Dashboard.tsx   # Dashboard principal
+├── hooks/              # Hooks personalizados
+│   └── useSupabase.ts  # Hook do Supabase
+├── lib/                # Utilitários
+│   └── utils.ts        # Funções auxiliares
+├── types/              # Tipos TypeScript
+│   └── index.ts        # Definições de tipos
+├── App.tsx             # Componente principal
+└── main.tsx            # Ponto de entrada
 \`\`\`
 
-## Contribuição
+## 🔧 Configuração do Supabase
+
+1. **Crie as tabelas necessárias:**
+\`\`\`sql
+-- Tabela de usuários
+CREATE TABLE profiles (
+  id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT,
+  name TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  PRIMARY KEY (id)
+);
+
+-- RLS (Row Level Security)
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Profiles are viewable by owner" ON profiles
+  FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile" ON profiles
+  FOR UPDATE USING (auth.uid() = id);
+\`\`\`
+
+2. **Configure a autenticação:**
+   - Ative o provedor de email no painel do Supabase
+   - Configure as URLs de redirecionamento
+
+## 🎨 Personalização
+
+### Cores e Tema
+Edite o arquivo \`tailwind.config.ts\` para personalizar as cores:
+
+\`\`\`typescript
+theme: {
+  extend: {
+    colors: {
+      primary: {
+        DEFAULT: "hsl(var(--primary))",
+        foreground: "hsl(var(--primary-foreground))",
+      },
+      // Adicione suas cores personalizadas
+    },
+  },
+},
+\`\`\`
+
+### Componentes
+Todos os componentes estão na pasta \`src/components\` e podem ser facilmente modificados.
+
+## 📚 Recursos Úteis
+
+- [Documentação do React](https://react.dev)
+- [Documentação do Supabase](https://supabase.com/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [Shadcn/ui](https://ui.shadcn.com)
+- [TanStack Query](https://tanstack.com/query)
+
+## 🤝 Contribuição
 
 1. Fork o projeto
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Push para a branch
+2. Crie uma branch para sua feature (\`git checkout -b feature/nova-feature\`)
+3. Commit suas mudanças (\`git commit -m 'Add nova feature'\`)
+4. Push para a branch (\`git push origin feature/nova-feature\`)
 5. Abra um Pull Request
 
-## Licença
+## 📄 Licença
 
-MIT License
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+
+**Desenvolvido com ❤️ usando o Gerador de SaaS com IA**
 `;
 };
 
@@ -423,7 +807,6 @@ const generateViteConfig = () => {
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -442,22 +825,16 @@ const generateTsConfig = () => {
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-
-    /* Path mapping */
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
@@ -552,10 +929,7 @@ dist-ssr
 .env.local
 .env.development.local
 .env.test.local
-.env.production.local
-
-# Supabase
-.supabase`;
+.env.production.local`;
 };
 
 const generateLibUtils = () => {
@@ -572,7 +946,7 @@ const generateEnvExample = () => {
 VITE_SUPABASE_URL=your-supabase-url
 VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 
-# Other API Keys (if needed)
+# Optional API Keys
 VITE_STRIPE_PUBLISHABLE_KEY=your-stripe-key
 VITE_GOOGLE_MAPS_API_KEY=your-google-maps-key`;
 };
