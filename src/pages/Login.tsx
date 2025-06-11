@@ -18,14 +18,14 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Redirecionar se já estiver logado - apenas uma vez quando os dados estiverem carregados
+  // Redirecionamento se já estiver logado - apenas uma vez quando os dados estiverem carregados
   useEffect(() => {
     if (!authLoading && user && userProfile) {
       console.log('User logged in, redirecting...', userProfile.plan_type);
       if (userProfile.plan_type === 'admin') {
         navigate('/admin', { replace: true });
       } else {
-        navigate('/generator', { replace: true });
+        navigate('/dashboard', { replace: true });
       }
     }
   }, [user, userProfile, authLoading, navigate]);

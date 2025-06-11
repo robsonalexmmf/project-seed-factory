@@ -12,7 +12,7 @@ import { toast } from '@/hooks/use-toast';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { user, userProfile } = useAuth();
+  const { user, userProfile, loading: authLoading } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -24,14 +24,14 @@ const Register = () => {
 
   // Redirecionar se já estiver logado
   useEffect(() => {
-    if (user && userProfile) {
+    if (!authLoading && user && userProfile) {
       if (userProfile.plan_type === 'admin') {
         navigate('/admin');
       } else {
-        navigate('/generator');
+        navigate('/dashboard');
       }
     }
-  }, [user, userProfile, navigate]);
+  }, [user, userProfile, authLoading, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -79,8 +79,8 @@ const Register = () => {
         
         // Aguardar um pouco para o useAuth atualizar
         setTimeout(() => {
-          navigate('/generator');
-        }, 1000);
+          navigate('/dashboard');
+        }, 1500);
       }
     } catch (error) {
       console.error('Erro no registro:', error);
@@ -94,6 +94,17 @@ const Register = () => {
       setLoading(false);
     }
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Verificando autenticação...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">

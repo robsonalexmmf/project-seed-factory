@@ -24,31 +24,52 @@ export const useAuth = () => {
 
   useEffect(() => {
     let mounted = true;
-    let profileFetched = false;
 
-    // Get initial session
+    // Configurar o listener de alterações de autenticação primeiro
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.email);
+        
+        if (!mounted) return;
+        
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          // Usando setTimeout para evitar problemas de deadlock
+          setTimeout(() => {
+            if (mounted) {
+              fetchUserProfile(session.user.id);
+            }
+          }, 0);
+        } else {
+          setUserProfile(null);
+        }
+      }
+    );
+
+    // Depois verificar a sessão existente
     const getInitialSession = async () => {
       try {
+        setLoading(true);
         const { data: { session }, error } = await supabase.auth.getSession();
+        
         if (error) {
           console.error('Error getting session:', error);
-          if (mounted) setLoading(false);
-          return;
+          throw error;
         }
-
+        
         if (mounted) {
           setSession(session);
           setUser(session?.user ?? null);
           
-          if (session?.user && !profileFetched) {
-            profileFetched = true;
+          if (session?.user) {
             await fetchUserProfile(session.user.id);
           }
-          
-          setLoading(false);
         }
       } catch (error) {
         console.error('Error in getInitialSession:', error);
+      } finally {
         if (mounted) {
           setLoading(false);
         }
@@ -56,32 +77,6 @@ export const useAuth = () => {
     };
 
     getInitialSession();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (!mounted) return;
-
-        console.log('Auth state changed:', event, session?.user?.email);
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (session?.user && !profileFetched) {
-          profileFetched = true;
-          // Use setTimeout to prevent blocking the auth state change
-          setTimeout(() => {
-            if (mounted) {
-              fetchUserProfile(session.user.id);
-            }
-          }, 100);
-        } else if (!session?.user) {
-          setUserProfile(null);
-          profileFetched = false;
-        }
-        
-        if (mounted) setLoading(false);
-      }
-    );
 
     return () => {
       mounted = false;
@@ -118,6 +113,8 @@ export const useAuth = () => {
       }
     } catch (error) {
       console.error('Error fetching user profile:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
