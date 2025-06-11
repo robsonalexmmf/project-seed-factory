@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,7 +16,9 @@ import {
   FileText,
   Settings,
   Database,
-  Zap
+  Zap,
+  Layout,
+  Image
 } from 'lucide-react';
 import { ProjectTemplate } from '@/utils/projectTemplates';
 
@@ -41,6 +42,11 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
   const [currentScreen, setCurrentScreen] = useState(0);
 
   const screens = [
+    {
+      name: 'Sistema',
+      description: 'Interface principal do sistema funcionando',
+      content: 'system'
+    },
     {
       name: 'Dashboard',
       description: 'Tela principal com métricas e visão geral',
@@ -78,6 +84,106 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
         return 'w-full h-96';
     }
   };
+
+  const mockSystemView = () => (
+    <div className="p-6 space-y-6 bg-gray-50 h-full overflow-y-auto">
+      {/* System Screenshot */}
+      <div className="bg-white rounded-lg shadow-sm p-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <template.icon className="h-8 w-8 text-blue-600" />
+            <h1 className="text-xl font-bold text-gray-900">{projectName}</h1>
+          </div>
+          <Badge variant="secondary" className="bg-green-100 text-green-800">
+            Sistema Ativo
+          </Badge>
+        </div>
+        
+        {/* System Interface Preview */}
+        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-6 border-2 border-dashed border-blue-200 min-h-[200px] flex flex-col items-center justify-center">
+          <div className="relative w-full max-w-md">
+            <img 
+              src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80" 
+              alt="Sistema em funcionamento"
+              className="w-full h-48 object-cover rounded-lg shadow-lg"
+            />
+            <div className="absolute inset-0 bg-blue-600/20 rounded-lg flex items-center justify-center">
+              <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+                <div className="flex items-center space-x-2 text-blue-800">
+                  <Layout className="w-5 h-5" />
+                  <span className="font-semibold">Interface {template.name}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-4 text-center">
+            <p className="text-sm text-gray-600 mb-2">Sistema {projectName} em funcionamento</p>
+            <p className="text-xs text-gray-500">Interface responsiva e moderna com React + Supabase</p>
+          </div>
+        </div>
+        
+        {/* System Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+          <div className="bg-green-50 p-3 rounded-lg border border-green-200">
+            <div className="text-green-600 text-sm font-medium">Frontend</div>
+            <div className="text-green-800 font-bold">React + TS</div>
+          </div>
+          <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+            <div className="text-blue-600 text-sm font-medium">Backend</div>
+            <div className="text-blue-800 font-bold">Supabase</div>
+          </div>
+          <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
+            <div className="text-purple-600 text-sm font-medium">Database</div>
+            <div className="text-purple-800 font-bold">PostgreSQL</div>
+          </div>
+          <div className="bg-orange-50 p-3 rounded-lg border border-orange-200">
+            <div className="text-orange-600 text-sm font-medium">Auth</div>
+            <div className="text-orange-800 font-bold">JWT + RLS</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Live System Features */}
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <h2 className="text-lg font-semibold mb-4 flex items-center">
+          <Image className="w-5 h-5 mr-2 text-purple-600" />
+          Sistema {projectName} - Funcionalidades Ativas
+        </h2>
+        
+        <div className="space-y-3">
+          {template.features.slice(0, 6).map((feature, index) => (
+            <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-gray-800">{feature}</span>
+              </div>
+              <Badge variant="outline" className="text-green-600 border-green-600 text-xs">
+                Ativo
+              </Badge>
+            </div>
+          ))}
+        </div>
+        
+        {customFeatures && (
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <h3 className="font-medium text-gray-900 mb-3">Recursos Personalizados:</h3>
+            <div className="space-y-2">
+              {customFeatures.split('\n').filter(f => f.trim()).slice(0, 3).map((feature, index) => (
+                <div key={index} className="flex items-center space-x-3 p-2 bg-purple-50 rounded-lg">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm text-gray-700">{feature.trim()}</span>
+                  <Badge variant="outline" className="text-purple-600 border-purple-600 text-xs ml-auto">
+                    Personalizado
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 
   const mockDashboard = () => (
     <div className="p-6 space-y-6 bg-gray-50 h-full overflow-y-auto">
@@ -289,7 +395,7 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
       
       <CardContent>
         <Tabs value={screens[currentScreen].name.toLowerCase()} className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             {screens.map((screen, index) => (
               <TabsTrigger
                 key={index}
@@ -313,6 +419,10 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
             </div>
             
             <div className={`mx-auto border-2 border-gray-300 rounded-lg overflow-hidden bg-white shadow-lg transition-all duration-300 ${getViewportClasses()}`}>
+              <TabsContent value="sistema" className="m-0 h-full">
+                {mockSystemView()}
+              </TabsContent>
+              
               <TabsContent value="dashboard" className="m-0 h-full">
                 {mockDashboard()}
               </TabsContent>
