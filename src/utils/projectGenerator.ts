@@ -139,6 +139,85 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 )`;
 };
 
+const generateIndexCss = () => {
+  return `@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}`;
+};
+
 const generateAppComponent = (template: ProjectTemplate, name: string, description: string) => {
   const iconName = template.icon.name || 'Rocket';
   
@@ -624,95 +703,6 @@ npm run build
 # Upload da pasta dist
 \`\`\`
 
-## 📁 Estrutura do Projeto
-
-\`\`\`
-src/
-├── components/          # Componentes reutilizáveis
-│   ├── ui/             # Componentes base (shadcn/ui)
-│   ├── Header.tsx      # Cabeçalho da aplicação
-│   ├── Sidebar.tsx     # Menu lateral
-│   └── Dashboard.tsx   # Dashboard principal
-├── hooks/              # Hooks personalizados
-│   └── useSupabase.ts  # Hook do Supabase
-├── lib/                # Utilitários
-│   └── utils.ts        # Funções auxiliares
-├── types/              # Tipos TypeScript
-│   └── index.ts        # Definições de tipos
-├── App.tsx             # Componente principal
-└── main.tsx            # Ponto de entrada
-\`\`\`
-
-## 🔧 Configuração do Supabase
-
-1. **Crie as tabelas necessárias:**
-\`\`\`sql
--- Tabela de usuários
-CREATE TABLE profiles (
-  id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  email TEXT,
-  name TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  PRIMARY KEY (id)
-);
-
--- RLS (Row Level Security)
-ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Profiles are viewable by owner" ON profiles
-  FOR SELECT USING (auth.uid() = id);
-
-CREATE POLICY "Users can update own profile" ON profiles
-  FOR UPDATE USING (auth.uid() = id);
-\`\`\`
-
-2. **Configure a autenticação:**
-   - Ative o provedor de email no painel do Supabase
-   - Configure as URLs de redirecionamento
-
-## 🎨 Personalização
-
-### Cores e Tema
-Edite o arquivo \`tailwind.config.ts\` para personalizar as cores:
-
-\`\`\`typescript
-theme: {
-  extend: {
-    colors: {
-      primary: {
-        DEFAULT: "hsl(var(--primary))",
-        foreground: "hsl(var(--primary-foreground))",
-      },
-      // Adicione suas cores personalizadas
-    },
-  },
-},
-\`\`\`
-
-### Componentes
-Todos os componentes estão na pasta \`src/components\` e podem ser facilmente modificados.
-
-## 📚 Recursos Úteis
-
-- [Documentação do React](https://react.dev)
-- [Documentação do Supabase](https://supabase.com/docs)
-- [Tailwind CSS](https://tailwindcss.com/docs)
-- [Shadcn/ui](https://ui.shadcn.com)
-- [TanStack Query](https://tanstack.com/query)
-
-## 🤝 Contribuição
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (\`git checkout -b feature/nova-feature\`)
-3. Commit suas mudanças (\`git commit -m 'Add nova feature'\`)
-4. Push para a branch (\`git push origin feature/nova-feature\`)
-5. Abra um Pull Request
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
 ---
 
 **Desenvolvido com ❤️ usando o Gerador de SaaS com IA**
@@ -949,81 +939,4 @@ VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 # Optional API Keys
 VITE_STRIPE_PUBLISHABLE_KEY=your-stripe-key
 VITE_GOOGLE_MAPS_API_KEY=your-google-maps-key`;
-};
-
-const generateSupabaseConfig = () => {
-  return `[api]
-enabled = true
-port = 54321
-schemas = ["public", "graphql_public"]
-extra_search_path = ["public", "extensions"]
-max_rows = 1000
-
-[auth]
-enabled = true
-site_url = "http://localhost:3000"
-additional_redirect_urls = ["https://localhost:3000"]
-jwt_expiry = 3600
-enable_signup = true
-enable_confirmations = false
-
-[auth.email]
-enable_signup = true
-double_confirm_changes = true
-enable_confirmations = false
-
-[db]
-shadow_database_url = ""
-major_version = 15
-
-[storage]
-enabled = true
-file_size_limit = "50MiB"
-image_transformation = {
-  enabled = true
-}
-
-[functions]
-verify_jwt = false`;
-};
-
-const generateSupabaseSeed = (template: ProjectTemplate) => {
-  return `-- Seed data for ${template.name}
--- Enable RLS (Row Level Security)
-ALTER TABLE auth.users ENABLE ROW LEVEL SECURITY;
-
--- Create example tables
-CREATE TABLE IF NOT EXISTS public.profiles (
-  id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
-  full_name text,
-  avatar_url text,
-  updated_at timestamp with time zone DEFAULT NOW(),
-  PRIMARY KEY (id)
-);
-
--- Set up Row Level Security (RLS)
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Public profiles are viewable by everyone." ON public.profiles
-  FOR SELECT USING (true);
-
-CREATE POLICY "Users can insert their own profile." ON public.profiles
-  FOR INSERT WITH CHECK (auth.uid() = id);
-
-CREATE POLICY "Users can update own profile." ON public.profiles
-  FOR UPDATE USING (auth.uid() = id);
-
--- Create a trigger to automatically create a profile on user signup
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS trigger AS $$
-BEGIN
-  INSERT INTO public.profiles (id, full_name, avatar_url)
-  VALUES (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
-  RETURN new;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();`;
 };
