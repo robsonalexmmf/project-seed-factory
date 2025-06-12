@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,6 +9,7 @@ import PlanDistributionCard from '@/components/admin/PlanDistributionCard';
 import RevenueCards from '@/components/admin/RevenueCards';
 import ActivityCard from '@/components/admin/ActivityCard';
 import UsersTabContent from '@/components/admin/UsersTabContent';
+import { supabase } from '@/integrations/supabase/client';
 
 interface DashboardStats {
   totalUsers: number;
@@ -28,13 +28,13 @@ const NewAdminDashboard = () => {
   const navigate = useNavigate();
   const { userProfile, loading: authLoading, signOut } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
-    totalUsers: 150,
-    newUsersThisMonth: 25,
-    totalRevenue: 4500,
-    projectsGenerated: 320,
-    planDistribution: { freemium: 120, pro: 25, business: 4, admin: 1 }
+    totalUsers: 0,
+    newUsersThisMonth: 0,
+    totalRevenue: 0,
+    projectsGenerated: 0,
+    planDistribution: { freemium: 0, pro: 0, business: 0, admin: 0 }
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (authLoading) return;
@@ -49,7 +49,80 @@ const NewAdminDashboard = () => {
       return;
     }
 
-    setLoading(false);
+    const loadAdminData = async () => {
+      setLoading(true);
+      try {
+        // Fetch users
+        const { data: users, error: usersError } = await supabase
+          .from('users')
+          .select('*');
+
+        if (usersError) {
+          console.error('Error fetching users:', usersError);
+          toast({
+            title: 'Error fetching users',
+            description: usersError.message,
+            variant: 'destructive',
+          });
+          return;
+        }
+
+        // Calculate stats
+        const totalUsers = users.length;
+        const newUsersThisMonth = users.filter(user => {
+          const createdAt = new Date(user.created_at);
+          const now = new Date();
+          return createdAt.getMonth() === now.getMonth() && createdAt.getFullYear() === now.getFullYear();
+        }).length;
+        const projectsGenerated = users.reduce((total, user) => total + (user.projects_generated || 0), 0);
+
+        // Fetch sales
+        const { data: sales, error: salesError } = await supabase
+          .from('sales')
+          .select('*');
+
+        if (salesError) {
+          console.error('Error fetching sales:', salesError);
+          toast({
+            title: 'Error fetching sales',
+            description: salesError.message,
+            variant: 'destructive',
+          });
+          return;
+        }
+
+        // Calculate total revenue
+        const totalRevenue = sales.reduce((total, sale) => total + sale.amount, 0);
+
+        // Calculate plan distribution
+        const planDistribution = {
+          freemium: users.filter(user => user.plan_type === 'freemium').length,
+          pro: users.filter(user => user.plan_type === 'pro').length,
+          business: users.filter(user => user.plan_type === 'business').length,
+          admin: users.filter(user => user.plan_type === 'admin').length,
+        };
+
+        // Update state
+        setStats({
+          totalUsers,
+          newUsersThisMonth,
+          totalRevenue,
+          projectsGenerated,
+          planDistribution,
+        });
+      } catch (error) {
+        console.error('Error loading admin data:', error);
+        toast({
+          title: 'Error loading admin data',
+          description: error instanceof Error ? error.message : 'Unknown error',
+          variant: 'destructive',
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAdminData();
   }, [userProfile, authLoading, navigate]);
 
   const updateUserPlan = async (userId: string, newPlan: string) => {
@@ -90,18 +163,19 @@ const NewAdminDashboard = () => {
 
           <TabsContent value="overview" className="space-y-6">
             <AdminStatsCards stats={stats} />
-            <PlanDistributionCard 
-              planDistribution={stats.planDistribution} 
-              totalUsers={stats.totalUsers} 
+            <PlanDistributionCard
+              planDistribution={stats.planDistribution}
+              totalUsers={stats.totalUsers}
             />
           </TabsContent>
 
           <TabsContent value="users" className="space-y-6">
             <UsersTabContent />
+            {/* Funcionalidade temporariamente desabilitada devido a problemas de conexão com banco. */}
           </TabsContent>
 
           <TabsContent value="revenue" className="space-y-6">
-            <RevenueCards 
+            <RevenueCards
               planDistribution={stats.planDistribution}
               totalRevenue={stats.totalRevenue}
             />
