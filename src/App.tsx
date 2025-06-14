@@ -14,6 +14,8 @@ import NewAdmin from "./pages/NewAdmin";
 import CreateAdmin from "./pages/CreateAdmin";
 import NotFound from "./pages/NotFound";
 import CRMMain from "./pages/CRMMain";
+import DeliveryDashboard from "./pages/DeliveryDashboard";
+import DeliveryRestaurants from "./pages/DeliveryRestaurants";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,8 @@ const App = () => (
           <Route path="/admin" element={<NewAdmin />} />
           <Route path="/create-admin" element={<CreateAdmin />} />
           <Route path="/crm" element={<CRMMain />} />
+          <Route path="/delivery" element={<DeliveryDashboard />} />
+          <Route path="/delivery/restaurants" element={<DeliveryRestaurants />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
