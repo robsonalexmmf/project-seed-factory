@@ -31,6 +31,8 @@ import UserTooltip from '@/components/UserTooltip';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
+const featuredTemplates = projectTemplates.slice(0, 5); // 5 primeiros da lista
+
 const Index = () => {
   const { user, userProfile, signOut, canGenerate, incrementProjectCount, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -379,6 +381,28 @@ const Index = () => {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Seção de Destaques */}
+        <div className="mb-12">
+          <div className="bg-gradient-to-r from-yellow-100 via-pink-50 to-purple-100 rounded-3xl p-8 shadow-xl border border-yellow-300 flex flex-col items-center">
+            <h2 className="text-2xl md:text-3xl font-black text-yellow-700 mb-6 flex items-center gap-3">
+              <Star className="w-6 h-6 text-yellow-500" />
+              Destaques da Semana
+            </h2>
+            <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 w-full">
+              {featuredTemplates.map((template) => (
+                <div key={template.id}>
+                  <TemplateCard
+                    template={template}
+                    onSelect={() => handleTemplateSelect(template)}
+                    categoryName={templateCategories.find(c => c.id === template.category)?.name || ''}
+                    isBlocked={userProfile ? !canGenerate() : false}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Search and Filters */}
         <div className="mb-16 space-y-8">
           {/* Search Bar */}
