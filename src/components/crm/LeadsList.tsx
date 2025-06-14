@@ -1,25 +1,13 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-// IMPORTANT: Import Lead type from LeadForm to ensure identical type!
+// Import only from LeadForm, do NOT redeclare below
 import LeadForm, { Lead } from "./LeadForm";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
-export type Lead = {
-  id: string;
-  name: string;
-  email?: string;
-  phone?: string;
-  company?: string;
-  value?: number;
-  status?: string;
-  last_contact?: string;
-  created_at?: string;
-  updated_at?: string;
-};
+// Remove the duplicated local Lead type definition here
 
 const LeadsList: React.FC = () => {
   const { userProfile } = useAuth();
