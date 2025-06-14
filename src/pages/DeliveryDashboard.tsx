@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,7 +11,7 @@ const DeliveryDashboard = () => {
     <div className="max-w-5xl mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-6">Delivery - Dashboard</h1>
 
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
+      <div className="grid md:grid-cols-3 gap-6 mb-8">
         <Card>
           <CardHeader>
             <CardTitle>Restaurantes</CardTitle>
@@ -21,6 +20,17 @@ const DeliveryDashboard = () => {
             <p className="mb-4">Gerencie seus restaurantes e cadastre novos.</p>
             <Button asChild>
               <Link to="/delivery/restaurants">Ver restaurantes</Link>
+            </Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Produtos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-4">Gerencie os produtos do restaurante.</p>
+            <Button asChild>
+              <Link to="/delivery/products">Ver produtos</Link>
             </Button>
           </CardContent>
         </Card>

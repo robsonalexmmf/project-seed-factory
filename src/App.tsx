@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import CRMMain from "./pages/CRMMain";
 import DeliveryDashboard from "./pages/DeliveryDashboard";
 import DeliveryRestaurants from "./pages/DeliveryRestaurants";
+import DeliveryProducts from "./pages/DeliveryProducts";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/crm" element={<CRMMain />} />
           <Route path="/delivery" element={<DeliveryDashboard />} />
           <Route path="/delivery/restaurants" element={<DeliveryRestaurants />} />
+          <Route path="/delivery/products" element={<DeliveryProducts />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
