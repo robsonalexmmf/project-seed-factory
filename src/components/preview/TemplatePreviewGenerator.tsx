@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ProjectTemplate } from '@/utils/projectTemplates';
 import { Badge } from '@/components/ui/badge';
@@ -38,6 +37,286 @@ interface TemplatePreviewProps {
 
 export const generateTemplatePreview = (template: ProjectTemplate, projectName: string, customFeatures: string) => {
   
+  // TODO APP - Aplicativo de Tarefas
+  if (template.id === 'todo-app') {
+    return {
+      screens: [
+        {
+          name: 'Lista de Tarefas',
+          description: 'Tela principal do gerenciador de tarefas',
+          content: (
+            <div className="p-6 bg-gradient-to-br from-green-50 to-green-200 h-full">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <template.icon className="w-7 h-7 text-green-600" />
+                  <h1 className="text-xl font-bold text-gray-900">{projectName}</h1>
+                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80" // Monitor com código/tasks
+                  alt="Interface todo app"
+                  className="w-full h-44 object-cover rounded-lg mb-4"
+                />
+                <div className="space-y-2">
+                  {["Estudar React", "Comprar mantimentos", "Fazer exercícios"].map((tarefa, idx) => (
+                    <div key={idx} className="flex items-center p-2 bg-green-50 rounded-lg group">
+                      <input type="checkbox" className="mr-3" checked={idx === 0} readOnly />
+                      <span className={idx === 0 ? "line-through text-gray-400" : "text-gray-800"}>{tarefa}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )
+        },
+        {
+          name: 'Adicionar Tarefa',
+          description: 'Tela de criação de nova tarefa',
+          content: (
+            <div className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 h-full">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="mb-4 flex items-center space-x-2">
+                  <template.icon className="w-5 h-5 text-blue-500" />
+                  <h2 className="text-lg font-bold">Nova Tarefa</h2>
+                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=800&q=80"
+                  alt="Adicionar tarefa - todo app"
+                  className="w-full h-32 object-cover rounded-lg mb-3"
+                />
+                <input
+                  type="text"
+                  value="Ex: Finalizar relatório"
+                  className="w-full px-4 py-2 border rounded-lg bg-gray-50 mb-2"
+                  disabled
+                />
+                <button className="w-full py-2 bg-green-500 text-white rounded-lg mt-2 font-semibold">Salvar</button>
+              </div>
+            </div>
+          )
+        }
+      ]
+    }
+  }
+
+  // BLOG PLATFORM
+  if (template.id === 'blog-platform') {
+    return {
+      screens: [
+        {
+          name: 'Home do Blog',
+          description: 'Página inicial do seu blog compartilhando ideias',
+          content: (
+            <div className="p-6 bg-gradient-to-br from-yellow-50 to-orange-50 h-full">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h1 className="text-2xl font-bold text-gray-800 mb-4">{projectName}</h1>
+                <img 
+                  src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=800&q=80"
+                  alt="Home blog"
+                  className="w-full h-40 object-cover rounded-lg mb-3"
+                />
+                <div className="space-y-2">
+                  {["Como melhorar sua produtividade", "Dicas de programação moderna"].map((post, idx) => (
+                    <div key={idx} className="p-2 bg-gray-50 rounded-lg">
+                      <span className="font-medium">{post}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )
+        },
+        {
+          name: 'Editor de Post',
+          description: 'Área para produzir e publicar novos conteúdos',
+          content: (
+            <div className="p-6 bg-gradient-to-br from-purple-50 to-pink-50 h-full">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="mb-4 flex items-center space-x-2">
+                  <template.icon className="w-5 h-5 text-purple-500" />
+                  <h2 className="text-lg font-bold">Novo Post</h2>
+                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80"
+                  alt="Editor de blog"
+                  className="w-full h-28 object-cover rounded-lg mb-2"
+                />
+                <textarea
+                  className="w-full border rounded-lg bg-gray-50 p-2 mb-2"
+                  value="Digite seu texto aqui..."
+                  disabled
+                />
+                <button className="w-full py-2 bg-purple-600 text-white rounded-lg mt-2 font-semibold">Publicar</button>
+              </div>
+            </div>
+          )
+        }
+      ]
+    }
+  }
+
+  // WEATHER APP
+  if (template.id === 'weather-app') {
+    return {
+      screens: [
+        {
+          name: 'Clima da Cidade',
+          description: 'Veja a previsão em tempo real',
+          content: (
+            <div className="p-6 bg-gradient-to-br from-blue-100 to-cyan-100 h-full">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="flex items-center space-x-2 mb-3">
+                  <template.icon className="w-6 h-6 text-blue-500" />
+                  <h2 className="text-xl font-bold">Tempo Agora</h2>
+                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80"
+                  alt="Clima app"
+                  className="w-full h-32 object-cover rounded-lg mb-3"
+                />
+                <div className="flex items-center justify-between">
+                  <div className="text-blue-700 text-5xl font-bold">22°C</div>
+                  <div className="text-gray-600 text-lg">Ensolarado</div>
+                </div>
+                <div className="mt-3 text-sm text-gray-500">Próximos 7 dias: Sol e poucas nuvens ☀️</div>
+              </div>
+            </div>
+          )
+        },
+        {
+          name: 'Cidades Salvas',
+          description: 'Visualize o clima para várias cidades',
+          content: (
+            <div className="p-6 bg-gradient-to-br from-cyan-50 to-blue-50 h-full">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=800&q=80"
+                  alt="Cidades clima"
+                  className="w-full h-28 object-cover rounded-lg mb-2"
+                />
+                <div className="space-y-2">
+                  {["São Paulo", "Curitiba", "Rio de Janeiro"].map((cidade, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-2 bg-blue-50 rounded-md">
+                      <span>{cidade}</span>
+                      <span className="font-semibold">{21 + idx}°C</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )
+        }
+      ]
+    }
+  }
+
+  // EXPENSE TRACKER
+  if (template.id === 'expense-tracker') {
+    return {
+      screens: [
+        {
+          name: 'Painel de Gastos',
+          description: 'Controle visual das finanças pessoais',
+          content: (
+            <div className="p-6 bg-gradient-to-br from-yellow-50 to-orange-50 h-full">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h1 className="text-2xl font-bold text-gray-800 mb-4">{projectName}</h1>
+                <img 
+                  src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=800&q=80"
+                  alt="Expense Tracker dashboard"
+                  className="w-full h-36 object-cover rounded-lg mb-3"
+                />
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-yellow-100 p-3 rounded-lg text-yellow-900 font-bold flex flex-col items-center">
+                    <span>R$ 3600</span>
+                    <span className="text-xs">Receitas</span>
+                  </div>
+                  <div className="bg-red-100 p-3 rounded-lg text-red-700 font-bold flex flex-col items-center">
+                    <span>R$ 2450</span>
+                    <span className="text-xs">Despesas</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        },
+        {
+          name: 'Nova Transação',
+          description: 'Adicionar receita ou despesa',
+          content: (
+            <div className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 h-full">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80"
+                  alt="Nova transação financeira"
+                  className="w-full h-28 object-cover rounded-lg mb-3"
+                />
+                <input
+                  type="text"
+                  value="Ex: Salário do mês"
+                  className="w-full px-4 py-2 border rounded-lg bg-gray-50 mb-2"
+                  disabled
+                />
+                <input
+                  type="number"
+                  value="1200"
+                  className="w-full px-4 py-2 border rounded-lg bg-gray-50 mb-2"
+                  disabled
+                />
+                <button className="w-full py-2 bg-blue-600 text-white rounded-lg mt-3 font-semibold">Salvar Transação</button>
+              </div>
+            </div>
+          )
+        }
+      ]
+    }
+  }
+
+  // RECIPE APP
+  if (template.id === 'recipe-app') {
+    return {
+      screens: [
+        {
+          name: 'Minhas Receitas',
+          description: 'Lista de receitas favoritas e novas opções',
+          content: (
+            <div className="p-6 bg-gradient-to-br from-pink-50 to-yellow-50 h-full">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h1 className="text-xl font-bold text-pink-700 mb-4">{projectName}</h1>
+                <img 
+                  src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80"
+                  alt="Recipe book app"
+                  className="w-full h-36 object-cover rounded-lg mb-3"
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  {["Bolo de Chocolate", "Massa a Bolonhesa", "Salada Fit", "Panqueca"].map((receita, idx) => (
+                    <div key={idx} className="bg-pink-50 p-2 rounded-md text-pink-700 text-sm">{receita}</div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )
+        },
+        {
+          name: 'Detalhe da Receita',
+          description: 'Veja detalhes e modo de preparo',
+          content: (
+            <div className="p-6 bg-gradient-to-br from-yellow-50 to-orange-50 h-full">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1721322800607-8c38375eef04?auto=format&fit=crop&w=800&q=80"
+                  alt="Receita detalhada"
+                  className="w-full h-28 object-cover rounded-lg mb-3"
+                />
+                <div className="font-bold text-lg mb-2">Bolo de Chocolate</div>
+                <div className="text-sm text-gray-600">Modo de preparo: Misture os ingredientes, asse por 30 minutos...</div>
+              </div>
+            </div>
+          )
+        }
+      ]
+    }
+  }
+
   // Delivery App Preview
   if (template.id === 'delivery-app') {
     return {
@@ -194,7 +473,7 @@ export const generateTemplatePreview = (template: ProjectTemplate, projectName: 
                 <h2 className="text-xl font-bold mb-6">Catálogo de Produtos</h2>
                 
                 <img 
-                  src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80" 
+                  src="https://images.unsplash.com/photo-1441986300917-afdab827c52f?auto=format&fit=crop&w=800&q=80" 
                   alt="Product catalog"
                   className="w-full h-40 object-cover rounded-lg mb-4"
                 />
@@ -395,7 +674,7 @@ export const generateTemplatePreview = (template: ProjectTemplate, projectName: 
                 </div>
                 
                 <img 
-                  src="https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=800&q=80" 
+                  src="https://images.unsplash.com/photo-1432888622747-4eb9a827c52f?auto=format&fit=crop&w=800&q=80" 
                   alt="Content editor"
                   className="w-full h-40 object-cover rounded-lg mb-4"
                 />
