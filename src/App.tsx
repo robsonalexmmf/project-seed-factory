@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +13,7 @@ import Checkout from "./pages/Checkout";
 import NewAdmin from "./pages/NewAdmin";
 import CreateAdmin from "./pages/CreateAdmin";
 import NotFound from "./pages/NotFound";
+import CRMMain from "./pages/CRMMain";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +33,7 @@ const App = () => (
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/admin" element={<NewAdmin />} />
           <Route path="/create-admin" element={<CreateAdmin />} />
+          <Route path="/crm" element={<CRMMain />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

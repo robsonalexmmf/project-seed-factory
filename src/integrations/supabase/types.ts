@@ -9,6 +9,89 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      crm_lead_activities: {
+        Row: {
+          completed: boolean | null
+          created_at: string | null
+          id: string
+          lead_id: string | null
+          notes: string | null
+          scheduled_for: string | null
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          completed?: boolean | null
+          created_at?: string | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          scheduled_for?: string | null
+          type: string
+          user_id?: string | null
+        }
+        Update: {
+          completed?: boolean | null
+          created_at?: string | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          scheduled_for?: string | null
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_lead_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_leads: {
+        Row: {
+          company: string | null
+          created_at: string | null
+          email: string | null
+          id: string
+          last_contact: string | null
+          name: string
+          phone: string | null
+          status: string
+          updated_at: string | null
+          user_id: string | null
+          value: number | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          last_contact?: string | null
+          name: string
+          phone?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+          value?: number | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          last_contact?: string | null
+          name?: string
+          phone?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+          value?: number | null
+        }
+        Relationships: []
+      }
       projects: {
         Row: {
           created_at: string
