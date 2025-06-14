@@ -18,6 +18,8 @@ type Lead = {
   last_contact?: string;
 };
 
+export type { Lead };
+
 interface LeadFormProps {
   initial?: Lead | null;
   onSaved: () => void;
@@ -133,12 +135,14 @@ const LeadForm: React.FC<LeadFormProps> = ({ initial, onSaved, onCancel }) => {
       </div>
       <div className="flex gap-2 justify-end pt-2">
         {onCancel && (
-          <Button type="button" variant="ghost" onClick={onCancel}>
+          <Button type="button" variant="ghost" onClick={onCancel} disabled={loading}>
             Cancelar
           </Button>
         )}
-        <Button type="submit" loading={loading}>
-          {lead.id ? "Atualizar" : "Criar"} Lead
+        <Button type="submit" disabled={loading}>
+          {loading
+            ? (lead.id ? "Atualizando..." : "Salvando...")
+            : (lead.id ? "Atualizar" : "Criar")} Lead
         </Button>
       </div>
     </form>

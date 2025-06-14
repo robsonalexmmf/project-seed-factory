@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import LeadForm from "./LeadForm";
+// IMPORTANT: Import Lead type from LeadForm to ensure identical type!
+import LeadForm, { Lead } from "./LeadForm";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -43,7 +44,14 @@ const LeadsList: React.FC = () => {
         variant: "destructive",
       });
     } else {
-      setLeads(data ?? []);
+      // Coerce data to correct type, forcing 'status' to allowed values
+      const safeData = (data ?? []).map((lead: any) => ({
+        ...lead,
+        status: (["new", "qualified", "proposal", "closed"].includes(lead.status)
+          ? lead.status
+          : "new") as Lead["status"],
+      }));
+      setLeads(safeData);
     }
     setLoading(false);
   }
@@ -144,7 +152,7 @@ const LeadsList: React.FC = () => {
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => handleDelete(lead.id)}
+                        onClick={() => handleDelete(lead.id!)}
                       >
                         Excluir
                       </Button>
